@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Members{% endblock %}
+
+{% block body %}
+    <h1>Team {{team.Name}}</h1>
+    <hr/>
+    <h2>Team members</h1>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+
+            {% for member in team.TeamMembers %}
+                <tr>
+                    <td>{{ member.Name }}</td>
+                    <td>{{ member.Email }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <hr/>
+    <h2>New member</h1>
+    {{ include('member/_form.html.twig') }}
+
+    <br/>
+{% endblock %}
