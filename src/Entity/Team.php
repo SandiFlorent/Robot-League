@@ -6,6 +6,7 @@ use App\Repository\TeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -23,6 +24,10 @@ class Team
      */
     #[ORM\ManyToMany(targetEntity: Member::class, inversedBy: 'teams')]
     private Collection $TeamMembers;
+
+    #[ORM\ManyToOne(inversedBy: 'teams')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?user $creator = null;
 
     public function __construct()
     {
@@ -66,6 +71,18 @@ class Team
     public function removeTeamMember(Member $teamMember): static
     {
         $this->TeamMembers->removeElement($teamMember);
+
+        return $this;
+    }
+
+    public function getCreator(): ?user
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?user $creator): static
+    {
+        $this->creator = $creator;
 
         return $this;
     }
