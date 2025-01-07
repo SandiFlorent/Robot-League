@@ -1,42 +1,25 @@
-# Symfony Cache and Logs
-/var/cache/
-/var/log/
-/var/sessions/
-!var/cache/.gitkeep
-!var/log/.gitkeep
-!var/sessions/.gitkeep
 
-# Ignore .env files for sensitive environment variables
+###> symfony/framework-bundle ###
 /.env.local
+/.env.local.php
 /.env.*.local
-
-# Ignore Composer dependencies
-/vendor/
-
-# Ignore built assets
-/public/build/
-/node_modules/
-
-# Symfony binaries
-/bin/*
-!bin/console
-
-# User uploads and generated assets
-/public/uploads/
+/config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
 
-# Ignore PHPUnit configuration
+###> phpunit/phpunit ###
 /phpunit.xml
-/phpunit.xml.dist
+.phpunit.result.cache
+###< phpunit/phpunit ###
 
-# Ignore IDE and OS-specific files
-.idea/
-/*.iml
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
 
-# Ignore backup files
-**/Entity/*~
-
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
