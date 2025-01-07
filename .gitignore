@@ -7,7 +7,6 @@
 !var/sessions/.gitkeep
 
 # Ignore .env files for sensitive environment variables
-/.env
 /.env.local
 /.env.*.local
 
