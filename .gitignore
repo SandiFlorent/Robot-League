@@ -1,62 +1,43 @@
-# Created by https://www.toptal.com/developers/gitignore/api/symfony
-# Edit at https://www.toptal.com/developers/gitignore?templates=symfony
-
-### Symfony ###
-# Cache and logs (Symfony2)
-/app/cache/*
-/app/logs/*
-!app/cache/.gitkeep
-!app/logs/.gitkeep
-
-# Email spool folder
-/app/spool/*
-
-# Cache, session files and logs (Symfony3)
-/var/cache/*
-/var/logs/*
-/var/sessions/*
+# Symfony Cache and Logs
+/var/cache/
+/var/log/
+/var/sessions/
 !var/cache/.gitkeep
-!var/logs/.gitkeep
+!var/log/.gitkeep
 !var/sessions/.gitkeep
 
-# Logs (Symfony4)
-/var/log/*
-!var/log/.gitkeep
+# Ignore .env files for sensitive environment variables
+/.env
+/.env.local
+/.env.*.local
 
-# Parameters
-/app/config/parameters.yml
-/app/config/parameters.ini
-
-# Managed by Composer
-/app/bootstrap.php.cache
-/var/bootstrap.php.cache
-/bin/*
-!bin/console
-!bin/symfony_requirements
+# Ignore Composer dependencies
 /vendor/
 
-# Assets and user uploads
-/web/bundles/
-/web/uploads/
+# Ignore built assets
+/public/build/
+/node_modules/
 
-# PHPUnit
-/app/phpunit.xml
+# Symfony binaries
+/bin/*
+!bin/console
+
+# User uploads and generated assets
+/public/uploads/
+/public/bundles/
+
+# Ignore PHPUnit configuration
 /phpunit.xml
+/phpunit.xml.dist
 
-# Build data
-/build/
+# Ignore IDE and OS-specific files
+.idea/
+/*.iml
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
 
-# Composer PHAR
-/composer.phar
-
-# Backup entities generated with doctrine:generate:entities command
+# Ignore backup files
 **/Entity/*~
 
-# Embedded web-server pid file
-/.web-server-pid
-
-### Symfony Patch ###
-/web/css/
-/web/js/
-
-# End of https://www.toptal.com/developers/gitignore/api/symfony
