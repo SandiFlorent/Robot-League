@@ -24,9 +24,16 @@ class Team
     #[ORM\ManyToMany(targetEntity: Member::class, inversedBy: 'teams')]
     private Collection $TeamMembers;
 
+    /**
+     * @var Collection<int, Championship>
+     */
+    #[ORM\OneToMany(targetEntity: Championship::class, mappedBy: 'blueTeam')]
+    private Collection $championships;
+
     public function __construct()
     {
         $this->TeamMembers = new ArrayCollection();
+        $this->championships = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,6 +73,36 @@ class Team
     public function removeTeamMember(Member $teamMember): static
     {
         $this->TeamMembers->removeElement($teamMember);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Championship>
+     */
+    public function getChampionships(): Collection
+    {
+        return $this->championships;
+    }
+
+    public function addChampionship(Championship $championship): static
+    {
+        if (!$this->championships->contains($championship)) {
+            $this->championships->add($championship);
+            $championship->setBlueTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChampionship(Championship $championship): static
+    {
+        if ($this->championships->removeElement($championship)) {
+            // set the owning side to null (unless already changed)
+            if ($championship->getBlueTeam() === $this) {
+                $championship->setBlueTeam(null);
+            }
+        }
 
         return $this;
     }
