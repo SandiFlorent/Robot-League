@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Championnats{% endblock %}
+
+{% block body %}
+
+    <h1>Liste des Championnats</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Equipe Blue</th>
+                <th>Equipe Green</th>
+                <th>But Equipe Blue</th>
+                <th>But Equipe Green</th>
+                <th>Etat</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for championship in championships %}
+                <tr>
+                    <td>{{ championship.blueTeam.name }}</td>
+                    <td>{{ championship.greenTeam.name }}</td>
+                    <td>
+                        <form method="POST" action="{{ path('app_championship_save_score', {'id': championship.id}) }}">
+                            <input type="number" name="blueScore" value="{{ championship.blueGoal }}" min="0" required>
+                    </td>
+                    <td>
+                        <input type="number" name="greenScore" value="{{ championship.greenGoal }}" min="0" required>
+                        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                        </form>
+                    </td>
+                    <td>{{ championship.state.value|capitalize }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
