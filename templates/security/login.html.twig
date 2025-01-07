@@ -3,18 +3,22 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+
+<header class="bg-white shadow">
+    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">Connexion</h1>
+    </div>
+</header>
+
+
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
+   
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    
     <label for="inputEmail">Email</label>
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
     <label for="inputPassword">Password</label>
@@ -30,8 +34,8 @@
         </label>
     </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
+    <button class="rounded-md bg-sky-900 px-3 py-2 text-sm font-medium text-white" type="submit">
+        Valider
     </button>
 </form>
 {% endblock %}
