@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Team;
 use App\Entity\Member;
+use App\Entity\User;
 use App\Form\TeamType;
 use App\Form\MemberType;
 use App\Repository\TeamRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +34,9 @@ final class TeamController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $team->setCreator($user);
+
             $entityManager->persist($team);
             $entityManager->flush();
 
@@ -47,13 +52,6 @@ final class TeamController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_team_show', methods: ['GET'])]
-    public function show(Team $team): Response
-    {
-        return $this->render('team/show.html.twig', [
-            'team' => $team,
-        ]);
-    }
 
     #[Route('/{id}/edit', name: 'app_team_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Team $team, EntityManagerInterface $entityManager): Response
@@ -110,5 +108,13 @@ final class TeamController extends AbstractController
         ]);
 
         
+    }
+
+    #[Route('/show', name: 'app_team_show', methods: ['GET'])]
+    public function show(TeamRepository $teamRepository): Response
+    {
+        return $this->render('team/show.html.twig', [
+            'teams' => $teamRepository->findAll(),
+        ]);
     }
 }
