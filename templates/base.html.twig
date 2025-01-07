@@ -32,10 +32,14 @@
                             <a href="{{path('app_home')}}" class="rounded-md bg-sky-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Menu</a>
           
                             {% if app.user %}
+                                {{ app.user.email }}
+                                <a href="{{path('app_team_show')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Equipes</a>
+                                <a href="{{path('app_team_new')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Créer une équipe</a>
                                 <a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Déconnexion</a>
                             {% else %}
                                 <a href="{{path('app_login')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Connexion</a>
                                 <a href="{{path('app_register')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Inscription</a>
+                                <a href="{{path('app_team_show')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Equipes</a>
                             {% endif %}
                         </div>
                     </div>
