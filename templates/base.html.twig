@@ -22,7 +22,7 @@
                     <!-- Left side for logo -->
                     <div class="flex items-center">
                         <div class="shrink-0">
-                            <img class="size-8" src="images/ballonLogo.png" alt="Your Company">
+                            <img class="size-8" src="Images/logo.png" alt="Your Company">
                         </div>
                     </div>
 
@@ -32,7 +32,6 @@
                             <a href="{{path('app_home')}}" class="rounded-md bg-sky-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Menu</a>
           
                             {% if app.user %}
-                                [[{ app.user.email }]]
                                 <a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Déconnexion</a>
                             {% else %}
                                 <a href="{{path('app_login')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Connexion</a>
