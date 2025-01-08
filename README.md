@@ -20,11 +20,11 @@ Afin d'utiliser RobotLeague, il est requis d'avoir des compétences de base en `
 #### Tailwind
 Afin de modifier le style du site, vous aurez besoin d'utiliser Tailwind. 
 Pour le télécharger puis le lancer, vous devez exécuter les commandes suivantes : 
-`composer require symfonycasts/tailwind-bundle   
-php bin/console tailwind:init   
-php bin/console tailwind:build   
-symfony serve   
-php bin/console tailwind:build -w`
+`composer require symfonycasts/tailwind-bundle`   
+`php bin/console tailwind:init`  
+`php bin/console tailwind:build`   
+`symfony serve`   
+`php bin/console tailwind:build -w`
 
 ### Interface Administrateur
 #### Sous-titre 2
