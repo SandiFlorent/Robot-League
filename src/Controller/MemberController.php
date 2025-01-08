@@ -32,6 +32,12 @@ final class MemberController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($member);
             $entityManager->flush();
+            
+            // The notce message when creating a team member
+            $this->addFlash(
+                'notice',
+                'Member created successfully'
+            );
 
             return $this->redirectToRoute('app_member_index', [], Response::HTTP_SEE_OTHER);
         }

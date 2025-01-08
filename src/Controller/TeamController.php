@@ -40,6 +40,12 @@ final class TeamController extends AbstractController
             $entityManager->persist($team);
             $entityManager->flush();
 
+            //Notice message when a team is created
+            $this->addFlash(
+                'notice',
+                'Team successfully created'
+            );
+
             $id = $team->getId();
             return $this->redirectToRoute('app_team_member', [
                 'id' => $id
@@ -62,6 +68,12 @@ final class TeamController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            //Notice message when a team is edited
+            $this->addFlash(
+                'notice',
+                'Team successfully edited'
+            );
+
             return $this->redirectToRoute('app_team_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -77,6 +89,13 @@ final class TeamController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$team->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($team);
             $entityManager->flush();
+
+            //Notice message when a team is deleted
+            $this->addFlash(
+                'notice',
+                'Team successfully deleted'
+            );
+
         }
 
         return $this->redirectToRoute('app_team_index', [], Response::HTTP_SEE_OTHER);
@@ -94,6 +113,12 @@ final class TeamController extends AbstractController
 
             $entityManager->persist($member);
             $entityManager->flush();
+
+            //Notice message when a new member is added
+            $this->addFlash(
+                'notice',
+                'Member successfully added'
+            );
 
             $id = $team->getId();
             return $this->redirectToRoute('app_team_member', [
