@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
 
@@ -33,6 +34,24 @@ class Team
 
     #[ORM\OneToOne(mappedBy: 'myTeam', cascade: ['persist', 'remove'])]
     private ?User $creator = null;
+
+    #[ORM\Column]
+    private ?int $totalPoints = null;
+
+    #[ORM\Column]
+    private ?float $score = null;
+
+    #[ORM\Column]
+    private ?int $nbEncounter = null;
+
+    #[ORM\Column]
+    private ?int $nbGoals = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $inscriptionDate = null;
+
+    #[ORM\Column]
+    private ?int $nbWin = null;
 
     public function __construct()
     {
@@ -129,6 +148,78 @@ class Team
         }
 
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    public function getTotalPoints(): ?int
+    {
+        return $this->totalPoints;
+    }
+
+    public function setTotalPoints(int $totalPoints): static
+    {
+        $this->totalPoints = $totalPoints;
+
+        return $this;
+    }
+
+    public function getScore(): ?float
+    {
+        return $this->score;
+    }
+
+    public function setScore(float $score): static
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    public function getNbEncounter(): ?int
+    {
+        return $this->nbEncounter;
+    }
+
+    public function setNbEncounter(int $nbEncounter): static
+    {
+        $this->nbEncounter = $nbEncounter;
+
+        return $this;
+    }
+
+    public function getNbGoals(): ?int
+    {
+        return $this->nbGoals;
+    }
+
+    public function setNbGoals(int $nbGoals): static
+    {
+        $this->nbGoals = $nbGoals;
+
+        return $this;
+    }
+
+    public function getInscriptionDate(): ?\DateTimeInterface
+    {
+        return $this->inscriptionDate;
+    }
+
+    public function setInscriptionDate(\DateTimeInterface $inscriptionDate): static
+    {
+        $this->inscriptionDate = $inscriptionDate;
+
+        return $this;
+    }
+
+    public function getNbWin(): ?int
+    {
+        return $this->nbWin;
+    }
+
+    public function setNbWin(int $nbWin): static
+    {
+        $this->nbWin = $nbWin;
 
         return $this;
     }
