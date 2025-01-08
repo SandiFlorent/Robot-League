@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class RegistrationFormType extends AbstractType
 {
@@ -23,6 +24,10 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
+                    ]),
+                    new Assert\Email([
+                        'message' => 'The email "{{ value }}" is not a valid one.',
+                        'mode' => 'html5',
                     ]),
                 ],
             ])

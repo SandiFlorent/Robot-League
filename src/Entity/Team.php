@@ -8,6 +8,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
+use Symfony\Component\Validator\Constraints as Assert;
+use DateTimeInterface;
+use DateTime;
+
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -18,6 +22,7 @@ class Team
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank()]
     private ?string $Name = null;
 
     /**
@@ -36,27 +41,34 @@ class Team
     private ?User $creator = null;
 
     #[ORM\Column]
-    private ?int $totalPoints = null;
+    #[Assert\PositiveOrZero()]
+    private ?int $totalPoints = 0;
 
     #[ORM\Column]
-    private ?float $score = null;
+    #[Assert\PositiveOrZero()]
+    private ?float $score = 0;
 
     #[ORM\Column]
-    private ?int $nbEncounter = null;
+    #[Assert\PositiveOrZero()]
+    private ?int $nbEncounter = 0;
 
     #[ORM\Column]
-    private ?int $nbGoals = null;
+    #[Assert\PositiveOrZero()]
+    private ?int $nbGoals = 0;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $inscriptionDate = null;
+    #[ORM\Column(type: "datetime")]
+    private ?DateTimeInterface $inscriptionDate;
+
 
     #[ORM\Column]
-    private ?int $nbWin = null;
+    #[Assert\PositiveOrZero()]
+    private ?int $nbWin = 0;
 
     public function __construct()
     {
         $this->TeamMembers = new ArrayCollection();
         $this->championships = new ArrayCollection();
+        $this->inscriptionDate = new DateTime();
     }
 
     public function getId(): ?int
@@ -220,7 +232,6 @@ class Team
     public function setNbWin(int $nbWin): static
     {
         $this->nbWin = $nbWin;
-
         return $this;
     }
 }
