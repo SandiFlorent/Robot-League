@@ -10,33 +10,35 @@
     <body>
         <div class="flex justify-start flex-row p-8 space-y-8"> 
             <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-screen">
-            
+            {% if championships is not empty %}
             <h1>Liste des matchs</h1>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Equipe Blue</th>
-                            <th>Equipe Green</th>
-                            <th>But Equipe Blue</th>
-                            <th>But Equipe Green</th>
-                            <th>Etat</th>
-                        </tr>
-                    </thead>
-                        <tbody>
-                            {% for championship in championships %}
-                                <tr>
-                                    <td>{{ championship.blueTeam.name }}</td>
-                                    <td>{{ championship.greenTeam.name }}</td>
-                                    <td>{{ championship.blueGoal }}</td>
-                                    <td>{{ championship.greenGoal }}</td>
-                                    <td>
-                                        {{ championship.state.value}} 
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody> 
-                </table>            
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Equipe Blue</th>
+                                <th>Equipe Green</th>
+                                <th>But Equipe Blue</th>
+                                <th>But Equipe Green</th>
+                                <th>Etat</th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                                {% for championship in championships %}
+                                    <tr>
+                                        <td>{{ championship.blueTeam.name }}</td>
+                                        <td>{{ championship.greenTeam.name }}</td>
+                                        <td>{{ championship.blueGoal }}</td>
+                                        <td>{{ championship.greenGoal }}</td>
+                                        <td>
+                                            {{ championship.state.value}} 
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody> 
+                    </table>
+                    {% else %}
+                        <p>Pas de championnat en cours</p>
+                    {% endif %}           
             </div>         
             
         </div>
