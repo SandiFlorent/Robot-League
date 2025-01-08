@@ -7,15 +7,22 @@
 			{% endblock %}
 		</title>
 		<link rel="icon" href="{{ asset('Images/logo.png') }}"> {% block stylesheets %}{% endblock %}
+		<link rel="icon" href="{{ asset('Images/logo.png') }}"> {% block stylesheets %}{% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
     <body>
+		{% for message in app.flashes('notice')%}
+			<div class="flash-notice">
+				{{ message }}
+			</div>
+		{% endfor %}
+
         <div class="min-h-full">
             <nav class="bg-slate-100 flex w-full h-40 flex-row justify-start place-items-center pl-4 pr-8">
-                <img class="size-12" src="Images/logo.png" alt="Your Company">
+                <img class="size-8" src="{{ asset('Images/logo.png') }}" alt="Your Company">
                 <p class="text-5xl pl-4 font-bold"> 
                     RobotLeague
                 </p>
@@ -23,7 +30,6 @@
                     <a href="{{path('app_home')}}" class="rounded-md bg-sky-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Menu</a>
                         {% if app.user %}	
 									<a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-sm font-medium text-red-900 hover:bg-red-700 hover:text-white">Déconnexion</a>
-									<a href="{{path('app_team_show')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Equipes</a>
 									{% if is_granted('ROLE_USER') %}
                                     {% if app.user.myTeam == null %}
                                         <a href="{{path('app_team_new')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Créer une équipe</a>
