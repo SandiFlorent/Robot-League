@@ -69,6 +69,7 @@ class Team
         $this->TeamMembers = new ArrayCollection();
         $this->championships = new ArrayCollection();
         $this->inscriptionDate = new DateTime();
+        $this->inscriptionDate = new DateTime();
     }
 
     public function getId(): ?int
