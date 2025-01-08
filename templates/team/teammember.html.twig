@@ -3,30 +3,61 @@
 {% block title %}Add Members{% endblock %}
 
 {% block body %}
-<div class="flex flex-col place-items-center">
-    <h1 class="font-bold text-5xl tracking-tight text-gray-900 p-12 mt-72 bg-white shadow">Equipe {{team.Name}}</h1>
-    <hr/>
-    <h2>Membres de l'équipe</h1>   
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Nom</th>
-                <th>Email</th>
-            </tr>
+<div class="container mx-auto p-8">
+    <!-- Header Section -->
+    <div class="text-center">
+        <h1 class="font-bold text-4xl tracking-tight text-gray-900 p-6 bg-white shadow-lg rounded-lg">
+            Équipe : {{ team.Name }}
+        </h1>
+    </div>
 
-            {% for member in team.TeamMembers %}
-                <tr>
-                    <td>{{ member.Name }}</td>
-                    <td>{{ member.Email }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <hr/>
-    <h2>New member</h1>
-    {{ include('member/_form.html.twig') }}
+    <div class="mt-12">
+        <!-- Membres de l'équipe -->
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Membres de l'équipe</h2>
+        <div class="overflow-x-auto shadow-md rounded-lg">
+            <table class="min-w-full border-collapse border border-gray-300">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Nom</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in team.TeamMembers %}
+                        <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
+                            <td class="px-6 py-4 text-sm text-gray-700 border border-gray-300">{{ member.Name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-700 border border-gray-300">{{ member.Email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <br/>
+    <hr class="my-8 border-gray-300" />
+
+
+    <div class="mt-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ajouter un nouveau membre</h2>
+        <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
+            {{ form_start(form) }}
+            <div class="grid gap-6 mb-6 md:grid-cols-2">
+                <div>
+                    {{ form_label(form.Name, 'Nom', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                    {{ form_widget(form.Name, {'attr': {'class': 'bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.Email, 'Email', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                    {{ form_widget(form.Email, {'attr': {'class': 'bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
+                </div>
+            </div>
+            <button class="bg-blue-950 text-blue-400 border border-red-blue border-b-4 font-medium overflow-hidden relative px-4 py-2 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
+                <span class="bg-blue-400 shadow-blue-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
+                {{ button_label|default('Ajouter') }}
+            </button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
 </div>
-
 {% endblock %}
