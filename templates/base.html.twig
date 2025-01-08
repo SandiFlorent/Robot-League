@@ -30,6 +30,9 @@
                                 <a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Déconnexion</a>
                                                                 <a href="{{path('app_team_show')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Equipes</a>
                                 <a href="{{path('app_team_new')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Créer une équipe</a>
+                                {% if is_granted('ROLE_ORGANISATEUR') %}
+                                    <a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Championnat</a>
+                                {% endif %}
                             {% else %}
                                 <a href="{{path('app_login')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Connexion</a>
                                 <a href="{{path('app_register')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Inscription</a>
