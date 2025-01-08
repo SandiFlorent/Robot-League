@@ -3,9 +3,17 @@
 {% block title %}New Member{% endblock %}
 
 {% block body %}
-    <h1>Create new Member</h1>
 
-    {{ include('member/_form.html.twig') }}
+<html>
+    <body>
+        <div class="flex flex-row">
+            
+        </div>
+    </body>
+</html>
+    
+    
 
-    <a href="{{ path('app_member_index') }}">back to list</a>
+{{ include('member/_form.html.twig') }}
+<a href="{{ path('app_member_index') }}">back to list</a>
 {% endblock %}
