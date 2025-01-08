@@ -35,16 +35,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    /**
-     * @var Collection<int, Team>
-     */
-    #[ORM\OneToMany(targetEntity: Team::class, mappedBy: 'creator')]
-    private Collection $teams;
+    #[ORM\OneToOne(inversedBy: 'creator', cascade: ['persist', 'remove'])]
+    private ?Team $myTeam = null;
 
-    public function __construct()
-    {
-        $this->teams = new ArrayCollection();
-    }
+
+
 
     public function getId(): ?int
     {
@@ -121,32 +116,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection<int, Team>
-     */
-    public function getTeams(): Collection
+    public function getMyTeam(): ?Team
     {
-        return $this->teams;
+        return $this->myTeam;
     }
 
-    public function addTeam(Team $team): static
+    public function setMyTeam(?Team $myTeam): static
     {
-        if (!$this->teams->contains($team)) {
-            $this->teams->add($team);
-            $team->setCreator($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTeam(Team $team): static
-    {
-        if ($this->teams->removeElement($team)) {
-            // set the owning side to null (unless already changed)
-            // if ($team->getCreator() === $this) {
-            //     $team->setCreator(null);
-            // }
-        }
+        $this->myTeam = $myTeam;
 
         return $this;
     }

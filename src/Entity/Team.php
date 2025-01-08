@@ -31,9 +31,8 @@ class Team
     #[ORM\OneToMany(targetEntity: Championship::class, mappedBy: 'blueTeam')]
     private Collection $championships;
 
-    #[ORM\ManyToOne(inversedBy: 'teams')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?user $creator = null;
+    #[ORM\OneToOne(mappedBy: 'myTeam', cascade: ['persist', 'remove'])]
+    private ?User $creator = null;
 
     public function __construct()
     {
@@ -112,13 +111,23 @@ class Team
         return $this;
     }
 
-    public function getCreator(): ?user
+    public function getCreator(): ?User
     {
         return $this->creator;
     }
 
-    public function setCreator(?user $creator): static
+    public function setCreator(?User $creator): static
     {
+        // unset the owning side of the relation if necessary
+        if ($creator === null && $this->creator !== null) {
+            $this->creator->setMyTeam(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($creator !== null && $creator->getMyTeam() !== $this) {
+            $creator->setMyTeam($this);
+        }
+
         $this->creator = $creator;
 
         return $this;
