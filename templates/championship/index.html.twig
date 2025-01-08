@@ -38,13 +38,12 @@
                         <input type="number" name="greenScore" value="{{ championship.greenGoal }}" min="0" required>
                     </td>
                     <td>
-                        <select name="state" class="form-select">
-                            <option value="NotStarted" {{ championship.state.value == 'non commencé' ? 'selected' : '' }}>Non commencé</option>
-                            <option value="InProgress" {{ championship.state.value == 'en cours' ? 'selected' : '' }}>En cours</option>
-                            <option value="WinBlue" {{ championship.state.value == 'Victoire Blue' ? 'selected' : '' }}>Victoire Blue</option>
-                            <option value="WinGreen" {{ championship.state.value == 'Victoire Green' ? 'selected' : '' }}>Victoire Green</option>
-                            <option value="Draw" {{ championship.state.value == 'Égalité' ? 'selected' : '' }}>Égalité</option>
-                            <option value="Canceled" {{ championship.state.value == 'annulé' ? 'selected' : '' }}>Annulé</option>
+                        <select name="state" required>
+                            {% for state in states %}
+                                <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>
+                                    {{ state.value }}
+                                </option>
+                            {% endfor %}
                         </select>
                     </td>
                     <td>
