@@ -8,18 +8,13 @@
 		</title>
 		<link rel="icon" href="{{ asset('Images/logo.png') }}"> {% block stylesheets %}{% endblock %}
 
-		{% block javascripts %}
-			{% block importmap %}
-				{{ importmap('app') }}
-			{% endblock %}
-		{% endblock %}
-	</head>
-	<body>
-		{% for message in app.flashes('notice')%}
-			<div class="flash-notice">
-				{{ message }}
-			</div>
-		{% endfor %}
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        
+        
 
 		<div class="min-h-full">
 			<nav class="bg-slate-100">
