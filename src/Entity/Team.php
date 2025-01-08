@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
+use DateTimeInterface;
+use DateTime;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -36,27 +38,28 @@ class Team
     private ?User $creator = null;
 
     #[ORM\Column]
-    private ?int $totalPoints = null;
+    private ?int $totalPoints = 0;
 
     #[ORM\Column]
-    private ?float $score = null;
+    private ?float $score = 0;
 
     #[ORM\Column]
-    private ?int $nbEncounter = null;
+    private ?int $nbEncounter = 0;
 
     #[ORM\Column]
-    private ?int $nbGoals = null;
+    private ?int $nbGoals = 0;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $inscriptionDate = null;
+    #[ORM\Column(type: "datetime")]
+    private ?DateTimeInterface $inscriptionDate;
 
     #[ORM\Column]
-    private ?int $nbWin = null;
+    private ?int $nbWin = 0;
 
     public function __construct()
     {
         $this->TeamMembers = new ArrayCollection();
         $this->championships = new ArrayCollection();
+        $this->inscriptionDate = new DateTime();
     }
 
     public function getId(): ?int
