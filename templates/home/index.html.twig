@@ -9,20 +9,51 @@
 <html>
     <body>
         <div class="flex justify-start flex-row p-8 space-y-8"> 
-            <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-screen">Tournois à venir</div>          
+            <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full">
+                {% if championships is not empty %}
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-base text-left text-gray-800 border-collapse border border-gray-300">
+                        <thead class="text-lg text-gray-700 uppercase bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">Équipe Bleue</th>
+                                <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
+                                <th scope="col" class="px-8 py-6">But Équipe Verte</th>
+                                <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">Équipe Verte</th>
+                                <th scope="col" class="px-8 py-6">État</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for championship in championships %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
+                                <td class="px-8 py-6">{{ championship.blueGoal }}</td>
+                                <td class="px-8 py-6">{{ championship.greenGoal }}</td>
+                                <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.greenTeam.name }}</td>
+                                <td class="px-8 py-6">{{ championship.state.value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                    <p class="text-lg text-gray-700">Pas de championnat en cours</p>
+                {% endif %}           
+            </div>         
         </div>
 
-        <!-- mettre en ahref plus tard -->
-        <div class ="w-screen h-full bg-black text-white flex flex-col">
+
+        <!-- Pied de page -->
+        <div class="w-screen h-full bg-black text-white flex flex-col">
             <div class="flex flex-row justify-evenly p-8">
-                <a href="{{path('app_home')}}">Mentions légales</a>
-                <a href="{{path('app_home')}}">Mentions légales</a>
-                <a href="{{path('app_home')}}">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
             </div>    
             <div class="flex flex-row justify-evenly p-8">
-                <a href="{{path('app_home')}}">Mentions légales</a>
-                <a href="{{path('app_home')}}">Mentions légales</a>
-                <a href="{{path('app_home')}}">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
             </div>    
         </div>
 
@@ -30,6 +61,7 @@
 
     </body>
 </html>
+
 
 {% endblock %}  
 
