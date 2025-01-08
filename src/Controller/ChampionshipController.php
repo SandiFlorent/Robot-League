@@ -80,7 +80,6 @@ final class ChampionshipController extends AbstractController
                 }
             }
         }
-
         // Sauvegarde toutes les nouvelles rencontres
         $this->entityManager->flush();
     }
