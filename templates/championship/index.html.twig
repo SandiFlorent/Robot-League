@@ -1,11 +1,20 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Championnats{% endblock %}
-
 {% block body %}
 
-    <h1>Liste des Championnats</h1>
+<h1>Liste des matchs</h1>
 
+<!-- Formulaire pour générer le championnat -->
+<form method="post" action="{{ path('app_championship_generate') }}">
+    <button type="submit" class="btn btn-success">Générer Championnat</button>
+</form>
+
+<!-- Formulaire pour supprimer tous le championnats -->
+<form method="post" action="{{ path('app_championship_delete_all') }}" onsubmit="return confirm('Are you sure you want to delete all the matches?');">
+    <button type="submit" class="btn btn-danger">Supprimer le championnat</button>
+</form>
+
+<!-- Table du championnat avec les rencontres -->
+{% if championships is not empty %}
     <table class="table">
         <thead>
             <tr>
@@ -45,5 +54,8 @@
             {% endfor %}
         </tbody>
     </table>
+{% else %}
+    <p>Aucun matchs disponible. Veuillez générer le championnat.</p>
+{% endif %}
 
 {% endblock %}
