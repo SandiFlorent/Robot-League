@@ -37,7 +37,6 @@
 									{{ app.user.email }}
 									<a href="{{path('app_home')}}" class="rounded-md bg-sky-900 px-3 ml-10 py-2 hover:bg-cyan-700 text-sm font-medium text-white" aria-current="page">Menu</a>
 									<a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-sm font-medium text-red-900 hover:bg-red-700 hover:text-white">Déconnexion</a>
-									<a href="{{path('app_team_show')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Equipes</a>
 									{% if is_granted('ROLE_USER') %}
                                     {% if app.user.myTeam == null %}
                                         <a href="{{path('app_team_new')}}" class="rounded-md px-3 py-2 text-sm font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Créer une équipe</a>
