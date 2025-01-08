@@ -24,15 +24,12 @@ final class ChampionshipController extends AbstractController
         $this->teamRepository = $teamRepository;
     }
 
-
+    
     #[Route(name: 'app_championship_index', methods: ['GET'])]
     public function index(ChampionshipRepository $championshipRepository): Response
     {
         // Récupère toutes les équipes
         $teams = $this->teamRepository->findAll();
-
-        // Génère les championnats si elles n'ont pas encore été créées
-        $this->generateChampionships($teams);
 
         // Récupère toutes les rencontres
         $championships = $championshipRepository->findAll();
@@ -46,26 +43,10 @@ final class ChampionshipController extends AbstractController
         ]);
     }
 
-
-
     private function generateChampionships(array $teams)
     {
         // On récupère toutes les rencontres existantes
         $existingChampionships = $this->entityManager->getRepository(Championship::class)->findAll();
-
-        // Supprimer les anciens matchs retour
-        foreach ($existingChampionships as $championship) {
-            $blueTeam = $championship->getBlueTeam();
-            $greenTeam = $championship->getGreenTeam();
-
-            // Vérifier si l'équipe blue a un ID supérieur à l'équipe green
-            if ($blueTeam->getId() > $greenTeam->getId()) {
-                $this->entityManager->remove($championship);  // Supprimer le match retour
-            }
-        }
-
-        // Sauvegarde des modifications après la suppression des matchs retour
-        $this->entityManager->flush();
 
         // Recréer les rencontres sans matchs retour
         foreach ($teams as $team1) {
@@ -116,9 +97,39 @@ final class ChampionshipController extends AbstractController
         // Sauvegarde les modifications
         $this->entityManager->flush();
 
-        // Redirige vers la liste des championnats
+        // Redirige vers la liste des matchs
         return $this->redirectToRoute('app_championship_index');
     }
 
+    #[Route('/championship/delete_all', name: 'app_championship_delete_all', methods: ['POST'])]
+    public function deleteAllChampionships(): Response
+    {
+        // Récupérer tous les matchs existants
+        $championships = $this->entityManager->getRepository(Championship::class)->findAll();
+
+        // Supprimer tous les matchs
+        foreach ($championships as $championship) {
+            $this->entityManager->remove($championship);
+        }
+
+        // Appliquer les modifications
+        $this->entityManager->flush();
+
+        // Rediriger vers la page du championnat pour actualiser l'affichage (table vide)
+        return $this->redirectToRoute('app_championship_index');
+    }
     
+    #[Route('/championship/generate', name: 'app_championship_generate', methods: ['POST'])]
+    public function generateChampionshipsPost(): Response
+    {
+        // Récupère toutes les équipes
+        $teams = $this->teamRepository->findAll();
+
+        // Génère les nouveaux matchs
+        $this->generateChampionships($teams);
+
+        // Redirige vers la page du championnat pour actualiser l'affichage
+        return $this->redirectToRoute('app_championship_index');
+    }
+        
 }
