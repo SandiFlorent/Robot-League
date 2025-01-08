@@ -86,6 +86,14 @@ final class ChampionshipController extends AbstractController
         $championship->setBlueGoal($blueScore);
         $championship->setGreenGoal($greenScore);
 
+        // Récupère et met à jour l'état
+        $newState = $request->request->get('state');
+        if (State::tryFrom($newState)) { // Vérifie que l'état est valide
+            $championship->setState(State::from($newState));
+        } else {
+            throw $this->createNotFoundException('État invalide.');
+        }
+
         // Convertit la valeur de l'état en une instance de l'énumération State
         try {
             $championship->setState(State::from($stateName));
