@@ -13,6 +13,11 @@
         {% endblock %}
     </head>
     <body>
+	{% for message in app.flashes('notice')%}
+			<div class= "flash-notice">
+				{{ message }}
+			</div>
+	{% endfor %}
         <div class="min-h-full">
             <nav class="bg-slate-100 flex w-full h-40 flex-row justify-start place-items-center pl-4 pr-8">
                 <img class="size-12" src="Images/logo.png" alt="Your Company">
