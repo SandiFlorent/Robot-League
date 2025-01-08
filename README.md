@@ -6,29 +6,38 @@ Cela inclut la gestion des utilisateurs, des équipes participantes et de l'affi
 
 ## Sommaire
 ### [Prérequis](#prérequis)  
+- Lancement de Tailwind (#tailwind)
 ### [Interface administrateur](#interface-administrateur)  
-- [Ajout de membres](#ajout-de-membres)
 - [titre](#sous-titre-2)
-
+### Base de données(#base-de-donnees)
 ### [Autres informations](#autres-informations)
-
 ### [Convention de codage](#convention-de-codage)
+
 
 ### Prérequis
 
 Afin d'utiliser RobotLeague, il est requis d'avoir des compétences de base en `SQL` (MySQL). Cette application est développée en `Symfony`, si vous souhaitez apporter des modifications à celle-ci il est préférable d'avoir une connaissance de base du `PHP`.
-
+#### Tailwind
+Afin de modifier le style du site, vous aurez besoin d'utiliser Tailwind. 
+Pour le télécharger puis le lancer, vous devez exécuter les commandes suivantes : 
+`composer require symfonycasts/tailwind-bundle   
+php bin/console tailwind:init   
+php bin/console tailwind:build   
+symfony serve   
+php bin/console tailwind:build -w`
 
 ### Interface Administrateur
-
-#### Ajout de membres
 #### Sous-titre 2
 
 
+### Base de données
+Dans le projet, des scripts SQL nécessitent d'être importés dans PHPMyAdmin. 
+Il s'agit par exemple de triggers.
+
 
 #### Autres informations
-La version de Symfony utilisée est : `___`  
-La base de donnée est gérée avec : `___`  
+La version de Symfony utilisée est : `6.4`  
+La base de donnée est gérée avec : `MySQL`  
 Le framework CSS utilisé est : `SimpleCSS` / `Tailwind`
 
 ### Convention de codage 
