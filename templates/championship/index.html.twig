@@ -1,61 +1,63 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
 
-
-
 <!-- Formulaire pour générer le championnat -->
-<form method="post" action="{{ path('app_championship_generate') }}">
-    <button type="submit" class="btn btn-success">Générer Championnat</button>
+<form method="post" action="{{ path('app_championship_generate') }}" class="mb-8">
+    <button type="submit" class="px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600">Générer Championnat</button>
 </form>
 
-<!-- Formulaire pour supprimer tous le championnats -->
-<form method="post" action="{{ path('app_championship_delete_all') }}" onsubmit="return confirm('Are you sure you want to delete all the matches?');">
-    <button type="submit" class="btn btn-danger">Supprimer le championnat</button>
+<!-- Formulaire pour supprimer tous les championnats -->
+<form method="post" action="{{ path('app_championship_delete_all') }}" onsubmit="return confirm('Are you sure you want to delete all the matches?');" class="mb-8">
+    <button type="submit" class="px-6 py-3 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600">Supprimer le championnat</button>
 </form>
-<h1>Liste des matchs</h1>
+
+<h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
+
 <!-- Table du championnat avec les rencontres -->
 {% if championships is not empty %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Equipe Blue</th>
-                <th>Equipe Green</th>
-                <th>But Equipe Blue</th>
-                <th>But Equipe Green</th>
-                <th>Etat</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for championship in championships %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-left text-gray-800 border-collapse border border-gray-300">
+            <thead class="text-lg text-gray-700 uppercase bg-gray-100">
                 <tr>
-                    <td>{{ championship.blueTeam.name }}</td>
-                    <td>{{ championship.greenTeam.name }}</td>
-                    <td>
-                        <form method="POST" action="{{ path('app_championship_save_score', {'id': championship.id}) }}">
-                            <input type="number" name="blueScore" value="{{ championship.blueGoal }}" min="0" required>
-                                </td>
-                                <td>
-                                    <input type="number" name="greenScore" value="{{ championship.greenGoal }}" min="0" required>
-                                </td>
-                                <td>
-                                    <select name="state" required>
-                                        {% for state in states %}
-                                            <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>
-                                                {{ state.value }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                        </form>
-                    </td>
+                    <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">Équipe Bleue</th>
+                    <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">Équipe Verte</th>
+                    <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
+                    <th scope="col" class="px-8 py-6">But Équipe Verte</th>
+                    <th scope="col" class="px-8 py-6">État</th>
+                    <th scope="col" class="px-8 py-6">Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for championship in championships %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
+                        <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.greenTeam.name }}</td>
+                        <td class="px-8 py-6">
+                            <form method="POST" action="{{ path('app_championship_save_score', {'id': championship.id}) }}">
+                                <input type="number" name="blueScore" value="{{ championship.blueGoal }}" min="0" required class="px-3 py-2 border border-gray-300 rounded-md">
+                        </td>
+                        <td class="px-8 py-6">
+                            <input type="number" name="greenScore" value="{{ championship.greenGoal }}" min="0" required class="px-3 py-2 border border-gray-300 rounded-md">
+                        </td>
+                        <td class="px-8 py-6">
+                            <select name="state" required class="px-3 py-2 border border-gray-300 rounded-md">
+                                {% for state in states %}
+                                    <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>{{ state.value }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td class="px-8 py-6">
+                            <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Sauvegarder</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% else %}
-    <p>Aucun matchs disponible. Veuillez générer le championnat.</p>
+    <p class="text-lg text-gray-700">Aucun matchs disponible. Veuillez générer le championnat.</p>
 {% endif %}
 
 {% endblock %}
