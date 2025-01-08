@@ -87,8 +87,7 @@ final class ChampionshipController extends AbstractController
     $this->entityManager->flush();
 }
 
-    
-    // Route pour sauvegarder les scores
+        
     #[Route('/{id}/save_score', name: 'app_championship_save_score', methods: ['POST'])]
     public function saveScore(Request $request, Championship $championship): Response
     {
@@ -100,10 +99,20 @@ final class ChampionshipController extends AbstractController
         $championship->setBlueGoal($blueScore);
         $championship->setGreenGoal($greenScore);
 
+        // Récupère et met à jour l'état
+        $newState = $request->request->get('state');
+        if (State::tryFrom($newState)) { // Vérifie que l'état est valide
+            $championship->setState(State::from($newState));
+        } else {
+            throw $this->createNotFoundException('État invalide.');
+        }
+
         // Sauvegarde des modifications
         $this->entityManager->flush();
 
         // Redirige vers la liste des championnats
         return $this->redirectToRoute('app_championship_index');
     }
+
+
 }
