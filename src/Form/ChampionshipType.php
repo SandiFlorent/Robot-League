@@ -18,9 +18,6 @@ class ChampionshipType extends AbstractType
         $builder
             ->add('blueScore')
             ->add('greenScore')
-            ->add('matchDate', null, [
-                'widget' => 'single_text',
-            ])
             ->add('blueTeam', EntityType::class, [
                 'class' => Team::class,
                 'choice_label' => 'name',  // Affiche le nom de l'équipe (au lieu de l'ID)
