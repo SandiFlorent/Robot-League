@@ -30,6 +30,12 @@ class Championship
     #[ORM\Column(nullable: true, enumType: State::class)]
     private ?State $state = null;
 
+    #[ORM\ManyToOne(inversedBy: 'matches')]
+    private ?ChampionshipList $championshipList = null;
+
+    #[ORM\OneToOne(mappedBy: 'matches', cascade: ['persist', 'remove'])]
+    private ?Encounter $encounter = null;
+
     public function __construct()
     {
         if ($this->state === null) {
@@ -98,6 +104,40 @@ class Championship
     public function setState(?State $state): static
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getChampionshipList(): ?ChampionshipList
+    {
+        return $this->championshipList;
+    }
+
+    public function setChampionshipList(?ChampionshipList $championshipList): static
+    {
+        $this->championshipList = $championshipList;
+
+        return $this;
+    }
+
+    public function getEncounter(): ?Encounter
+    {
+        return $this->encounter;
+    }
+
+    public function setEncounter(?Encounter $encounter): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($encounter === null && $this->encounter !== null) {
+            $this->encounter->setMatches(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($encounter !== null && $encounter->getMatches() !== $this) {
+            $encounter->setMatches($this);
+        }
+
+        $this->encounter = $encounter;
 
         return $this;
     }

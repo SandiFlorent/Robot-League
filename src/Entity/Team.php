@@ -37,8 +37,6 @@ class Team
     #[ORM\OneToMany(targetEntity: Championship::class, mappedBy: 'blueTeam')]
     private Collection $championships;
 
-    #[ORM\OneToOne(mappedBy: 'myTeam', cascade: ['persist', 'remove'])]
-    private ?User $creator = null;
 
     #[ORM\Column]
     #[Assert\PositiveOrZero()]
@@ -63,6 +61,15 @@ class Team
     #[ORM\Column]
     #[Assert\PositiveOrZero()]
     private ?int $nbWin = 0;
+
+    #[ORM\Column]
+    private ?bool $isAccepted = null;
+
+    #[ORM\ManyToOne(inversedBy: 'teams')]
+    private ?ChampionshipList $championshipList = null;
+
+    #[ORM\ManyToOne(inversedBy: 'myTeams')]
+    private ?User $creator = null;
 
     public function __construct()
     {
@@ -142,27 +149,6 @@ class Team
         return $this;
     }
 
-    public function getCreator(): ?User
-    {
-        return $this->creator;
-    }
-
-    public function setCreator(?User $creator): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($creator === null && $this->creator !== null) {
-            $this->creator->setMyTeam(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($creator !== null && $creator->getMyTeam() !== $this) {
-            $creator->setMyTeam($this);
-        }
-
-        $this->creator = $creator;
-
-        return $this;
-    }
 
     public function getTotalPoints(): ?int
     {
@@ -232,6 +218,42 @@ class Team
     public function setNbWin(int $nbWin): static
     {
         $this->nbWin = $nbWin;
+        return $this;
+    }
+
+    public function isAccepted(): ?bool
+    {
+        return $this->isAccepted;
+    }
+
+    public function setAccepted(bool $isAccepted): static
+    {
+        $this->isAccepted = $isAccepted;
+
+        return $this;
+    }
+
+    public function getChampionshipList(): ?ChampionshipList
+    {
+        return $this->championshipList;
+    }
+
+    public function setChampionshipList(?ChampionshipList $championshipList): static
+    {
+        $this->championshipList = $championshipList;
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): static
+    {
+        $this->creator = $creator;
+
         return $this;
     }
 }
