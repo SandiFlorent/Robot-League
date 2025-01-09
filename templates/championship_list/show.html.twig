@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ChampionshipList{% endblock %}
+
+{% block body %}
+    <h1>ChampionshipList</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ championship_list.id }}</td>
+            </tr>
+            <tr>
+                <th>ChampionshipName</th>
+                <td>{{ championship_list.ChampionshipName }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ championship_list.description }}</td>
+            </tr>
+            <tr>
+                <th>Adress</th>
+                <td>{{ championship_list.adress }}</td>
+            </tr>
+            <tr>
+                <th>DateStart</th>
+                <td>{{ championship_list.dateStart ? championship_list.dateStart|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DateEnd</th>
+                <td>{{ championship_list.dateEnd ? championship_list.dateEnd|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Threshold</th>
+                <td>{{ championship_list.threshold }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_championship_list_index') }}">back to list</a>
+
+    <a href="{{ path('app_championship_list_edit', {'id': championship_list.id}) }}">edit</a>
+
+    {{ include('championship_list/_delete_form.html.twig') }}
+{% endblock %}
