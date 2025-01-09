@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ChampionshipList{% endblock %}
+
+{% block body %}
+    <h1>Ajouter des terrains</h1>
+
+    <hr />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for fiel in championship_list.field %}
+            <tr>
+                <td>{{ fiel.Name }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Pas de terrain enregistré pour le moment</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <hr />
+
+    {{ include('field/_form.html.twig') }}
+
+     <hr />
+
+    <a href="{{ path('app_championship_list_new_slot', {'id': championship_list.id }) }}">Ajouter des créneaux</a>
+{% endblock %}

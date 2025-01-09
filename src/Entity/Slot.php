@@ -31,6 +31,9 @@ class Slot
     #[ORM\ManyToOne(inversedBy: 'slot')]
     private ?ChampionshipList $championshipList = null;
 
+    #[ORM\Column]
+    private ?int $length = null;
+
     public function __construct()
     {
         $this->encounters = new ArrayCollection();
@@ -103,6 +106,18 @@ class Slot
     public function setChampionshipList(?ChampionshipList $championshipList): static
     {
         $this->championshipList = $championshipList;
+
+        return $this;
+    }
+
+    public function getLength(): ?int
+    {
+        return $this->length;
+    }
+
+    public function setLength(int $length): static
+    {
+        $this->length = $length;
 
         return $this;
     }
