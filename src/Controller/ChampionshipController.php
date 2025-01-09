@@ -62,7 +62,7 @@ final class ChampionshipController extends AbstractController
                         $championship = new Championship();
                         $championship->setBlueTeam($team1);
                         $championship->setGreenTeam($team2);
-                        $championship->setState(State::NotStarted);  // L'état initial peut être "Non Commencé"
+                        $championship->setState(State::NOT_STARTED);  // L'état initial peut être "Non Commencé"
 
                         // Sauvegarde la rencontre
                         $this->entityManager->persist($championship);
