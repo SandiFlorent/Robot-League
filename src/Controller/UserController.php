@@ -25,7 +25,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -33,11 +33,17 @@ final class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-                $entityManager->persist($user);
-                $entityManager->flush();
+            // Hachage du mot de passe
+            $plainPassword = $user->getPassword();
+            if (!empty($plainPassword)) {
+                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword); // Mise à jour du mot de passe haché
+            }
 
-                return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            $entityManager->persist($user);
+            $entityManager->flush();
 
+            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/new.html.twig', [
