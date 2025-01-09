@@ -45,6 +45,7 @@ security:
     access_control:
           - { path: ^/championship, roles: ROLE_ORGANISATEUR }
           - { path: ^/team$, roles: ROLE_ORGANISATEUR }
+          - { path: ^/user, roles: ROLE_ORGANISATEUR }
 
 when@test:
     security:
