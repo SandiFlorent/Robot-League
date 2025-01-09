@@ -3,45 +3,97 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-<style>
-
-</style>
 <html>
     <body>
         <div class="flex justify-start flex-row p-8 space-y-8"> 
-            <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full">
+            <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full overflow-auto"> <!-- Ajouter overflow-auto pour limiter les débordements -->
                 {% if championships is not empty %}
                 <h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full text-base text-left text-gray-800 border-collapse border border-gray-300">
-                        <thead class="text-lg text-gray-700 uppercase bg-gray-100">
-                            <tr>
-                                <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">Équipe Bleue</th>
-                                <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
-                                <th scope="col" class="px-8 py-6">But Équipe Verte</th>
-                                <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">Équipe Verte</th>
-                                <th scope="col" class="px-8 py-6">État</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for championship in championships %}
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
-                                <td class="px-8 py-6">{{ championship.blueGoal }}</td>
-                                <td class="px-8 py-6">{{ championship.greenGoal }}</td>
-                                <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.greenTeam.name }}</td>
-                                <td class="px-8 py-6">{{ championship.state.value }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="overflow-x-auto"> <!-- Gérer l'overflow horizontal -->
+                    
+                    <!-- Affichage normal (tableau) sur grand écran -->
+                    <div class="hidden sm:block">
+                        <table class="min-w-full text-base text-left text-gray-800 border-collapse border border-gray-300">
+                            <thead class="text-lg text-gray-700 uppercase bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">Équipe Bleue</th>
+                                    <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
+                                    <th scope="col" class="px-8 py-6">But Équipe Verte</th>
+                                    <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">Équipe Verte</th>
+                                    <th scope="col" class="px-8 py-6">État</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for championship in championships %}
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
+                                    <td class="px-8 py-6">{{ championship.blueGoal }}</td>
+                                    <td class="px-8 py-6">{{ championship.greenGoal }}</td>
+                                    <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.greenTeam.name }}</td>
+                                    <td class="px-8 py-6">{{ championship.state.value }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Affichage mobile avec les scores sur la même ligne que les noms -->
+                    <div class="sm:hidden">
+                        {% set perPage = 4 %} <!-- Nombre de matchs par page -->
+                        {% set page = app.request.query.get('page', 1) %}
+                        {% set start = (page - 1) * perPage %}
+                        {% set end = start + perPage %}
+                        {% set currentChampionships = championships | slice(start, end) %}
+
+                        {% for championship in currentChampionships %}
+                        <div class="flex flex-col mb-4 border border-gray-300 p-4">
+                            <!-- Ligne - Équipe Bleue et Score -->
+                            <div class="flex justify-between bg-blue-100 px-4 py-2 font-medium text-blue-700">
+                                <div class="flex items-center">
+                                    <div class="font-semibold">Équipe Bleue:</div>
+                                    <div class="ml-4 font-semibold">{{ championship.blueTeam.name }}</div>
+                                </div>
+                                <div class="ml-4 text-blue-700 font-medium">Score: {{ championship.blueGoal }}</div>
+                            </div>
+                            <!-- Ligne - Équipe Verte et Score -->
+                            <div class="flex justify-between bg-green-100 px-4 py-2 font-medium text-green-700">
+                                <div class="flex items-center">
+                                    <div class="font-semibold">Équipe Verte:</div>
+                                    <div class="ml-4 font-semibold">{{ championship.greenTeam.name }}</div>
+                                </div>
+                                <div class="ml-4 text-green-700 font-medium">Score: {{ championship.greenGoal }}</div>
+                            </div>
+                            <!-- Ligne - État -->
+                            <div class="flex justify-between px-4 py-2 font-medium">
+                                <div class="font-semibold">État:</div>
+                                <div>{{ championship.state.value }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Pagination (pour les petits écrans) -->
+                        <div class="flex justify-center mt-8">
+                            {% if page > 1 %}
+                            <a href="?page={{ page - 1 }}" class="px-4 py-2 bg-gray-300 rounded-l-lg hover:bg-gray-400">← Précédent</a>
+                            {% else %}
+                            <span class="px-4 py-2 bg-gray-200 rounded-l-lg cursor-not-allowed">← Précédent</span>
+                            {% endif %}
+                            <span class="px-4 py-2">Page {{ page }}</span>
+                            {% if end < championships|length %}
+                            <a href="?page={{ page + 1 }}" class="px-4 py-2 bg-gray-300 rounded-r-lg hover:bg-gray-400">Suivant →</a>
+                            {% else %}
+                            <span class="px-4 py-2 bg-gray-200 rounded-r-lg cursor-not-allowed">Suivant →</span>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
                 </div>
                 {% else %}
                     <p class="text-lg text-gray-700">Pas de championnat en cours</p>
                 {% endif %}           
             </div>         
         </div>
-
 
         <!-- Pied de page -->
         <div class="w-screen h-full bg-black text-white flex flex-col">
@@ -58,7 +110,4 @@
         </div>
     </body>
 </html>
-
-
-{% endblock %}  
-
+{% endblock %}
