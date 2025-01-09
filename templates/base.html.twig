@@ -17,6 +17,24 @@
             {{ message }}
         </div>
     {% endfor %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}Welcome!{% endblock %}
+    </title>
+    <link rel="icon" href="{{ asset('Images/logo.png') }}">
+    {% block stylesheets %}
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {% endblock %}
+</head>
+<body class="bg-gray-100">
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
 
     <div class="min-h-full">
         <nav class="bg-gradient-to-r from-blue-500 via-teal-400 to-indigo-600 flex items-center justify-between px-6 py-4 shadow-lg rounded-b-xl">
