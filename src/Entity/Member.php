@@ -6,6 +6,7 @@ use App\Repository\MemberRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
 class Member
@@ -18,6 +19,7 @@ class Member
     #[ORM\Column(length: 255)]
     private ?string $Name = null;
 
+    
     #[ORM\Column(length: 255)]
     private ?string $Email = null;
 
