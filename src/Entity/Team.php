@@ -39,19 +39,23 @@ class Team
 
 
     #[ORM\Column]
-    #[Assert\PositiveOrZero()]
+    #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
+    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $totalPoints = 0;
 
     #[ORM\Column]
     #[Assert\PositiveOrZero()]
+    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?float $score = 0;
 
     #[ORM\Column]
     #[Assert\PositiveOrZero()]
+    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $nbEncounter = 0;
 
     #[ORM\Column]
     #[Assert\PositiveOrZero()]
+    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $nbGoals = 0;
 
     #[ORM\Column(type: "datetime")]
@@ -60,6 +64,7 @@ class Team
 
     #[ORM\Column]
     #[Assert\PositiveOrZero()]
+    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $nbWin = 0;
 
     #[ORM\Column]
