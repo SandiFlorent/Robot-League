@@ -113,12 +113,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    // Dans l'entité User
+    public function setPassword(?string $password): self
     {
-        $this->password = $password;
-
+        // Si un mot de passe est fourni (non null), on le met à jour
+        if ($password !== null) {
+            $this->password = $password;
+        }
+        // Si le mot de passe est null, on ne change rien
         return $this;
     }
+
 
     /**
      * @see UserInterface
