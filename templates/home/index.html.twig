@@ -3,16 +3,16 @@
 {% block title %}{{ 'index.home'|trans }}{% endblock %}
 
 {% block body %}
-<style>
-
-</style>
 <html>
     <body>
         <div class="flex justify-start flex-row p-8 space-y-8"> 
-            <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full">
+            <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full overflow-auto"> <!-- Ajouter overflow-auto pour limiter les débordements -->
                 {% if championships is not empty %}
                 <h1 class="text-3xl font-bold text-gray-800 mb-8">{{ 'index.matchList'|trans }}</h1>
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto"> <!-- Gérer l'overflow horizontal -->
+                    
+                    <!-- Affichage normal (tableau) sur grand écran -->
+                    <div class="hidden sm:block">
                     <table class="min-w-full text-base text-left text-gray-800 border-collapse border border-gray-300">
                         <thead class="text-lg text-gray-700 uppercase bg-gray-100">
                             <tr>
@@ -42,7 +42,6 @@
             </div>         
         </div>
 
-
         <!-- Pied de page -->
         <div class="w-screen h-full bg-black text-white flex flex-col">
             <div class="flex flex-row justify-evenly p-8">
@@ -59,7 +58,4 @@
         </div>
     </body>
 </html>
-
-
-{% endblock %}  
-
+{% endblock %}
