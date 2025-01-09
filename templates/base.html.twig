@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Welcome!
+			{% block title %}Bienvenu!
 			{% endblock %}
 		</title>
 		<link rel="icon" href="{{ asset('Images/logo.png') }}"> {% block stylesheets %}{% endblock %}
@@ -28,25 +28,21 @@
                 <div class="justify-end ml-auto"> 
                     <a href="{{path('app_home')}}" class="rounded-md bg-sky-900 px-3 py-2 text-lg font-medium text-white" aria-current="page">Menu</a>
                         {% if app.user %}	
-									<a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-lg font-medium text-red-900 hover:bg-red-700 hover:text-white">Déconnexion</a>
-									{% if is_granted('ROLE_USER') %}
-                                    {% if app.user.myTeam == null %}
-                                        <a href="{{path('app_team_new')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Créer une équipe</a>
-                                    {% else %}
-                                        <a href="{{ path('app_team_member', {'id': app.user.myTeam.id }) }}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Mon équipe</a>
-                                    {% endif %}
-									<div class="flex -space-x-2 overflow-hidden">
-  										<img class="inline-block size-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-                                	</div>
-								{% endif %}
-									{% if is_granted('ROLE_ORGANISATEUR') %}
-                                    <a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Championnat</a>
-                                	{% endif %}
-								{% else %}
-									<a href="{{path('app_login')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Connexion</a>
-									<a href="{{path('app_register')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Inscription</a>
-									
-								{% endif %}
+							<a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-lg font-medium text-red-900 hover:bg-red-700 hover:text-white">Déconnexion</a>
+							{% if is_granted('ROLE_USER') %}
+								<div class="flex -space-x-2 overflow-hidden">
+									<img class="inline-block size-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+								</div>
+                                <a href="{{path('app_team_new')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Créer une équipe</a>
+							{% endif %}
+							{% if is_granted('ROLE_ORGANISATEUR') %}
+								<a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Mes championnats</a>
+								<a href="{{path('app_championship_list_new')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Créer un championnat</a>
+							{% endif %}
+						{% else %}
+							<a href="{{path('app_login')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Connexion</a>
+							<a href="{{path('app_register')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Inscription</a>
+						{% endif %}
 								<a href="{{path('app_team_show')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Equipes</a>
 							</div>
 						</div>
@@ -59,7 +55,14 @@
 			<div class="flash-notice">
 				{{ message }}
 			</div>
-		{% endfor %}<!-- Mobile menu, show/hide based on menu state. 
+		{% endfor %}
+		
+		<!--
+		
+		!-->
+		
+		
+		<!-- Mobile menu, show/hide based on menu state. 
 					        <div class="md:hidden" id="mobile-menu">
 					            <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
 					                Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" 
