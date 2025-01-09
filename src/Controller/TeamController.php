@@ -106,6 +106,12 @@ final class TeamController extends AbstractController
     #[Route('/{id}/teammember', name: 'app_team_member', methods: ['GET', 'POST'])]
     public function member(Request $request, Team $team ,EntityManagerInterface $entityManager): Response
     {
+        // Vérifier si l'utilisateur connecté est le créateur de l'équipe
+        $user = $this->getUser();
+        if ($team->getCreator() !== $user) {
+            // Si ce n'est pas le créateur, on renvoie une exception "Access Denied"
+            throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette équipe.');
+        }
         $member = new Member();
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
