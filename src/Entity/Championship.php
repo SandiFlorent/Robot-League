@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Enum\State;
 use App\Repository\ChampionshipRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ChampionshipRepository::class)]
 class Championship
@@ -21,10 +22,12 @@ class Championship
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $greenTeam = null;
 
-    #[ORM\Column(nullable: true)]
+    #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
+    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $blueGoal = null;
 
-    #[ORM\Column(nullable: true)]
+    #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
+    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $greenGoal = null;
 
     #[ORM\Column(nullable: true, enumType: State::class)]
@@ -33,7 +36,7 @@ class Championship
     public function __construct()
     {
         if ($this->state === null) {
-            $this->state = State::NotStarted;
+            $this->state = State::NOT_STARTED;
         }
     }
     
