@@ -11,8 +11,9 @@ use App\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 use DateTimeInterface;
 use DateTime;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
+#[UniqueEntity(fields: ['Name'], message: "Une équipe porte déjà ce nom")]
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
 {
@@ -20,7 +21,7 @@ class Team
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank()]
     private ?string $Name = null;
@@ -38,22 +39,18 @@ class Team
     private Collection $championships;
 
 
-    #[ORM\Column]
     #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $totalPoints = 0;
 
-    #[ORM\Column]
     #[Assert\PositiveOrZero()]
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?float $score = 0;
 
-    #[ORM\Column]
     #[Assert\PositiveOrZero()]
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $nbEncounter = 0;
 
-    #[ORM\Column]
     #[Assert\PositiveOrZero()]
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $nbGoals = 0;
@@ -62,7 +59,6 @@ class Team
     private ?DateTimeInterface $inscriptionDate;
 
 
-    #[ORM\Column]
     #[Assert\PositiveOrZero()]
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $nbWin = 0;
