@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Score!{% endblock %}
+
+{% block body %}
+
+<h1>Tableau des scores!</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for team in teams %}
+        <tr>
+            <td>{{ team.getName() }}</td>
+            <td>
+                {{ team.getScore() }}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">Aucune donnée</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

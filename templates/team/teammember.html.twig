@@ -49,6 +49,7 @@
                 <div>
                     {{ form_label(form.Email, 'Email', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
                     {{ form_widget(form.Email, {'attr': {'class': 'bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
+                    {{ form_errors(form.Name) }}
                 </div>
             </div>
             <button class="bg-blue-950 text-blue-400 border border-red-blue border-b-4 font-medium overflow-hidden relative px-4 py-2 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
