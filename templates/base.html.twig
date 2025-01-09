@@ -29,6 +29,7 @@
                             {% endif %}
 						{% endif %}
 						{% if is_granted('ROLE_ORGANISATEUR') %}
+							<a href="{{path('app_user_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Utilisateurs</a>
                             <a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.championship'|trans }}</a>
                         {% endif %}
 						<a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-lg font-medium text-red-900 hover:bg-red-700 hover:text-white">{{ 'base.logout'|trans }}</a>
