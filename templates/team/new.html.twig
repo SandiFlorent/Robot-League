@@ -15,9 +15,13 @@
         <div>
             {{ form_label(form.Name, 'new.teamName'|trans, { 'label_attr': { 'class': 'block mb-2 text-sm font-medium text-gray-900' } }) }}
             {{ form_widget(form.Name, { 'attr': { 
-            'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5', 
-            'placeholder': 'new.teamName'|trans } }) }}
-            {{ form_errors(form.Name) }}
+                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5', 
+                'placeholder': 'new.teamName'|trans ' } }) }}
+                
+            {% for error in form_errors(form) %}
+            <div class="form-error">{{ error.message }}</div>
+            {% endfor %}
+            {{ form_row(form.email) }}
         </div>
         
         <!-- Bouton de soumission -->
