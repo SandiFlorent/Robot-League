@@ -34,6 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->roles = ["ROLE_USER"];
+        $this->myTeams = new ArrayCollection();
     }
 
     /**
@@ -42,8 +43,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToOne(inversedBy: 'creator', cascade: ['persist'])]
-    private ?Team $myTeam = null;
+    /**
+     * @var Collection<int, Team>
+     */
+    #[ORM\OneToMany(targetEntity: Team::class, mappedBy: 'creator')]
+    private Collection $myTeams;
+
+
 
 
     public function getId(): ?int
@@ -126,14 +132,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getMyTeam(): ?Team
+    /**
+     * @return Collection<int, Team>
+     */
+    public function getMyTeams(): Collection
     {
-        return $this->myTeam;
+        return $this->myTeams;
     }
 
-    public function setMyTeam(?Team $myTeam): static
+    public function addMyTeam(Team $myTeam): static
     {
-        $this->myTeam = $myTeam;
+        if (!$this->myTeams->contains($myTeam)) {
+            $this->myTeams->add($myTeam);
+            $myTeam->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMyTeam(Team $myTeam): static
+    {
+        if ($this->myTeams->removeElement($myTeam)) {
+            // set the owning side to null (unless already changed)
+            if ($myTeam->getCreator() === $this) {
+                $myTeam->setCreator(null);
+            }
+        }
 
         return $this;
     }
