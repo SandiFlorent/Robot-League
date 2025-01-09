@@ -38,6 +38,8 @@ class Team
     #[ORM\OneToMany(targetEntity: Championship::class, mappedBy: 'blueTeam')]
     private Collection $championships;
 
+    #[ORM\OneToOne(mappedBy: 'myTeam', cascade: ['persist'])]
+    private ?User $creator = null;
 
     #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]

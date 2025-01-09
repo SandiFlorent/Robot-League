@@ -50,8 +50,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $myTeams;
 
 
-
-
     public function getId(): ?int
     {
         return $this->id;
