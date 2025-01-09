@@ -3,34 +3,20 @@ DELIMITER $$
 CREATE TRIGGER before_update_championship
 BEFORE UPDATE ON Championship
 FOR EACH ROW
-
 BEGIN
-
-    -- Victory
-    
-    --blue team
-    IF NEW.state = 'Victoire Blue' AND OLD.state =! 'Victoire Blue' AND OLD.state != 'Égalité' THEN
+    -- Update blue team's total goals
+    IF NEW.blue_goal != OLD.blue_goal THEN
         UPDATE team
-        SET total_points = total_points + 3, nb_win = nb_win + 1
+        SET total_goal = total_goal + (NEW.blue_goal - OLD.blue_goal)
         WHERE id = NEW.blue_team_id;
     END IF;
 
-    IF NEW.state = 'Victoire Blue' AND OLD.state == "Égalité" THEN
+    -- Update green team's total goals
+    IF NEW.green_goal != OLD.green_goal THEN
         UPDATE team
-        SET total_points = total_goal + 2
-        WHERE id = NEW.blue_team_id;
-
-    --green team
-
-    -- égalité
-    --blue team
-    IF NEW.state = 'Égalité' AND (OLD.state == 'Victoire Blue' OR OLD.state == 'Victoire Green')THEN
-        UPDATE team
-        SET total_points = total_points - 2
-        WHERE id = NEW.blue_team_id; 
+        SET total_goal = total_goal + (NEW.green_goal - OLD.green_goal)
+        WHERE id = NEW.green_team_id;
     END IF;
-
-
 END$$
 
 DELIMITER ;
