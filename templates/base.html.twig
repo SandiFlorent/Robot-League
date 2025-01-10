@@ -49,11 +49,7 @@
                     <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
                         {% if app.user %}
                             {% if is_granted('ROLE_USER') %}
-                                {% if app.user.myTeam == null %}
-                                    <a href="{{ path('/{_locale}/app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">{{ 'base.create'|trans }}</a>
-                                {% else %}
-                                    <a href="{{ path('/{_locale}/app_team_member', {'id': app.user.myTeam.id}) }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">{{ 'base.team'|trans }}</a>
-                                {% endif %}
+                                <a href="{{ path('app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">{{ 'base.create'|trans }}</a>
                             {% endif %}
 						{% endif %}
 						{% if is_granted('ROLE_ORGANISATEUR') %}
@@ -94,11 +90,7 @@
             <a href="{{ path('app_team_show') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">{{ 'show.teams'|trans }}</a>
             {% if app.user %}
                 {% if is_granted('ROLE_USER') %}
-                    {% if app.user.myTeam == null %}
-                        <a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">{{ 'new.createTeam'|trans }}</a>
-                    {% else %}
-                        <a href="{{ path('app_team_member', {'id': app.user.myTeam.id }) }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">{{ 'base.team'|trans }}</a>
-                    {% endif %}
+                    <a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">{{ 'new.createTeam'|trans }}</a>
                 {% endif %}
                 {% if is_granted('ROLE_ORGANISATEUR') %}
                     <a href="{{ path('app_user_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">{{ 'show.users'|trans }}</a>
