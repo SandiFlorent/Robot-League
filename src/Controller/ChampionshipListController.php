@@ -8,9 +8,11 @@ use App\Entity\Slot;
 use App\Form\SlotType;
 use App\Entity\Field;
 use App\Form\FieldType;
-use App\Form\ChampionshipListChoiceType;
+use App\Entity\Encounter;
 use App\Repository\ChampionshipListRepository;
 use App\Repository\ChampionshipRepository;
+use App\Repository\FieldRepository;
+use App\Repository\SlotRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -92,7 +94,7 @@ final class ChampionshipListController extends AbstractController
 
 
     #[Route('{id}/newSlot', name: 'app_championship_list_new_slot', methods: ['GET', 'POST'])]
-    public function newSlot(Request $request, EntityManagerInterface $entityManager , ChampionshipList $championshipList): Response
+    public function newSlot(Request $request, EntityManagerInterface $entityManager , ChampionshipList $championshipList, FieldRepository $FieldRepository): Response
     {
         $slot = new Slot();
         $form = $this->createForm(SlotType::class, $slot);
@@ -130,10 +132,19 @@ final class ChampionshipListController extends AbstractController
                     $entityManager->persist($slo);
                 }
 
-            
-                $championshipList->addSlot($slot);
+                
+                $fields = $FieldRepository->findAll();
 
-                $entityManager->persist($slot);
+                foreach ($slots as $slo) {
+                    foreach($fields as $field){
+                        $encounter = new Encounter();
+                        $encounter->setField($field);
+                        $encounter->setSlot($slo);
+                        $encounter->setMyChampionshipList($championshipList);
+                        $entityManager->persist($encounter);
+                    }
+                }
+
                 $entityManager->flush();
                 
 
@@ -151,7 +162,7 @@ final class ChampionshipListController extends AbstractController
     }
 
     #[Route('{id}/newField', name: 'app_championship_list_new_field', methods: ['GET', 'POST'])]
-    public function newField(Request $request, EntityManagerInterface $entityManager, ChampionshipList $championshipList): Response
+    public function newField(Request $request, EntityManagerInterface $entityManager, ChampionshipList $championshipList, SlotRepository $slotRepository): Response
     {
         $field = new Field();
         $form = $this->createForm(FieldType::class, $field);
@@ -162,6 +173,16 @@ final class ChampionshipListController extends AbstractController
 
             $entityManager->persist($field);
             $entityManager->flush();
+
+            $slots = $slotRepository->findAll();
+
+            foreach ($slots as $slo) {
+                $encounter = new Encounter();
+                $encounter->setField($field);
+                $encounter->setSlot($slo);
+                $encounter->setMyChampionshipList($championshipList);
+                $entityManager->persist($encounter);
+            }
 
             $id = $championshipList->getId();
             return $this->redirectToRoute('app_championship_list_new_field', [
