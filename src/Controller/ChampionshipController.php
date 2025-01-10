@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Championship;
+use App\Entity\ChampionshipList;
 use App\Repository\ChampionshipRepository;
+use App\Repository\ChampionshipListRepository;
 use App\Repository\TeamRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -130,5 +132,36 @@ final class ChampionshipController extends AbstractController
         // Redirige vers la page du championnat pour actualiser l'affichage
         return $this->redirectToRoute('app_championship_index');
     }
+
+    // #[Route('/championship', name: 'app_championship_select')]
+    // public function selectChampionship(ChampionshipListRepository $championshipListRepository, Request $request): Response
+    // {
+    //     $championshiplistId = $request->query->get('championshiplist_id');
+        
+    //     // Récupérer tous les championnats disponibles
+    //     $championshiplists= $championshipListRepository->findAll();
+        
+    //     // Récupérer le championnat sélectionné
+    //     $selectedChampionshiplist = null;
+    //     if ($championshiplistId) {
+    //         $selectedChampionshiplist = $championshipListRepository->find($championshiplistId);
+    //     }
+
+    //     // Récupérer les matchs du championnat sélectionné
+    //     $championships = [];
+    //     if ($selectedChampionshiplist) {
+    //         $championships = $selectedChampionshiplist->getMatches();
+    //     }
+
+    //     $states = State::cases();
+
+    //     // Passer les données à la vue
+    //     return $this->render('championship/index.html.twig', [
+    //         'championship_list' => $selectedChampionshiplist,
+
+    //         'championships' => $championships,
+    //         'states' => $states, // Exemple pour les états
+    //     ]);
+    // }
         
 }

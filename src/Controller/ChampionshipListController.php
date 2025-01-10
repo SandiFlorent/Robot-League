@@ -8,12 +8,16 @@ use App\Entity\Slot;
 use App\Form\SlotType;
 use App\Entity\Field;
 use App\Form\FieldType;
+use App\Form\ChampionshipListChoiceType;
 use App\Repository\ChampionshipListRepository;
+use App\Repository\ChampionshipRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 #[Route('/championship/list')]
 final class ChampionshipListController extends AbstractController
@@ -170,4 +174,65 @@ final class ChampionshipListController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    // #[Route('/choose-number', name: 'app_choose_number', methods: ['GET', 'POST'])]
+    // public function chooseNumber(Request $request): Response
+    // {
+    //     // Créer le formulaire
+    //     $form = $this->createForm(ChampionshipListChoiceType::class);
+
+    //     // Traiter la soumission du formulaire
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         // Récupérer l'entier sélectionné
+    //         $selectedNumber = $form->get('number')->getData();
+
+    //         // Afficher ou traiter l'entier sélectionné
+    //         $this->addFlash('notice', 'Numéro sélectionné : ' . $selectedNumber);
+
+    //         // Redirection ou traitement supplémentaire
+    //         return $this->redirectToRoute('app_choose_number');
+    //     }
+
+    //     // Rendu du formulaire
+    //     return $this->render('championship/choice.html.twig', [
+    //         'form' => $form->createView(),
+    //     ]);
+    // }
+
+    // #[Route('/choose', name: 'app_championship_choice', methods: ['POST'])]
+    // public function ChampionshipChoice(ChampionshipListRepository $championshipListRepository, Request $request, string $path): Response
+    // {
+    //     // Récupérer la liste des championnats
+    //     $Championshiplists = $championshipListRepository->findAll();
+
+    //     // Récupérer le paramètre 'championshiplist_id' envoyé par le formulaire via POST
+    //     $championshiplistId = $request->request->get('championshiplist_id');
+        
+    //     // Vérifier si l'ID a bien été récupéré
+    //     if ($championshiplistId != null) {
+
+    //         // Redirection vers la route spécifiée avec le paramètre 'champid'
+    //         return $this->redirectToRoute($path, [
+    //             'champid' => $championshiplistId // Passer l'ID du championnat
+    //         ]);
+    //     }
+
+    //     // Si aucun championnat n'est sélectionné, on affiche la page avec la liste des championnats
+    //     return $this->render('championship_list/choice.html.twig', [
+    //         'championshiplists' => $Championshiplists,
+    //     ]);
+    // }
+
+    // #[Route('/choose', name: 'app_championship_choice_base', methods: ['POST'])]
+    // public function ChampionshipChoiceBase(ChampionshipListRepository $championshipListRepository, Request $request, string $path): Response
+    // {
+
+    //     $Championshiplists = $championshipListRepository->findAll();
+
+    //     return $this->redirectToRoute('app_championship_choice', [
+    //         'path' => $path
+    //     ]);
+    // }
 }
