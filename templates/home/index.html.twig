@@ -1,30 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Liste des matchs{% endblock %}
 
 {% block body %}
-<html>
-    <body>
-        <div class="flex justify-start flex-row p-8 space-y-8"> 
-            <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full overflow-auto rounded-xl hover:shadow-2xl transition-shadow duration-300">
-                {% if championships is not empty %}
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
-                <div class="overflow-x-auto">
+<div class="flex justify-start flex-row p-8 space-y-8"> 
+    <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full overflow-auto rounded-xl hover:shadow-2xl transition-shadow duration-300">
+        
+        <!-- Formulaire de sélection du championnat -->
+        <form method="get" action="{{ path('app_home') }}" class="mb-8">
+            <label for="championshiplist_id" class="block text-lg font-semibold text-gray-700">Choisir un championnat :</label>
+            <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
+                <option value="">Sélectionner un championnat</option>
+                {% for championshipList in championshipLists %}
+                    <option value="{{ championshipList.id }}" {% if championshipList.id == selected_championship_id %}selected{% endif %}>
+                        {{ championshipList.championshipName }} <!-- Correction ici -->
+                    </option>
+                {% endfor %}
+            </select>
 
-                    <!-- Affichage normal (tableau) sur grand écran -->
-                    <div class="hidden sm:block">
-                        <table class="min-w-full text-base text-left text-gray-800 border-collapse border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
-                            <thead class="text-lg text-gray-700 uppercase bg-gradient-to-r from-blue-500 to-green-500 text-white">
-                                <tr>
-                                    <th scope="col" class="px-8 py-6">Équipe Bleue</th>
-                                    <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
-                                    <th scope="col" class="px-8 py-6">But Équipe Verte</th>
-                                    <th scope="col" class="px-8 py-6">Équipe Verte</th>
-                                    <th scope="col" class="px-8 py-6">État</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white">
-                                {% for championship in championships %}
+            <button type="submit" class="mt-4 px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">
+                Afficher les matchs
+            </button>
+        </form>
+
+        {% if championships is not empty and selected_championship_id %}
+            <h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
+            <div class="overflow-x-auto">
+                <!-- Affichage normal (tableau) sur grand écran -->
+                <div class="hidden sm:block">
+                    <table class="min-w-full text-base text-left text-gray-800 border-collapse border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <thead class="text-lg text-gray-700 uppercase bg-gradient-to-r from-blue-500 to-green-500 text-white">
+                            <tr>
+                                <th scope="col" class="px-8 py-6">Équipe Bleue</th>
+                                <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
+                                <th scope="col" class="px-8 py-6">But Équipe Verte</th>
+                                <th scope="col" class="px-8 py-6">Équipe Verte</th>
+                                <th scope="col" class="px-8 py-6">État</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            {% for championship in championships %}
                                 <tr class="hover:bg-blue-50 transition-colors duration-300 rounded-lg">
                                     <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
                                     <td class="px-8 py-6">{{ championship.blueGoal }}</td>
@@ -32,20 +47,20 @@
                                     <td class="px-8 py-6 font-medium text-gray-900">{{ championship.greenTeam.name }}</td>
                                     <td class="px-8 py-6">{{ championship.state.value }}</td>
                                 </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-                    <!-- Affichage mobile avec les scores sur la même ligne que les noms -->
-                    <div class="sm:hidden">
-                        {% set perPage = 4 %} <!-- Nombre de matchs par page -->
-                        {% set page = app.request.query.get('page', 1) %}
-                        {% set start = (page - 1) * perPage %}
-                        {% set end = start + perPage %}
-                        {% set currentChampionships = championships | slice(start, end) %}
+                <!-- Affichage mobile avec les scores sur la même ligne que les noms -->
+                <div class="sm:hidden">
+                    {% set perPage = 4 %} <!-- Nombre de matchs par page -->
+                    {% set page = app.request.query.get('page', 1) %}
+                    {% set start = (page - 1) * perPage %}
+                    {% set end = start + perPage %}
+                    {% set currentChampionships = championships | slice(start, end) %}
 
-                        {% for championship in currentChampionships %}
+                    {% for championship in currentChampionships %}
                         <div class="flex flex-col mb-4 border border-gray-300 p-4 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
                             <div class="flex justify-between bg-blue-200 px-4 py-2 font-medium text-blue-700 rounded-lg hover:bg-blue-300 transition-colors duration-300">
                                 <div class="font-semibold">Équipe Bleue:</div>
@@ -62,41 +77,25 @@
                                 <div>{{ championship.state.value }}</div>
                             </div>
                         </div>
-                        {% endfor %}
+                    {% endfor %}
 
-                        <!-- Pagination (pour les petits écrans) -->
-                        <div class="flex justify-center mt-8 space-x-4">
-                            {% set totalPages = (championships|length // perPage) + (championships|length % perPage > 0 ? 1 : 0) %}
-                            {% for i in 1..totalPages %}
-                                <a href="?page={{ i }}" 
-                                   class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition duration-300 
-                                          {% if i == page %}bg-blue-500 text-white{% endif %}">
-                                    {{ i }}
-                                </a>
-                            {% endfor %}
-                        </div>
+                    <!-- Pagination (pour les petits écrans) -->
+                    <div class="flex justify-center mt-8 space-x-4">
+                        {% set totalPages = (championships|length // perPage) + (championships|length % perPage > 0 ? 1 : 0) %}
+                        {% for i in 1..totalPages %}
+                            <a href="?page={{ i }}" 
+                               class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition duration-300 
+                                      {% if i == page %}bg-blue-500 text-white{% endif %}">
+                                {{ i }}
+                            </a>
+                        {% endfor %}
                     </div>
                 </div>
-                {% else %}
-                    <p class="text-lg text-gray-700">Pas de championnat en cours</p>
-                {% endif %}           
-            </div>         
-        </div>
+            </div>
+        {% else %}
+            <p class="text-lg text-gray-700">Pas de championnat en sélectionner</p>
+        {% endif %}
+    </div>         
+</div>
 
-        <!-- Pied de page -->
-        <div class="w-screen h-full bg-black text-white flex flex-col">
-            <div class="flex flex-row justify-evenly p-8">
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-            </div>    
-            <div class="flex flex-row justify-evenly p-8">
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-            </div>    
-        </div>
-    </body>
-</html>
 {% endblock %}
-    
