@@ -32,4 +32,8 @@
 
     {{ include('slot/_form.html.twig') }}
 
+    <hr />
+
+    <a href="{{ path('app_championship_list_new_field', {'id': championship_list.id }) }}">Ajouter des terrains</a>
+
 {% endblock %}

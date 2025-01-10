@@ -58,12 +58,19 @@ class ChampionshipList
     #[ORM\OneToMany(targetEntity: Slot::class, mappedBy: 'championshipList')]
     private Collection $slot;
 
+    /**
+     * @var Collection<int, Encounter>
+     */
+    #[ORM\OneToMany(targetEntity: Encounter::class, mappedBy: 'myChampionshipList')]
+    private Collection $encounters;
+
     public function __construct()
     {
         $this->teams = new ArrayCollection();
         $this->matches = new ArrayCollection();
         $this->field = new ArrayCollection();
         $this->slot = new ArrayCollection();
+        $this->encounters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -257,6 +264,36 @@ class ChampionshipList
             // set the owning side to null (unless already changed)
             if ($slot->getChampionshipList() === $this) {
                 $slot->setChampionshipList(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Encounter>
+     */
+    public function getEncounters(): Collection
+    {
+        return $this->encounters;
+    }
+
+    public function addEncounter(Encounter $encounter): static
+    {
+        if (!$this->encounters->contains($encounter)) {
+            $this->encounters->add($encounter);
+            $encounter->setMyChampionshipList($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEncounter(Encounter $encounter): static
+    {
+        if ($this->encounters->removeElement($encounter)) {
+            // set the owning side to null (unless already changed)
+            if ($encounter->getMyChampionshipList() === $this) {
+                $encounter->setMyChampionshipList(null);
             }
         }
 
