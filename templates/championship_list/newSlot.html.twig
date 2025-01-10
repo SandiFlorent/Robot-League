@@ -20,6 +20,7 @@
                 <td>{{ slo.dateDebut|date('Y-m-d H:i:s') }}</td>
                 <td>{{ slo.dateEnd|date('Y-m-d H:i:s') }}</td>
             </tr>
+            <a href={{ path('app_championship_list_delete_slot', {'id': championship_list.id, 'idSlot': slo.id }) }}>Supprimer</a>
         {% else %}
             <tr>
                 <td colspan="8">Pas de créneau enregistré pour le moment</td>
