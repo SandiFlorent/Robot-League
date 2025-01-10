@@ -9,59 +9,81 @@
         <div class="flex-grow p-12">
             <div class="max-w-7xl mx-auto">
                 {% if championships is not empty %}
-                    <!-- Titre avec effet spectaculaire -->
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-800 mb-12 text-center leading-tight tracking-wide uppercase border-b-4 border-blue-500 pb-4">
-                        Matchs du Championnat
-                    </h1>
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
+                <div class="overflow-x-auto">
+                    <!-- Affichage pour les écrans moyens et grands -->
+                    <div class="hidden md:block">
+                        <table class="min-w-full text-sm text-left text-gray-800 border-collapse border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                            <thead class="text-base text-gray-700 uppercase bg-gradient-to-r from-blue-500 to-green-500 text-white">
+                                <tr>
+                                    <th scope="col" class="px-6 py-4">Équipe Bleue</th>
+                                    <th scope="col" class="px-6 py-4">But Équipe Bleue</th>
+                                    <th scope="col" class="px-6 py-4">But Équipe Verte</th>
+                                    <th scope="col" class="px-6 py-4">Équipe Verte</th>
+                                    <th scope="col" class="px-6 py-4">État</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                {% for championship in championships %}
+                                <tr class="hover:bg-blue-50 transition-colors duration-300 rounded-lg">
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
+                                    <td class="px-6 py-4">{{ championship.blueGoal }}</td>
+                                    <td class="px-6 py-4">{{ championship.greenGoal }}</td>
+                                    <td class="px-6 py-4 font-medium text-gray-900">{{ championship.greenTeam.name }}</td>
+                                    <td class="px-6 py-4">{{ championship.state.value }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
-
-                    
-                    <!-- Grille des équipes -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+                    <!-- Affichage compact pour les écrans medium et petits -->
+                    <div class="block md:hidden">
                         {% for championship in championships %}
-                            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out hover:scale-105 hover:border-4 hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 hover:cursor-pointer">
-                                <div class="flex flex-col space-y-6">
-                                    <!-- Équipe Bleue -->
-                                    <div class="bg-gradient-to-r from-blue-400 to-blue-500 text-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out">
-                                        <h3 class="text-2xl font-semibold">{{ championship.blueTeam.name }}</h3>
-                                        <p class="text-xl">{{ championship.blueGoal }} buts</p>
-                                    </div>
-                                    
-                                    <!-- Équipe Verte -->
-                                    <div class="bg-gradient-to-r from-green-400 to-green-500 text-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out">
-                                        <h3 class="text-2xl font-semibold">{{ championship.greenTeam.name }}</h3>
-                                        <p class="text-xl">{{ championship.greenGoal }} buts</p>
-                                    </div>
-                                    
-                                    <!-- État -->
-                                    <div class="p-6 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out">
-                                        <span class="font-medium text-gray-600">État du match:</span>
-                                        <span class="text-xl font-semibold text-blue-600">{{ championship.state.value }}</span>
-                                    </div>
-                                </div>
+                        <div class="flex flex-col mb-4 border border-gray-300 p-4 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                            <div class="flex justify-between bg-blue-200 px-4 py-2 font-medium text-blue-700 rounded-lg hover:bg-blue-300 transition-colors duration-300">
+                                <span>Équipe Bleue:</span>
+                                <span>{{ championship.blueTeam.name }}</span>
                             </div>
+                            <div class="flex justify-between bg-green-200 px-4 py-2 font-medium text-green-700 rounded-lg hover:bg-green-300 transition-colors duration-300">
+                                <span>Score:</span>
+                                <span>{{ championship.blueGoal }}</span>
+                            </div>
+                            <div class="flex justify-between bg-blue-200 px-4 py-2 font-medium text-blue-700 rounded-lg hover:bg-blue-300 transition-colors duration-300 mt-2">
+                                <span>Équipe Verte:</span>
+                                <span>{{ championship.greenTeam.name }}</span>
+                            </div>
+                            <div class="flex justify-between bg-green-200 px-4 py-2 font-medium text-green-700 rounded-lg hover:bg-green-300 transition-colors duration-300 mt-2">
+                                <span>Score:</span>
+                                <span>{{ championship.greenGoal }}</span>
+                            </div>
+                            <div class="flex justify-between px-4 py-2 font-medium mt-2">
+                                <span>État:</span>
+                                <span>{{ championship.state.value }}</span>
+                            </div>
+                        </div>
                         {% endfor %}
                     </div>
+                </div>
                 {% else %}
                     <p class="text-lg text-gray-700 text-center">Pas de championnat en cours</p>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="w-full bg-black text-white py-8 mt-auto">
-            <div class="flex justify-evenly mb-4">
-                <a href="{{ path('app_home') }}" class="text-sm hover:text-blue-600 hover:underline transition-all duration-300 ease-in-out">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="text-sm hover:text-blue-600 hover:underline transition-all duration-300 ease-in-out">Politique de confidentialité</a>
-                <a href="{{ path('app_home') }}" class="text-sm hover:text-blue-600 hover:underline transition-all duration-300 ease-in-out">Contact</a>
+        <!-- Pied de page -->
+        <div class="w-screen h-full bg-black text-white flex flex-col">
+            <div class="flex flex-row justify-evenly p-8">
+                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">Politique de confidentialité</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">Contact</a>
             </div>    
-            <div class="flex justify-evenly">
-                <a href="{{ path('app_home') }}" class="text-sm hover:text-blue-600 hover:underline transition-all duration-300 ease-in-out">Plan du site</a>
-                <a href="{{ path('app_home') }}" class="text-sm hover:text-blue-600 hover:underline transition-all duration-300 ease-in-out">Support</a>
-                <a href="{{ path('app_home') }}" class="text-sm hover:text-blue-600 hover:underline transition-all duration-300 ease-in-out">FAQ</a>
+            <div class="flex flex-row justify-evenly p-8">
+                <a href="{{ path('app_home') }}" class="hover:underline">Plan du site</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">Support</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">FAQ</a>
             </div>    
         </div>
     </body>
 </html>
 {% endblock %}
-
