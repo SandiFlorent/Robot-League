@@ -28,16 +28,16 @@ class ChampionshipType extends AbstractType
             ])
             ->add('state', ChoiceType::class, [
                 'choices' => [
-                    'Annulé' => State::Canceled->value,
-                    'En cours' => State::InProgress->value,
-                    'Non commencé' => State::NotStarted->value,
-                    'Victoire Blue' => State::WinBlue->value,
-                    'Victoire Green' => State::WinGreen->value,
-                    'Égalité' => State::Draw->value,
+                    'Annulé' => State::CANCELED->value,
+                    'En cours' => State::IN_PROGRESS->value,
+                    'Non commencé' => State::NOT_STARTED->value,
+                    'Victoire Blue' => State::WIN_BLUE->value,
+                    'Victoire Green' => State::WIN_GREEN->value,
+                    'Égalité' => State::DRAW->value,
                 ],
                 'expanded' => true, // Affiche les options sous forme de boutons radio
                 'multiple' => false, // On ne permet pas de choisir plusieurs valeurs
-                'data' => State::NotStarted->value, // Par défaut, l'état est "Non Commencé"
+                'data' => State::NOT_STARTED->value, // Par défaut, l'état est "Non Commencé"
             ])
         ;
     }
