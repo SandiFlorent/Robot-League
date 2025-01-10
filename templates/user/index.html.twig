@@ -3,37 +3,55 @@
 {% block title %}{{ 'index.userIndex'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ 'index.userIndex'|trans }}</h1>
+<div class="container mx-auto p-6">
+    <!-- Titre de la page -->
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Liste des Utilisateurs</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>{{ 'show.id'|trans }}</th>
-                <th>{{ 'show.email'|trans }}</th>
-                <th>{{ 'show.roles'|trans }}</th>
-                <th>{{ 'index.actions'|trans }}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    &nbsp;
-                    &nbsp;
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">{{ 'index.noRecords'|trans }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <!-- Table Responsive -->
+    <div class="overflow-x-auto shadow-md rounded-lg">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">ID</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Email</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Rôles</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100">
+                    <td class="px-4 py-3 text-sm text-gray-700 border border-gray-300">{{ user.id }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700 border border-gray-300">{{ user.email }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700 border border-gray-300">
+                        {{ user.roles ? user.roles|json_encode : 'Aucun rôle' }}
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-700 border border-gray-300">
+                        <div class="flex space-x-3">
+                            <a href="{{ path('app_user_show', {'id': user.id}) }}" 
+                               class="text-blue-500 hover:underline">Afficher</a>
+                            <a href="{{ path('app_user_edit', {'id': user.id}) }}" 
+                               class="text-green-500 hover:underline">Modifier</a>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="px-4 py-3 text-center text-sm text-gray-600 border border-gray-300">
+                        Aucun utilisateur trouvé.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <a href="{{ path('app_user_new') }}">{{ 'index.createNew'|trans }}</a>
+    <!-- Lien de création d'utilisateur -->
+    <div class="mt-6 text-center">
+        <a href="{{ path('app_user_new') }}" 
+           class="inline-block px-6 py-2 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 transition">
+            Créer un nouvel utilisateur
+        </a>
+    </div>
+</div>
 {% endblock %}
