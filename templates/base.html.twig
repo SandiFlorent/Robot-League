@@ -30,50 +30,41 @@
             <div class="sm:block md:hidden lg:hidden">
                 <label for="menu-toggle" class="cursor-pointer">
                     <svg class="w-6 h-6 text-white transition-all hover:text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-6 h-6 text-white transition-all hover:text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </label>
                 <input type="checkbox" id="menu-toggle" class="hidden" />
             </div>
 
-            <!-- Menu Desktop (affiché uniquement sur les grands écrans) -->
-            <div class="hidden md:flex lg:flex space-x-6">
-                <a href="{{ path('app_home') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
-
-                <!-- Menu Équipes -->
-                <div class="relative">
-                    <button class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Équipes</button>
-                    <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
-                        {% if app.user %}
-                            {% if is_granted('ROLE_USER') %}
-                                <a href="{{ path('app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer une équipe</a>
-                            {% endif %}
-						{% endif %}
-						{% if is_granted('ROLE_ORGANISATEUR') %}
-                            <a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.championship'|trans }}</a>
-                        {% endif %}
-                        <a href="{{ path('app_team_show') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Voir les équipes</a>
-                        <a href="{{ path('app_score_table') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Voir le score</a>
-                    </div>
-                </div>
-
-                <!-- Menu Admin (affiché uniquement pour les organisateurs) -->
-                {% if is_granted('ROLE_ORGANISATEUR') %}
-                    <div class="relative">
-                        <button class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Admin</button>
-                        <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
-                            <a href="{{ path('app_user_index') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Utilisateurs</a>
-                            <a href="{{ path('app_championship_index') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Championnat</a>
-                        </div>
-                    </div>
-                {% endif %}
-
-                {% if app.user %}
-                    <a href="{{ path('app_logout') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
+            <!-- Menu Desktop -->
+            <div class="hidden sm:flex space-x-6">
+				<a href="{{ path('app_home') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
+                              	<a href="{{path('app_team_show')}}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Equipes</a>
+              	{% if app.user %}  
+                                           	{% if is_granted('ROLE_USER') %}
+                        	{% if app.user.myTeam == null %}
+                            	<a href="{{ path('app_team_new') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Créer une équipe</a>
+                        	{% else %}
+                            	<a href="{{ path('app_team_member', {'id': app.user.myTeam.id}) }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Mon équipe</a>
+                        	{% endif %}
+                                           	{% endif %}
+                                           	{% if is_granted('ROLE_ORGANISATEUR') %}
+												
+                                                  	<a href="{{path('app_user_index')}}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Utilisateurs</a>
+                       								<a href="{{path('app_championship_index')}}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Championnat</a>
+                  						 	{% endif %}
+                                          	<a href="{{ path('app_logout') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
+                                          	<button type="button" class="relative ml-auto shrink-0 rounded-full bg-sky-900 hover:bg-gray-700 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-500">                                          	<span class="absolute -inset-1.5"></span>
+                                          	<span class="sr-only">View notifications</span>                                           	
+											<svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" aria-hidden="true" data-slot="icon">                                                  	
+											<path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                                           	</svg>
+                                           	</button>
+                                   	{% else %}
+                                           	<a href="{{ path('app_login') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
                     <a href="{{ path('app_register') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Inscription</a>
-                {% endif %}
+                                   	{% endif %}
             </div>
         </nav>
 
@@ -84,23 +75,32 @@
     <!-- Menu mobile -->
     <div class="sm:hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur z-50 hidden" id="menu-mobile">
         <div class="flex flex-col items-center justify-center h-full space-y-6">
-            <a href="{{ path('app_home') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
-            <a href="{{ path('app_team_show') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Equipes</a>
-            <a href="{{ path('app_score_table') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Scores</a>
-            
-            {% if app.user %}
-                {% if is_granted('ROLE_USER') %}
-                    <a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Créer une équipe</a>
-                {% endif %}
-                {% if is_granted('ROLE_ORGANISATEUR') %}
-                    <a href="{{ path('app_user_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Utilisateurs</a>
-                    <a href="{{ path('app_championship_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Championnat</a>
-                {% endif %}
-                <a href="{{ path('app_logout') }}" class="text-white text-lg font-semibold hover:bg-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
-                <a href="{{ path('app_register') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Inscription</a>
-            {% endif %}
+             <a href="{{ path('app_home') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
+                              	<a href="{{path('app_team_show')}}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Equipes</a>
+              	{% if app.user %}  
+                                           	{% if is_granted('ROLE_USER') %}
+                        	{% if app.user.myTeam == null %}
+                            	<a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Créer une équipe</a>
+                        	{% else %}
+                            	<a href="{{ path('app_team_member', {'id': app.user.myTeam.id }) }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Mon équipe</a>
+                        	{% endif %}
+                                           	{% endif %}
+                                           	{% if is_granted('ROLE_ORGANISATEUR') %}
+												
+                                                  	<a href="{{path('app_user_index')}}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Utilisateurs</a>
+                       								<a href="{{path('app_championship_index')}}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Championnat</a>
+                  						 	{% endif %}
+                                          	<a href="{{ path('app_logout') }}" class="text-white text-lg font-semibold hover:bg-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
+                                          	<button type="button" class="relative ml-auto shrink-0 rounded-full bg-sky-900 hover:bg-gray-700 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-500">                                          	<span class="absolute -inset-1.5"></span>
+                                          	<span class="sr-only">View notifications</span>                                           	
+											<svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" aria-hidden="true" data-slot="icon">                                                  	
+											<path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                                           	</svg>
+                                           	</button>
+                                   	{% else %}
+                                           <a href="{{ path('app_login') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
+                                           	<a href="{{ path('app_register') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Inscription</a>
+                                   	{% endif %}
         </div>
     </div>
 
