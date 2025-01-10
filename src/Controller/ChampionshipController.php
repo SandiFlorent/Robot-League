@@ -46,7 +46,7 @@ final class ChampionshipController extends AbstractController
 
             // Récupérer les matchs du championnat sélectionné
             if ($selectedChampionshipList) {
-                $championships = $selectedChampionshipList->getChampionships();
+                $championships = $selectedChampionshipList->getMatches();
             }
         }
 

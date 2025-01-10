@@ -2,13 +2,20 @@
 
 {% block body %}
 <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Liste des Championnats</h1>
+    <!-- Titre principal -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Gestion du Championnat</h1>
+    </div>
+
+   
+
+    <hr class="my-8 border-gray-300" />
 
     <!-- Formulaire pour sélectionner un championnat -->
-    <form method="get" action="{{ path('app_championship_index') }}">
-        <div class="mb-4">
-            <label for="championshiplist_id" class="text-lg font-semibold text-gray-700">Choisir un championnat</label>
-            <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-300 rounded-md">
+    <div class="mb-4">
+        <label for="championshiplist_id" class="text-lg font-semibold text-gray-700">Choisir un championnat</label>
+        <form method="get" action="{{ path('app_championship_index') }}">
+            <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
                 <option value="">Sélectionner un championnat</option>
                 {% for championshipList in championship_lists %}
                     <option value="{{ championshipList.id }}" {% if championshipList == selected_championship_list %}selected{% endif %}>
@@ -16,14 +23,33 @@
                     </option>
                 {% endfor %}
             </select>
-        </div>
-        <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">
-            Voir les Matchs
-        </button>
-    </form>
+            <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300 mt-4">
+                Voir les Matchs
+            </button>
+        </form>
+    </div>
 
+    <!-- Si un championnat est sélectionné, afficher la liste des matchs -->
     {% if selected_championship_list %}
-        <h2 class="text-2xl mt-8">Matchs du championnat : {{ selected_championship_list.name }}</h2>
+        <!-- Formulaire pour générer ou supprimer le championnat -->
+        <div class="space-y-6">
+            <!-- Formulaire pour générer le championnat -->
+            <form method="post" action="{{ path('app_championship_generate') }}" class="text-center">
+                <button type="submit" class="px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300">
+                    Générer Championnat
+                </button>
+            </form>
+
+            <!-- Formulaire pour supprimer tous les championnats -->
+            <form method="post" action="{{ path('app_championship_delete_all') }}" 
+                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer tous les matchs ?');" 
+                class="text-center">
+                <button type="submit" class="px-6 py-3 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition duration-300">
+                    Supprimer le championnat
+                </button>
+            </form>
+        </div>
+        <h2 class="text-2xl mt-8">Matchs du championnat : {{ selected_championship_list.ChampionshipName }}</h2>
 
         <!-- Affichage des matchs du championnat sélectionné -->
         <table class="mt-4 table-auto w-full">
