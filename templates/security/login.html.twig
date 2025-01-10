@@ -13,14 +13,14 @@
 
 	<form method="post">
 		{% if error %}
-			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+			<div class="alert alert-danger bg-red-700 text-white px-4">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 		{% endif %}
 		<br><br><br><br><br><br><br><br>
 
 		<div class="max-w-sm mx-auto p-6 bg-white rounded-lg shadow-md justify-center">
 			<div class="mb-5">
 				<label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ 'show.email'|trans }}</label>
-				<input type="email" value="{{ last_username }}" placeholder='exemple@courriel.fr' name="email" id="inputEmail" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="email" required autofocus>
+				<input type="email" value="{{ last_username }}" placeholder="{{ 'login.placeholderMail'|trans }}" name="email" id="inputEmail" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" autocomplete="email" required autofocus>
 			</div>
 			<div class="mb-5 ">
 				<label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ 'show.passwd'|trans }}</label>

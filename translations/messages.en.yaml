@@ -2,88 +2,88 @@ base:
   menu: Menu
   teams: Teams
   create: Create a team
-  team: Myy team
+  team: My team
   championship: Championship
-  logout: Log 
-  notification: Voir les notifications
-  login: Connexion
-  register: Inscription
+  logout: Log out
+  notification: See notifications
+  login: Log in
+  register: Register
 
 show:
-  show: Aficher
-  team: Equipe
-  teams: Equipes
-  user: Utilisateur
-  id: Identifiant
-  email: Adresse e-mail
+  show: Show
+  team: Team
+  teams: Teams
+  user: User
+  id: Id
+  email: E-mail
   roles: Roles
-  passwd: Mot de passe
-  name: Nom
-  creatorOfTeam: Vous êtes le crérateur de cette équipe.
-  noTeams: Pas d'équipes à afficher.
-  noTeamJoined: Vous n'avez ni créé ni rejoint une équipe pour l'instant.
-  member: Membre
-  edit: Modifier
+  passwd: Password
+  name: Name
+  creatorOfTeam: You are the creator of this team.
+  noTeams: No teams to display.
+  noTeamJoined: You have not created nor joined a team yet.
+  member: Member
+  edit: Edit
   
 
 new: 
-  newTeam: Nouvelle équipe
-  createTeam: Créer une nouvelle équipe
-  teamName: Nom de l'équipe
-  enterTeamName: Veuillez entrer le nom de l'équipe
-  addTeam: Ajouter une équipe
-  backToList: Retour à la liste
-  newUser: Nouvel utilisateur
-  createNewUser: Créer un nouvel utilisateur
-  newMember: Nouveau membre
-  createNewMember: Créer un nouveu membre
-  newChampionship: Nouveau championnat
-  createNewChampionship: Créer un nouveau championnat
-  createNewTeamMember: Ajouter
+  newTeam: New team
+  createTeam: Create a new team
+  teamName: Name of the team
+  enterTeamName: Please enter the name of the team
+  addTeam: Add a team
+  backToList: Back to list
+  newUser: New user
+  createNewUser: Create a new user
+  newMember: New member
+  createNewMember: Create a new member
+  newChampionship: New championship
+  createNewChampionship: Create a new championship
+  createNewTeamMember: Create a new team member
 
 index: 
   actions: Actions
-  noRecords: Pas d'informations trouvées
-  userIndex: Index utilisateur
-  createNewUser: Créer un nouvel utilisateur
-  memberIndex: Index membre
-  home: Accueil | RobotLeague
-  matchList: Liste des matchs
-  blueTeam: Équipe bleue
-  greenTeam: Équipe verte
-  goalBlueTeam: But équipe bleue
-  goalGreenTeam: But équipe verte 
-  state: État
-  noChampionship: Pas de championnat en cours.
-  legalNotices: Mentions légales
-  generateChampionshhip: Générer un championnat
-  deleteChampionship: Supprimer le championnat
-  save: Sauvegarder
-  noMatch: Aucun match disponible. Veuillez générer le championnat.
-  teamIndex: Index équipe
+  noRecords: No record found
+  userIndex: User index
+  createNewUser: Create a new user
+  memberIndex: Member index
+  home: Home | RobotLeague
+  matchList: List of matches
+  blueTeam: Blue team
+  greenTeam: Green team
+  goalBlueTeam: Blue team goals
+  goalGreenTeam: Green team goals 
+  state: State
+  noChampionship: Currently no championships
+  legalNotices: Legal notices
+  generateChampionship: Generate a championship
+  deleteChampionship: Delete the championship
+  save: Save
+  noMatch: No match available. Please generate a championship.
+  teamIndex: Team index
 
 
 edit: 
-  editUser: Modifier l'utilisateur
-  editTeam: Modifier l'équipe
-  editMember: Modifier un membre de l'équipe
-  editChampionship: Modifier le championnat 
+  editUser: Edit the user
+  editTeam: Edit the team
+  editMember: Edit a team member
+  editChampionship: Edit the championship
   
 
 login: 
-  loginPage: Se connecter
-  log: Connexion
-  placeholderMail: exemple@courriel.fr
-  placeholderPasswd: motDePasse#
-  submit: Valider
+  loginPage: Log in
+  log: Log in
+  placeholderMail: exemple@mail.uk
+  placeholderPasswd: p@sswd#
+  submit: Submit
 
 delete: 
-  delete: Supprimer
+  delete: Delete
 
 teammember: 
-  addMembers: Ajouter des membres
-  addMember: Ajouter un nouveau membre
-  teamMembers: Membres de l'équipe
+  addMembers: Add members
+  addMember: Add a new member
+  teamMembers: Team members
   
 
 

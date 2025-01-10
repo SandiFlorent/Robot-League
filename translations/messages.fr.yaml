@@ -85,5 +85,14 @@ teammember:
   addMember: Ajouter un nouveau membre
   teamMembers: Membres de l'équipe
   
+php:
+  canceled: Annulé
+  inProgress: En cours
+  notStarted: Non commencé
+  winBlue: Victoire Bleue
+  winGreen: Victoire Verte
+  draw: Egalité
+  forfaitBlue: Forfait Bleue
+  forfaitGreen: Forfait Verte
 
 
