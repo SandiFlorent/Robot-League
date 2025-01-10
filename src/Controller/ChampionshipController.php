@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Championship;
@@ -19,19 +18,21 @@ final class ChampionshipController extends AbstractController
 {
     private $entityManager;
     private $teamRepository;
+    private $championshipListRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, TeamRepository $teamRepository)
+    // Injection du repository ChampionshipListRepository
+    public function __construct(EntityManagerInterface $entityManager, TeamRepository $teamRepository, ChampionshipListRepository $championshipListRepository)
     {
         $this->entityManager = $entityManager;
         $this->teamRepository = $teamRepository;
+        $this->championshipListRepository = $championshipListRepository;
     }
 
-    
     #[Route(name: 'app_championship_index', methods: ['GET'])]
-    public function index(ChampionshipRepository $championshipRepository, ChampionshipListRepository $championshipListRepository, Request $request): Response
+    public function index(ChampionshipRepository $championshipRepository, Request $request): Response
     {
         // On récupère tous les championnats disponibles
-        $championshipLists = $championshipListRepository->findAll();
+        $championshipLists = $this->championshipListRepository->findAll();
 
         // On récupère l'ID du championnat sélectionné depuis la requête (si existant)
         $championshiplistId = $request->query->get('championshiplist_id');
@@ -42,7 +43,7 @@ final class ChampionshipController extends AbstractController
 
         // Si un championnat a été sélectionné, on récupère ce championnat spécifique
         if ($championshiplistId) {
-            $selectedChampionshipList = $championshipListRepository->find($championshiplistId);
+            $selectedChampionshipList = $this->championshipListRepository->find($championshiplistId);
 
             // Récupérer les matchs du championnat sélectionné
             if ($selectedChampionshipList) {
@@ -62,33 +63,61 @@ final class ChampionshipController extends AbstractController
         ]);
     }
 
-    private function generateChampionships(array $teams)
+    #[Route('/championship/generate', name: 'app_championship_generate', methods: ['POST'])]
+    public function generateChampionshipsPost(Request $request): Response
     {
-        // On récupère toutes les rencontres existantes
-        $existingChampionships = $this->entityManager->getRepository(Championship::class)->findAll();
+        // Récupérer l'ID du championnat sélectionné depuis la requête
+        $championshipListId = $request->get('championship_list_id');
+        
+        // Trouver le championnat sélectionné
+        $championshipList = $this->entityManager->getRepository(ChampionshipList::class)->find($championshipListId);
 
-        // Recréer les rencontres sans matchs retour
-        foreach ($teams as $team1) {
-            foreach ($teams as $team2) {
-                // Vérifie que l'équipe 1 n'est pas la même que l'équipe 2 et que l'équipe 1 a un ID inférieur à celui de l'équipe 2
-                if ($team1 !== $team2 && $team1->getId() < $team2->getId()) {
-                    // Vérifie si cette rencontre existe déjà
-                    $existingChampionship = $this->entityManager->getRepository(Championship::class)
-                        ->findOneBy(['blueTeam' => $team1, 'greenTeam' => $team2]);
+        if (!$championshipList) {
+            throw $this->createNotFoundException('Championnat non trouvé');
+        }
 
-                    // Si la rencontre n'existe pas, on la crée
-                    if (!$existingChampionship) {
-                        $championship = new Championship();
-                        $championship->setBlueTeam($team1);
-                        $championship->setGreenTeam($team2);
-                        $championship->setState(State::NOT_STARTED);  // L'état initial peut être "Non Commencé"
+        // Récupérer toutes les équipes du championnat sélectionné
+        $teams = $championshipList->getTeams()->toArray();  // Conversion en tableau
 
-                        // Sauvegarde la rencontre
-                        $this->entityManager->persist($championship);
-                    }
+        // Générer les matchs
+        $this->generateChampionships($teams, $championshipList);
+
+        // Rediriger vers la page des matchs
+        return $this->redirectToRoute('app_championship_index', [
+            'championshiplist_id' => $championshipListId
+        ]);
+    }
+    
+    // Fonction pour générer les matchs
+    private function generateChampionships(array $teams, ChampionshipList $championshipList)
+    {
+        // Génère les matchs sans matchs retour (évite les doublons)
+        foreach ($teams as $index1 => $team1) {
+            for ($index2 = $index1 + 1; $index2 < count($teams); $index2++) {
+                $team2 = $teams[$index2];
+    
+                // Vérifie si cette rencontre existe déjà
+                $existingChampionship = $this->entityManager->getRepository(Championship::class)
+                    ->findOneBy([
+                        'blueTeam' => $team1,
+                        'greenTeam' => $team2,
+                        'championshipList' => $championshipList
+                    ]);
+    
+                // Si la rencontre n'existe pas, on la crée
+                if (!$existingChampionship) {
+                    $championship = new Championship();
+                    $championship->setBlueTeam($team1);
+                    $championship->setGreenTeam($team2);
+                    $championship->setChampionshipList($championshipList); // Associe le championnat à la liste
+                    $championship->setState(State::NOT_STARTED);  // L'état initial peut être "Non Commencé"
+    
+                    // Sauvegarde la rencontre
+                    $this->entityManager->persist($championship);
                 }
             }
         }
+    
         // Sauvegarde toutes les nouvelles rencontres
         $this->entityManager->flush();
     }
@@ -136,49 +165,4 @@ final class ChampionshipController extends AbstractController
         // Rediriger vers la page du championnat pour actualiser l'affichage (table vide)
         return $this->redirectToRoute('app_championship_index');
     }
-    
-    #[Route('/championship/generate', name: 'app_championship_generate', methods: ['POST'])]
-    public function generateChampionshipsPost(): Response
-    {
-        // Récupère toutes les équipes
-        $teams = $this->teamRepository->findAll();
-
-        // Génère les nouveaux matchs
-        $this->generateChampionships($teams);
-
-        // Redirige vers la page du championnat pour actualiser l'affichage
-        return $this->redirectToRoute('app_championship_index');
-    }
-
-    // #[Route('/championship', name: 'app_championship_select')]
-    // public function selectChampionship(ChampionshipListRepository $championshipListRepository, Request $request): Response
-    // {
-    //     $championshiplistId = $request->query->get('championshiplist_id');
-        
-    //     // Récupérer tous les championnats disponibles
-    //     $championshiplists= $championshipListRepository->findAll();
-        
-    //     // Récupérer le championnat sélectionné
-    //     $selectedChampionshiplist = null;
-    //     if ($championshiplistId) {
-    //         $selectedChampionshiplist = $championshipListRepository->find($championshiplistId);
-    //     }
-
-    //     // Récupérer les matchs du championnat sélectionné
-    //     $championships = [];
-    //     if ($selectedChampionshiplist) {
-    //         $championships = $selectedChampionshiplist->getMatches();
-    //     }
-
-    //     $states = State::cases();
-
-    //     // Passer les données à la vue
-    //     return $this->render('championship/index.html.twig', [
-    //         'championship_list' => $selectedChampionshiplist,
-
-    //         'championships' => $championships,
-    //         'states' => $states, // Exemple pour les états
-    //     ]);
-    // }
-        
 }

@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\ChampionshipListRepository;
 
 #[Route('/team')]
 final class TeamController extends AbstractController
@@ -148,10 +149,33 @@ final class TeamController extends AbstractController
     }
 
     #[Route('/show', name: 'app_team_show', methods: ['GET'])]
-    public function show(TeamRepository $teamRepository): Response
+        public function show(Request $request, TeamRepository $teamRepository, ChampionshipListRepository $championshipListRepository): Response
     {
+        // Récupérer tous les championnats pour le formulaire de filtre
+        $championshipList = $championshipListRepository->findAll();
+
+        // Vérifier si un championnat a été sélectionné
+        $selectedChampionship = null;
+        $teams = [];
+
+        if ($request->query->get('championship')) {
+            $selectedChampionship = $championshipListRepository->find($request->query->get('championship'));
+            
+            if ($selectedChampionship) {
+                // Filtrer les équipes qui appartiennent au championnat sélectionné
+                $teams = $teamRepository->findBy(['championshipList' => $selectedChampionship]);
+            }
+        }
+
+        if (!$selectedChampionship) {
+            // Si aucun championnat n'est sélectionné, afficher toutes les équipes
+            $teams = $teamRepository->findAll();
+        }
+
         return $this->render('team/show.html.twig', [
-            'teams' => $teamRepository->findAll(),
+            'teams' => $teams,
+            'championshipList' => $championshipList,
+            'selectedChampionship' => $selectedChampionship,
         ]);
     }
 }
