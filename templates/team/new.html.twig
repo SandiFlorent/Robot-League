@@ -27,7 +27,7 @@
         <button type="submit" 
             class="relative inline-flex items-center justify-center w-full p-3 text-white bg-blue-600 border border-blue-600 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-300">
             <span class="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent to-blue-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
-            {{ button_label|default('Ajouter une équipe') }}
+            {{ button_label|default('new.addTeam'|trans) }}
         </button>
         
         {{ form_end(form) }}

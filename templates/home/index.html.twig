@@ -8,7 +8,7 @@
         <div class="flex justify-start flex-row p-8 space-y-8"> 
             <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full overflow-auto rounded-xl hover:shadow-2xl transition-shadow duration-300">
                 {% if championships is not empty %}
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">{{ 'index.matchList'|trans }}</h1>
                 <div class="overflow-x-auto">
                     <!-- Affichage pour les écrans moyens et grands -->
                     <div class="hidden md:block">
@@ -73,7 +73,7 @@
         <!-- Pied de page -->
         <div class="w-screen h-full bg-black text-white flex flex-col">
             <div class="flex flex-row justify-evenly p-8">
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">{{ 'index.legalNotices'|trans }}</a>
                 <a href="{{ path('app_home') }}" class="hover:underline">Politique de confidentialité</a>
                 <a href="{{ path('app_home') }}" class="hover:underline">Contact</a>
             </div>    

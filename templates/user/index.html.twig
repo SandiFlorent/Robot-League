@@ -5,17 +5,17 @@
 {% block body %}
 <div class="container mx-auto p-6">
     <!-- Titre de la page -->
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Liste des Utilisateurs</h1>
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">{{ 'index.userIndex'|trans }}</h1>
 
     <!-- Table Responsive -->
     <div class="overflow-x-auto shadow-md rounded-lg">
         <table class="min-w-full bg-white border border-gray-300">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">ID</th>
-                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Email</th>
-                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Rôles</th>
-                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Actions</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">{{ 'show.id'|trans }}</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">{{ 'show.email'|trans }}</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">{{ 'show.roles'|trans }}</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">{{ 'index.actions'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,7 +38,7 @@
             {% else %}
                 <tr>
                     <td colspan="4" class="px-4 py-3 text-center text-sm text-gray-600 border border-gray-300">
-                        Aucun utilisateur trouvé.
+                        {{ 'index.noRecords'|trans }}
                     </td>
                 </tr>
             {% endfor %}
