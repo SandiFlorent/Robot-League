@@ -19,10 +19,13 @@ Cela inclut la gestion des utilisateurs, des équipes participantes et de l'affi
 Afin d'utiliser RobotLeague, il est requis d'avoir des compétences de base en `SQL` (MySQL). Cette application est développée en `Symfony`, si vous souhaitez apporter des modifications à celle-ci il est préférable d'avoir une connaissance de base du `PHP`.
 #### Tailwind
 Afin de modifier le style du site, vous aurez besoin d'utiliser Tailwind. 
-Pour le télécharger puis le lancer, vous devez exécuter les commandes suivantes : 
+Pour le télécharger puis le lancer la 1ère fois vous devez exécuter les commandes suivantes : 
 `composer require symfonycasts/tailwind-bundle`   
 `php bin/console tailwind:init`  
 `php bin/console tailwind:build`   
+`symfony serve`   
+`php bin/console tailwind:build -w`
+Pour les prochaines fois exécuter seuleument les commandes :
 `symfony serve`   
 `php bin/console tailwind:build -w`
 
@@ -42,45 +45,57 @@ Le framework CSS utilisé est : `SimpleCSS` / `Tailwind`
 
 ### Convention de codage 
 
-PSR-1 coding (php): 
+#### Pour vérifier notre utilisation des conventions de codage PSR-1 php, nous utilisons les commandes suivantes : 
 
-<?php : Pas d’espace avant.
-classes : Noms de classes en PascalCase.
-méthodes: Noms de méthodes en camelCase.
-Noms de fichiers : Correspondent à la classe (ex : MaClasse.php).
-Pas de code avant <?php ni après ?>.
-Encodage : UTF-8 sans BOM.
+    Installation : composer require --dev squizlabs/php_codesniffer  
+    Vérifier le code : vendor/bin/phpcs --standard=PSR1 src/  
+    Correction automatique : vendor/bin/phpcbf --standard=PSR1 src/  
 
-Symfony : 
+#### PSR-1 coding (php): 
 
-Utilise PSR-1
-Variables : Noms en camelCase (ex : getUserName()).
-Fichiers : Noms de fichiers en PascalCase, correspondant aux classes (ex : UserController.php).
-Indentation : tabulations.
-Commentaires : Utiliser PHPDoc pour documenter classes, méthodes et propriétés.
-Namespaces : Utiliser PascalCase (ex : App\Controller).
-Injection de dépendances : Via le constructeur.
-Services : Déclaration dans services.yaml en snake_case.
+`<?php` : Pas d’espace avant.  
+classes : Noms de classes en PascalCase.  
+méthodes: Noms de méthodes en camelCase.  
+Noms de fichiers : Correspondent à la classe (ex : MaClasse.php).  
+Pas de code avant <?php ni après ?>.  
+Encodage : UTF-8 sans BOM.  
 
-HTML :
+#### Symfony : 
 
-Structure : on commence toujours par `<!DOCTYPE html>`, puis balises `<html>`, `<head>`, `<body>`.
-Balises sémantiques : Utiliser `<header>`, `<footer>`, `<section>`, etc.
-Indentation : tabulation.
-Attributs : En minuscules, valeurs entre guillemets.
-Commentaires : Utilisation de `<!-- commentaire -->` pour expliquer le code.
-Fermeture des balises : Toujours fermer les balises (même les non-fermantes).
-Ne pas utiliser de balises inline (`style`, `onclick`).
+Utilise PSR-1  
+Variables : Noms en camelCase (ex : getUserName()).  
+Fichiers : Noms de fichiers en PascalCase, correspondant aux classes (ex : UserController.php).  
+Indentation : tabulations.  
+Commentaires : Utiliser PHPDoc pour documenter classes, méthodes et propriétés.  
+Namespaces : Utiliser PascalCase (ex : App\Controller).  
+Injection de dépendances : Via le constructeur.  
+Services : Déclaration dans services.yaml en snake_case.  
 
-CSS :
+#### Pour vérifier notre utilisation des conventions de codage HTML, nous utilisons les commandes suivantes : 
 
-Indentation : tabulation.
-Nommage : Utiliser BEM ou classes simples, en minuscules, avec tirets (my-class).
-Propriétés : Suivre l'ordre logique (position, dimension, typographie, couleur).
-Commentaires : Utiliser pour séparer et expliquer les sections.
-Minification : Minifier le CSS en production.
-Pas d'espace avant et après les : dans les règles CSS.
-HTML : Ne pas utiliser de balises inline (style, onclick).
-Préférences fichiers externes,éviter le code inline.
+    Installation : npm install htmlhint  
+    Vérification : npx htmlhint chemin/vers/fichier.html  
+
+#### HTML : 
+
+Structure : on commence toujours par `<!DOCTYPE html>`, puis balises `<html>`, `<head>`, `<body>`.  
+Balises sémantiques : Utiliser `<header>`, `<footer>`, `<section>`, etc.  
+Indentation : tabulation.  
+Attributs : En minuscules, valeurs entre guillemets.  
+Commentaires : Utilisation de `<!-- commentaire -->` pour expliquer le code.  
+Fermeture des balises : Toujours fermer les balises (même les non-fermantes).  
+Ne pas utiliser de balises inline (`style`, `onclick`).  
+
+#### CSS : 
+
+Indentation : tabulation.  
+Nommage : Utiliser BEM ou classes simples, en minuscules, avec tirets (my-class).  
+Propriétés : Suivre l'ordre logique (position, dimension, typographie, couleur).  
+Commentaires : Utiliser pour séparer et expliquer les sections.  
+Minification : Minifier le CSS en production.  
+Pas d'espace avant et après les : dans les règles CSS.  
+HTML : Ne pas utiliser de balises inline (style, onclick).  
+Préfére
+
 
 
