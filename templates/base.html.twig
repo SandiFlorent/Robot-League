@@ -52,6 +52,9 @@
                                     <a href="{{ path('app_team_member', {'id': app.user.myTeam.id}) }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Mon équipe</a>
                                 {% endif %}
                             {% endif %}
+						{% endif %}
+						{% if is_granted('ROLE_ORGANISATEUR') %}
+                            <a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.championship'|trans }}</a>
                         {% endif %}
                         <a href="{{ path('app_team_show') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Voir les équipes</a>
                     </div>
