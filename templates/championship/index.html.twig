@@ -27,8 +27,12 @@
 
     <!-- Si un championnat est sélectionné, afficher la liste des matchs -->
     {% if selected_championship_list %}
+
+        <a href="{{ path('app_championship_list_edit', {'id': selected_championship_list.id }) }}" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300">Modifier le championnat</a>
+
         <!-- Formulaires pour générer ou supprimer le championnat -->
         <div class="space-y-6">
+        
             <!-- Formulaire pour générer le championnat -->
             <form method="post" action="{{ path('app_championship_generate') }}" class="text-center">
                 <input type="hidden" name="championship_list_id" value="{{ selected_championship_list.id }}" />
