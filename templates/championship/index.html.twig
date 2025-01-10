@@ -2,79 +2,54 @@
 
 {% block body %}
 <div class="container mx-auto p-6">
-    <!-- Titre pour les actions -->
-    <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">{{ 'index.championshipManagement'|trans }}</h1>
-    </div>
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Liste des Championnats</h1>
 
-    <!-- Formulaires pour générer ou supprimer le championnat -->
-    <div class="space-y-6">
-        <!-- Formulaire pour générer le championnat -->
-        <form method="post" action="{{ path('app_championship_generate') }}" class="text-center">
-            <button type="submit" class="px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300">
-                {{ 'index.generateChampionship'|trans }}
-            </button>
-        </form>
-
-        <!-- Formulaire pour supprimer tous les championnats -->
-        <form method="post" action="{{ path('app_championship_delete_all') }}" 
-              onsubmit="return confirm('Are you sure you want to delete all the matches?');" 
-              class="text-center">
-            <button type="submit" class="px-6 py-3 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition duration-300">
-                {{ 'index.deleteChampionship'|trans }}
-            </button>
-        </form>
-    </div>
-
-    <hr class="my-8 border-gray-300" />
-
-    <!-- Titre de la table des matchs -->
-    <h2 class="text-2xl font-semibold text-gray-800 mb-6">{{ 'index.matchList'|trans }}</h2>
-
-    <!-- Table des matchs -->
-    {% if championships is not empty %}
-        <div class="overflow-x-auto shadow-md rounded-lg">
-            <table class="min-w-full text-sm text-left text-gray-800 border-collapse border border-gray-300">
-                <thead class="text-lg text-gray-700 uppercase bg-gray-100">
-                    <tr>
-                        <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">{{ 'index.blueTeam'|trans }}</th>
-                        <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">{{ 'index.greenTeam'|trans }}</th>
-                        <th scope="col" class="px-8 py-6">{{ 'index.goalBlueTeam'|trans }}</th>
-                        <th scope="col" class="px-8 py-6">{{ 'index.goalGreenTeam'|trans }}</th>
-                        <th scope="col" class="px-8 py-6">{{ 'index.state'|trans }}</th>
-                        <th scope="col" class="px-8 py-6">{{ 'index.actions'|trans }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for championship in championships %}
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
-                            <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.greenTeam.name }}</td>
-                            <td class="px-8 py-6">
-                                <form method="POST" action="{{ path('app_championship_save_score', {'id': championship.id}) }}">
-                                    <input type="number" name="blueScore" value="{{ championship.blueGoal }}" min="0" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
-                            </td>
-                            <td class="px-8 py-6">
-                                <input type="number" name="greenScore" value="{{ championship.greenGoal }}" min="0" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
-                            </td>
-                            <td class="px-8 py-6">
-                                <select name="state" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
-                                    {% for state in states %}
-                                        <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>{{ state.value }}</option>
-                                    {% endfor %}
-                                </select>
-                            </td>
-                            <td class="px-8 py-6">
-                                <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">{{ 'index.save'|trans }}</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <!-- Formulaire pour sélectionner un championnat -->
+    <form method="get" action="{{ path('app_championship_index') }}">
+        <div class="mb-4">
+            <label for="championshiplist_id" class="text-lg font-semibold text-gray-700">Choisir un championnat</label>
+            <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-300 rounded-md">
+                <option value="">Sélectionner un championnat</option>
+                {% for championshipList in championship_lists %}
+                    <option value="{{ championshipList.id }}" {% if championshipList == selected_championship_list %}selected{% endif %}>
+                        {{ championshipList.ChampionshipName }}
+                    </option>
+                {% endfor %}
+            </select>
         </div>
-    {% else %}
-        <p class="text-lg text-gray-700 text-center">{{ 'index.noMatch'|trans }}</p>
+        <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">
+            Voir les Matchs
+        </button>
+    </form>
+
+    {% if selected_championship_list %}
+        <h2 class="text-2xl mt-8">Matchs du championnat : {{ selected_championship_list.name }}</h2>
+
+        <!-- Affichage des matchs du championnat sélectionné -->
+        <table class="mt-4 table-auto w-full">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2 border">Équipe Bleue</th>
+                    <th class="px-4 py-2 border">Équipe Verte</th>
+                    <th class="px-4 py-2 border">Score</th>
+                    <th class="px-4 py-2 border">État</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for championship in championships %}
+                    <tr>
+                        <td class="px-4 py-2 border">{{ championship.blueTeam.name }}</td>
+                        <td class="px-4 py-2 border">{{ championship.greenTeam.name }}</td>
+                        <td class="px-4 py-2 border">{{ championship.blueGoal }} - {{ championship.greenGoal }}</td>
+                        <td class="px-4 py-2 border">{{ championship.state.label }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center py-2">Aucun match disponible pour ce championnat.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endif %}
 </div>
 {% endblock %}

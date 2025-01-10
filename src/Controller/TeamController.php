@@ -36,18 +36,21 @@ final class TeamController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // L'utilisateur qui crée l'équipe (si applicable)
             $user = $this->getUser();
             $team->setCreator($user);
+
+            // Récupérer le championnat sélectionné et l'assigner à l'équipe
+            $championshipList = $form->get('championshipList')->getData();
+            $team->setChampionshipList($championshipList);
 
             $entityManager->persist($team);
             $entityManager->flush();
 
-            //Notice message when a team is created
-            $this->addFlash(
-                'notice',
-                'Team successfully created'
-            );
+            //Message de succès après la création de l'équipe
+            $this->addFlash('notice', 'Team successfully created');
 
+            // Rediriger vers la page de gestion des membres de l'équipe
             $id = $team->getId();
             return $this->redirectToRoute('app_team_member', [
                 'id' => $id
@@ -56,9 +59,10 @@ final class TeamController extends AbstractController
 
         return $this->render('team/new.html.twig', [
             'team' => $team,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
 
 
     #[Route('/{id}/edit', name: 'app_team_edit', methods: ['GET', 'POST'])]
