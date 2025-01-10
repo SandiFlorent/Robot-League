@@ -22,6 +22,9 @@ class Encounter
     #[ORM\OneToOne(inversedBy: 'encounter', cascade: ['persist', 'remove'])]
     private ?Championship $matches = null;
 
+    #[ORM\ManyToOne(inversedBy: 'encounters')]
+    private ?ChampionshipList $myChampionshipList = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Encounter
     public function setMatches(?Championship $matches): static
     {
         $this->matches = $matches;
+
+        return $this;
+    }
+
+    public function getMyChampionshipList(): ?ChampionshipList
+    {
+        return $this->myChampionshipList;
+    }
+
+    public function setMyChampionshipList(?ChampionshipList $myChampionshipList): static
+    {
+        $this->myChampionshipList = $myChampionshipList;
 
         return $this;
     }

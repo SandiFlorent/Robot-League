@@ -1,13 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit ChampionshipList{% endblock %}
+{% block title %}Modifier le championnat{% endblock %}
 
 {% block body %}
-    <h1>Edit ChampionshipList</h1>
+    <h1>Modifier le championnat</h1>
 
     {{ include('championship_list/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_championship_list_index') }}">back to list</a>
+    <hr />
+
+    <a href="{{ path('app_championship_list_new_slot', {'id': championship_list.id }) }}">Ajouter des créneaux</a>
+
+    <a href="{{ path('app_championship_list_new_field', {'id': championship_list.id }) }}">Ajouter des terrains</a>
+
+    <hr />
 
     {{ include('championship_list/_delete_form.html.twig') }}
 {% endblock %}
