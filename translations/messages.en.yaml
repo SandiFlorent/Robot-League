@@ -1,0 +1,89 @@
+base: 
+  menu: Menu
+  teams: Teams
+  create: Create a team
+  team: My team
+  championship: Championship
+  logout: Log out
+  notification: See notifications
+  login: Log in
+  register: Register
+
+show:
+  show: Show
+  team: Team
+  teams: Teams
+  user: User
+  id: Id
+  email: E-mail
+  roles: Roles
+  passwd: Password
+  name: Name
+  creatorOfTeam: You are the creator of this team.
+  noTeams: No teams to display.
+  noTeamJoined: You have not created nor joined a team yet.
+  member: Member
+  edit: Edit
+  
+
+new: 
+  newTeam: New team
+  createTeam: Create a new team
+  teamName: Name of the team
+  enterTeamName: Please enter the name of the team
+  addTeam: Add a team
+  backToList: Back to list
+  newUser: New user
+  createNewUser: Create a new user
+  newMember: New member
+  createNewMember: Create a new member
+  newChampionship: New championship
+  createNewChampionship: Create a new championship
+  createNewTeamMember: Create a new team member
+
+index: 
+  actions: Actions
+  noRecords: No record found
+  userIndex: User index
+  createNewUser: Create a new user
+  memberIndex: Member index
+  home: Home | RobotLeague
+  matchList: List of matches
+  blueTeam: Blue team
+  greenTeam: Green team
+  goalBlueTeam: Blue team goals
+  goalGreenTeam: Green team goals 
+  state: State
+  noChampionship: Currently no championships
+  legalNotices: Legal notices
+  generateChampionship: Generate a championship
+  deleteChampionship: Delete the championship
+  save: Save
+  noMatch: No match available. Please generate a championship.
+  teamIndex: Team index
+
+
+edit: 
+  editUser: Edit the user
+  editTeam: Edit the team
+  editMember: Edit a team member
+  editChampionship: Edit the championship
+  
+
+login: 
+  loginPage: Log in
+  log: Log in
+  placeholderMail: exemple@mail.uk
+  placeholderPasswd: p@sswd#
+  submit: Submit
+
+delete: 
+  delete: Delete
+
+teammember: 
+  addMembers: Add members
+  addMember: Add a new member
+  teamMembers: Team members
+  
+
+

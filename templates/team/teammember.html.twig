@@ -1,25 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Add Members{% endblock %}
+{% block title %}{{ 'teammember.addMembers'|trans }}{% endblock %}
 
 {% block body %}
 <div class="container mx-auto p-8">
     <!-- Header Section -->
     <div class="text-center">
         <h1 class="font-bold text-4xl tracking-tight text-gray-900 p-6 bg-white shadow-lg rounded-lg">
-            Équipe : {{ team.Name }}
+            {{ 'show.team'|trans }} : {{ team.Name }}
         </h1>
     </div>
 
     <div class="mt-12">
         <!-- Membres de l'équipe -->
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Membres de l'équipe</h2>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">{{ 'teammember.teamMembers'|trans }}</h2>
         <div class="overflow-x-auto shadow-md rounded-lg">
             <table class="min-w-full border-collapse border border-gray-300">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Nom</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">Email</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">{{ 'show.name'|trans }}</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-600 border border-gray-300">{{ 'show.email'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,16 +37,16 @@
     <hr class="my-8 border-gray-300" />
 
     <div class="mt-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ajouter un nouveau membre</h2>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">{{ 'teammember.addMember'|trans }}</h2>
         <div class="bg-gray-100 p-6 shadow-lg rounded-lg">
             {{ form_start(form) }}
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
-                    {{ form_label(form.Name, 'Nom', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                    {{ form_label(form.Name, 'show.name'|trans, {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
                     {{ form_widget(form.Name, {'attr': {'class': 'bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
                 </div>
                 <div>
-                    {{ form_label(form.Email, 'Email', {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
+                    {{ form_label(form.Email, 'show.email'|trans, {'label_attr': {'class': 'block mb-2 text-sm font-medium text-gray-900'}}) }}
                     {{ form_widget(form.Email, {'attr': {'class': 'bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
                     {{ form_errors(form.Name) }}
                 </div>
@@ -55,7 +55,7 @@
                 <button type="submit" 
                     class="relative inline-flex items-center px-6 py-2 text-sm text-white bg-blue-600 border border-blue-600 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-300">
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-b from-transparent to-blue-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
-                    {{ button_label|default('Ajouter') }}
+                    {{ button_label|default('login.submit'|trans) }}
                 </button>
             </div>
             {{ form_end(form) }}

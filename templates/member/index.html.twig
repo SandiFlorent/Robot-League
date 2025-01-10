@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Member index{% endblock %}
+{% block title %} {{ 'index.memberIndex'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Member index</h1>
+    <h1>{{ 'index.memberIndex'|trans }}</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>actions</th>
+                <th>{{ 'show.id'|trans }}</th>
+                <th>{{ 'show.name'|trans }}</th>
+                <th>{{ 'show.passwd'|trans }}</th>
+                <th>{{ 'index.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -21,17 +21,17 @@
                 <td>{{ member.Name }}</td>
                 <td>{{ member.Email }}</td>
                 <td>
-                    <a href="{{ path('app_member_show', {'id': member.id}) }}">show</a>
-                    <a href="{{ path('app_member_edit', {'id': member.id}) }}">edit</a>
+                    <a href="{{ path('app_member_show', {'id': member.id}) }}">{{ 'show.show'|trans }}</a>
+                    <a href="{{ path('app_member_edit', {'id': member.id}) }}">{{ 'show.edit'|trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="4">{{ 'index.noRecords'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_member_new') }}">Create new</a>
+    <a href="{{ path('app_member_new') }}">{{ 'new.createNewMember'|trans }}</a>
 {% endblock %}
