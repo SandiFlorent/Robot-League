@@ -10,22 +10,25 @@ base:
   register: Register
 
 show:
+  score: Score
   show: Show
   team: Team
   teams: Teams
   user: User
+  users: Users
   id: Id
   email: E-mail
   roles: Roles
   passwd: Password
   name: Name
   creatorOfTeam: You are the creator of this team.
+  displayTeams: See teams to display
   noTeams: No teams to display.
   noTeamJoined: You have not created nor joined a team yet.
   member: Member
   edit: Edit
+  admin: Admin
   
-
 new: 
   newTeam: New team
   createTeam: Create a new team
@@ -61,7 +64,7 @@ index:
   save: Save
   noMatch: No match available. Please generate a championship.
   teamIndex: Team index
-
+  championshipManagement: Championship management
 
 edit: 
   editUser: Edit the user
@@ -69,13 +72,13 @@ edit:
   editMember: Edit a team member
   editChampionship: Edit the championship
   
-
 login: 
   loginPage: Log in
   log: Log in
   placeholderMail: exemple@mail.uk
   placeholderPasswd: p@sswd#
   submit: Submit
+  sixCharMin: 6 characters at least
 
 delete: 
   delete: Delete
@@ -84,6 +87,23 @@ teammember:
   addMembers: Add members
   addMember: Add a new member
   teamMembers: Team members
+
+php:
+  canceled: Canceled
+  inProgress: Inn progress
+  notStarted: Not started
+  winBlue: Blue wins
+  winGreen: Green wins
+  draw: Draw
+  forfaitBlue: Forfait Blue
+  forfaitGreen: Forfait Green
+
+privacy: 
+  privacyPolicy: Privacy policy
+  siteMap: Site map
+  support: Support
+  qna: Q&A
+  contact: Contact
   
 
 

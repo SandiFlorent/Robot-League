@@ -10,22 +10,25 @@ base:
   register: Inscription
 
 show:
+  score: Score
   show: Aficher
-  team: Equipe
+  team: Equipef
   teams: Equipes
   user: Utilisateur
+  users: Utilisateurs
   id: Identifiant
   email: Adresse e-mail
   roles: Roles
   passwd: Mot de passe
   name: Nom
   creatorOfTeam: Vous êtes le crérateur de cette équipe.
+  displayTeams: See teams to display
   noTeams: Pas d'équipes à afficher.
   noTeamJoined: Vous n'avez ni créé ni rejoint une équipe pour l'instant.
   member: Membre
   edit: Modifier
+  admin: Administrateur
   
-
 new: 
   newTeam: Nouvelle équipe
   createTeam: Créer une nouvelle équipe
@@ -43,7 +46,7 @@ new:
 
 index: 
   actions: Actions
-  noRecords: Pas d'informations trouvées
+  noRecords: Aucune donnée
   userIndex: Index utilisateur
   createNewUser: Créer un nouvel utilisateur
   memberIndex: Index membre
@@ -61,7 +64,7 @@ index:
   save: Sauvegarder
   noMatch: Aucun match disponible. Veuillez générer le championnat.
   teamIndex: Index équipe
-
+  championshipManagement: Gestion du championnat
 
 edit: 
   editUser: Modifier l'utilisateur
@@ -69,13 +72,13 @@ edit:
   editMember: Modifier un membre de l'équipe
   editChampionship: Modifier le championnat 
   
-
 login: 
   loginPage: Se connecter
   log: Connexion
   placeholderMail: exemple@courriel.fr
   placeholderPasswd: motDePasse#
   submit: Valider
+  sixCharMin: 6 caractères min.
 
 delete: 
   delete: Supprimer
@@ -95,4 +98,10 @@ php:
   forfaitBlue: Forfait Bleue
   forfaitGreen: Forfait Verte
 
+privacy: 
+  privacyPolicy: Politique de confidentialité
+  siteMap: Plan du site
+  support: Support
+  qna: FAQ
+  contact: Contact
 

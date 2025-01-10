@@ -29,9 +29,9 @@
                     <td class="px-4 py-3 text-sm text-gray-700 border border-gray-300">
                         <div class="flex space-x-3">
                             <a href="{{ path('app_user_show', {'id': user.id}) }}" 
-                               class="text-blue-500 hover:underline">Afficher</a>
+                               class="text-blue-500 hover:underline">{{ 'show.show'|trans }}</a>
                             <a href="{{ path('app_user_edit', {'id': user.id}) }}" 
-                               class="text-green-500 hover:underline">Modifier</a>
+                               class="text-green-500 hover:underline">{{ 'show.edit'|trans }}</a>
                         </div>
                     </td>
                 </tr>
@@ -50,7 +50,7 @@
     <div class="mt-6 text-center">
         <a href="{{ path('app_user_new') }}" 
            class="inline-block px-6 py-2 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 transition">
-            Créer un nouvel utilisateur
+            {{ 'nex.createNewUser'|trans }}
         </a>
     </div>
 </div>
