@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ChampionshipList{% endblock %}
+
+{% block body %}
+    <h1>Ajouter des créneaux</h1>
+
+    <hr />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date début</th>
+                <th>Date fin</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for slo in championship_list.slot %}
+            <tr>
+                <td>{{ slo.dateDebut|date('Y-m-d H:i:s') }}</td>
+                <td>{{ slo.dateEnd|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <a href={{ path('app_championship_list_delete_slot', {'id': championship_list.id, 'idSlot': slo.id }) }}>Supprimer</a>
+        {% else %}
+            <tr>
+                <td colspan="8">Pas de créneau enregistré pour le moment</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <hr />
+
+    {{ include('slot/_form.html.twig') }}
+
+    <hr />
+
+    <a href="{{ path('app_championship_list_new_field', {'id': championship_list.id }) }}">Ajouter des terrains</a>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ChampionshipList index{% endblock %}
+
+{% block body %}
+    <h1>ChampionshipList index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>ChampionshipName</th>
+                <th>Description</th>
+                <th>Adress</th>
+                <th>DateStart</th>
+                <th>DateEnd</th>
+                <th>Threshold</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for championship_list in championship_lists %}
+            <tr>
+                <td>{{ championship_list.id }}</td>
+                <td>{{ championship_list.ChampionshipName }}</td>
+                <td>{{ championship_list.description }}</td>
+                <td>{{ championship_list.adress }}</td>
+                <td>{{ championship_list.dateStart ? championship_list.dateStart|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ championship_list.dateEnd ? championship_list.dateEnd|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ championship_list.threshold }}</td>
+                <td>
+                    <a href="{{ path('app_championship_list_show', {'id': championship_list.id}) }}">show</a>
+                    <a href="{{ path('app_championship_list_edit', {'id': championship_list.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_championship_list_new') }}">Create new</a>
+{% endblock %}

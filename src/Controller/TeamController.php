@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\ChampionshipListRepository;
 
 #[Route('/team')]
 final class TeamController extends AbstractController
@@ -36,18 +37,21 @@ final class TeamController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // L'utilisateur qui crée l'équipe (si applicable)
             $user = $this->getUser();
             $team->setCreator($user);
+
+            // Récupérer le championnat sélectionné et l'assigner à l'équipe
+            $championshipList = $form->get('championshipList')->getData();
+            $team->setChampionshipList($championshipList);
 
             $entityManager->persist($team);
             $entityManager->flush();
 
-            //Notice message when a team is created
-            $this->addFlash(
-                'notice',
-                'Team successfully created'
-            );
+            //Message de succès après la création de l'équipe
+            $this->addFlash('notice', 'Team successfully created');
 
+            // Rediriger vers la page de gestion des membres de l'équipe
             $id = $team->getId();
             return $this->redirectToRoute('app_team_member', [
                 'id' => $id
@@ -56,9 +60,10 @@ final class TeamController extends AbstractController
 
         return $this->render('team/new.html.twig', [
             'team' => $team,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
 
 
     #[Route('/{id}/edit', name: 'app_team_edit', methods: ['GET', 'POST'])]
@@ -144,10 +149,33 @@ final class TeamController extends AbstractController
     }
 
     #[Route('/show', name: 'app_team_show', methods: ['GET'])]
-    public function show(TeamRepository $teamRepository): Response
+        public function show(Request $request, TeamRepository $teamRepository, ChampionshipListRepository $championshipListRepository): Response
     {
+        // Récupérer tous les championnats pour le formulaire de filtre
+        $championshipList = $championshipListRepository->findAll();
+
+        // Vérifier si un championnat a été sélectionné
+        $selectedChampionship = null;
+        $teams = [];
+
+        if ($request->query->get('championship')) {
+            $selectedChampionship = $championshipListRepository->find($request->query->get('championship'));
+            
+            if ($selectedChampionship) {
+                // Filtrer les équipes qui appartiennent au championnat sélectionné
+                $teams = $teamRepository->findBy(['championshipList' => $selectedChampionship]);
+            }
+        }
+
+        if (!$selectedChampionship) {
+            // Si aucun championnat n'est sélectionné, afficher toutes les équipes
+            $teams = $teamRepository->findAll();
+        }
+
         return $this->render('team/show.html.twig', [
-            'teams' => $teamRepository->findAll(),
+            'teams' => $teams,
+            'championshipList' => $championshipList,
+            'selectedChampionship' => $selectedChampionship,
         ]);
     }
 }
