@@ -100,33 +100,4 @@
         {% endif %}
     {% endif %}
 </div>
-
-<script>
-    // Fonction pour sauvegarder les matchs et recharger la page
-    function saveMatch(event, form) {
-        event.preventDefault();  // Empêcher la soumission par défaut du formulaire
-
-        // Créer un objet FormData à partir du formulaire
-        var formData = new FormData(form);
-
-        // Utiliser fetch pour envoyer les données du formulaire
-        fetch(form.action, {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())  // On suppose que la réponse est en JSON
-        .then(data => {
-            if (data.success) {
-                // Si la sauvegarde a réussi, rechargez la page actuelle
-                location.reload();
-            } else {
-                alert("Erreur lors de la sauvegarde");
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-        });
-    }
-</script>
-
 {% endblock %}
