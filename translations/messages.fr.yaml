@@ -1,0 +1,89 @@
+base: 
+  menu: Menu
+  teams: Equipes
+  create: Créer une équipe
+  team: Mon équipe
+  championship: Championnat
+  logout: Déconnexion
+  notification: Voir les notifications
+  login: Connexion
+  register: Inscription
+
+show:
+  show: Aficher
+  team: Equipe
+  teams: Equipes
+  user: Utilisateur
+  id: Identifiant
+  email: Adresse e-mail
+  roles: Roles
+  passwd: Mot de passe
+  name: Nom
+  creatorOfTeam: Vous êtes le crérateur de cette équipe.
+  noTeams: Pas d'équipes à afficher.
+  noTeamJoined: Vous n'avez ni créé ni rejoint une équipe pour l'instant.
+  member: Membre
+  edit: Modifier
+  
+
+new: 
+  newTeam: Nouvelle équipe
+  createTeam: Créer une nouvelle équipe
+  teamName: Nom de l'équipe
+  enterTeamName: Veuillez entrer le nom de l'équipe
+  addTeam: Ajouter une équipe
+  backToList: Retour à la liste
+  newUser: Nouvel utilisateur
+  createNewUser: Créer un nouvel utilisateur
+  newMember: Nouveau membre
+  createNewMember: Créer un nouveu membre
+  newChampionship: Nouveau championnat
+  createNewChampionship: Créer un nouveau championnat
+  createNewTeamMember: Ajouter
+
+index: 
+  actions: Actions
+  noRecords: Pas d'informations trouvées
+  userIndex: Index utilisateur
+  createNewUser: Créer un nouvel utilisateur
+  memberIndex: Index membre
+  home: Accueil | RobotLeague
+  matchList: Liste des matchs
+  blueTeam: Équipe bleue
+  greenTeam: Équipe verte
+  goalBlueTeam: But équipe bleue
+  goalGreenTeam: But équipe verte 
+  state: État
+  noChampionship: Pas de championnat en cours.
+  legalNotices: Mentions légales
+  generateChampionshhip: Générer un championnat
+  deleteChampionship: Supprimer le championnat
+  save: Sauvegarder
+  noMatch: Aucun match disponible. Veuillez générer le championnat.
+  teamIndex: Index équipe
+
+
+edit: 
+  editUser: Modifier l'utilisateur
+  editTeam: Modifier l'équipe
+  editMember: Modifier un membre de l'équipe
+  editChampionship: Modifier le championnat 
+  
+
+login: 
+  loginPage: Se connecter
+  log: Connexion
+  placeholderMail: exemple@courriel.fr
+  placeholderPasswd: motDePasse#
+  submit: Valider
+
+delete: 
+  delete: Supprimer
+
+teammember: 
+  addMembers: Ajouter des membres
+  addMember: Ajouter un nouveau membre
+  teamMembers: Membres de l'équipe
+  
+
+

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Member{% endblock %}
+{% block title %}{{ 'new.newMember'|trans }}{% endblock %}
 
 {% block body %}
 
@@ -15,5 +15,5 @@
     
 
 {{ include('member/_form.html.twig') }}
-<a href="{{ path('app_member_index') }}">back to list</a>
+<a href="{{ path('app_member_index') }}"> {{ 'new.backToList'|trans }}</a>
 {% endblock %}

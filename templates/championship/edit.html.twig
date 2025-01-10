@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Championship{% endblock %}
+{% block title %}{{ 'edit.editChampionship'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Championship</h1>
+    <h1>{{ 'edit.editChampionship'|trans }}</h1>
 
     {{ include('championship/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_championship_index') }}">back to list</a>
+    <a href="{{ path('app_championship_index') }}">{{ 'new.baackToList'|trans }}</a>
 
     {{ include('championship/_delete_form.html.twig') }}
 {% endblock %}

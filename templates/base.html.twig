@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Welcome!
+			{% block title %}
 			{% endblock %}
 		</title>
 		<link rel="icon" href="{{ asset('Images/logo.png') }}"> {% block stylesheets %}{% endblock %}
@@ -18,30 +18,30 @@
                 <img class="size-8" src="{{ asset('Images/logo.png') }}" alt="Your Company">
                 <p class="text-5xl pl-4 font-bold"> RobotLeague</p>
                 <div class="justify-end ml-auto"> 
-                    <a href="{{path('app_home')}}" class="rounded-md bg-sky-900  hover:bg-gray-700 px-3 py-2 text-lg font-medium text-white" aria-current="page">Menu</a>
-					<a href="{{path('app_team_show')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Equipes</a>
+                    <a href="{{path('app_home')}}" class="rounded-md bg-sky-900  hover:bg-gray-700 px-3 py-2 text-lg font-medium text-white" aria-current="page">{{ 'base.menu'|trans }}</a>
+					<a href="{{path('app_team_show')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.teams'|trans }}</a>
                     {% if app.user %}	
 						{% if is_granted('ROLE_USER') %}
                             {% if app.user.myTeam == null %}
-                                <a href="{{path('app_team_new')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Créer une équipe</a>
+                                <a href="{{path('app_team_new')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.create'|trans }}</a>
                             {% else %}
-                                <a href="{{ path('app_team_member', {'id': app.user.myTeam.id }) }}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Mon équipe</a>
+                                <a href="{{ path('app_team_member', {'id': app.user.myTeam.id }) }}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.team'|trans }}</a>
                             {% endif %}
 						{% endif %}
 						{% if is_granted('ROLE_ORGANISATEUR') %}
-                            <a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Championnat</a>
+                            <a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'titles.championship'|trans }}</a>
                         {% endif %}
-						<a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-lg font-medium text-red-900 hover:bg-red-700 hover:text-white">Déconnexion</a>
+						<a href="{{path('app_logout')}}" class="rounded-md px-3 py-2 text-lg font-medium text-red-900 hover:bg-red-700 hover:text-white">{{ 'base.logout'|trans }}</a>
 						<button type="button" class="relative ml-auto shrink-0 rounded-full bg-sky-900 hover:bg-gray-700 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-500">
     						<span class="absolute -inset-1.5"></span>
-    						<span class="sr-only">View notifications</span>
+    						<span class="sr-only">{{ 'base.notification'|trans }}</span>
     						<svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" aria-hidden="true" data-slot="icon">
         						<path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
     						</svg>
 						</button>
 					{% else %}
-						<a href="{{path('app_login')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Connexion</a>
-						<a href="{{path('app_register')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">Inscription</a>
+						<a href="{{path('app_login')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.login'|trans }}</a>
+						<a href="{{path('app_register')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.register'|trans }}</a>
 					{% endif %}
 				</div>
 			</nav>

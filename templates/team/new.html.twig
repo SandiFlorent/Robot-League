@@ -5,7 +5,7 @@
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen ">
     <!-- Titre principal -->
-    <p class="text-5xl font-bold text-gray-800 mb-8">Créer une nouvelle équipe</p>
+    <p class="text-5xl font-bold text-gray-800 mb-8"> {{ 'new.createTeam'|trans }}</p>
     
     <!-- Formulaire -->
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -13,17 +13,18 @@
         
         <!-- Champ Name -->
         <div>
-            {{ form_label(form.Name, 'Nom de l\'équipe', { 'label_attr': { 'class': 'block mb-2 text-sm font-medium text-gray-900' } }) }}
+            {{ form_label(form.Name, 'new.teamName'|trans, { 'label_attr': { 'class': 'block mb-2 text-sm font-medium text-gray-900' } }) }}
             {{ form_widget(form.Name, { 'attr': { 
-                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5', 
-                'placeholder': 'Entrez le nom de l\'équipe' } }) }}
+            'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5', 
+            'placeholder': 'new.teamName'|trans } }) }}
             {{ form_errors(form.Name) }}
         </div>
         
         <!-- Bouton de soumission -->
         <button class="bg-blue-950 text-blue-400 border border-red-blue border-b-4 font-medium overflow-hidden relative px-4 py-2 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
             <span class="bg-blue-400 shadow-blue-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
-            {{ button_label|default('Ajouter une équipe') }}
+            {{ button_label|default('new.addTeam'|trans) }}
+
         </button>
         
         {{ form_end(form) }}
@@ -31,7 +32,7 @@
         <!-- Bouton de retour -->
         <div class="mt-6 text-center">
             <a href="{{ path('app_team_index') }}" class="text-blue-500 hover:text-blue-700 font-medium underline">
-                Retour à la liste
+                {{ 'new.backToList'|trans }}
             </a>
         </div>
     </div>

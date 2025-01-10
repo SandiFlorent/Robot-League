@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Team index{% endblock %}
+{% block title %}{{ 'index.teamIndex'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Team index</h1>
+    <h1>{{ 'index.teamIndex'|trans }}</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
+                <th>{{ 'show.id'|trans }}</th>
+                <th>{{ 'show.name'|trans }}</th>
+                <th>{{ 'index.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -19,17 +19,17 @@
                 <td>{{ team.id }}</td>
                 <td>{{ team.Name }}</td>
                 <td>
-                    <a href="{{ path('app_team_show', {'id': team.id}) }}">show</a>
-                    <a href="{{ path('app_team_edit', {'id': team.id}) }}">edit</a>
+                    <a href="{{ path('app_team_show', {'id': team.id}) }}">{{ 'show.show'|trans }}</a>
+                    <a href="{{ path('app_team_edit', {'id': team.id}) }}">{{ 'show.edit'|trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">{{ 'index.noRecords'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_team_new') }}">Create new</a>
+    <a href="{{ path('app_team_new') }}">{{ 'new.createNewTeamMember'|trans }}</a>
 {% endblock %}

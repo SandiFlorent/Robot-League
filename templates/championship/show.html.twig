@@ -1,33 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Championship{% endblock %}
+{% block title %}{{ 'edit.editMember'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Championship</h1>
+    <h1>{{ 'base.championship'|trans }}</h1>
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>{{ 'show.id'|trans }}</th>
                 <td>{{ championship.id }}</td>
             </tr>
             <tr>
-                <th>BlueGoal</th>
+                <th>{{ 'index.goalBlueTeam'|trans }}</th>
                 <td>{{ championship.blueGoal }}</td>
             </tr>
             <tr>
-                <th>GreenGoal</th>
+                <th>{{ 'index.goalGreenTeam'|trans }}</th>
                 <td>{{ championship.greenGoal }}</td>
             </tr>
             <tr>
-                <th>State</th>
+                <th>{{ 'index.state'|trans }}</th>
                 <td>{{ championship.state }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_championship_index') }}">back to list</a>
+    <a href="{{ path('app_championship_index') }}">{{ 'new.backToList'|trans }}</a>
 
-    <a href="{{ path('app_championship_edit', {'id': championship.id}) }}">edit</a>
+    <a href="{{ path('app_championship_edit', {'id': championship.id}) }}">{{ 'edit.editChampionship'|trans }}</a>
 
     {{ include('championship/_delete_form.html.twig') }}
 {% endblock %}

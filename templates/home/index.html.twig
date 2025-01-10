@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}{{ 'index.home'|trans }}{% endblock %}
 
 {% block body %}
 <style>
@@ -11,16 +11,16 @@
         <div class="flex justify-start flex-row p-8 space-y-8"> 
             <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full">
                 {% if championships is not empty %}
-                <h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">{{ 'index.matchList'|trans }}</h1>
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-base text-left text-gray-800 border-collapse border border-gray-300">
                         <thead class="text-lg text-gray-700 uppercase bg-gray-100">
                             <tr>
-                                <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">Équipe Bleue</th>
-                                <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
-                                <th scope="col" class="px-8 py-6">But Équipe Verte</th>
-                                <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">Équipe Verte</th>
-                                <th scope="col" class="px-8 py-6">État</th>
+                                <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">{{ 'index.blueTeam'|trans }}</th>
+                                <th scope="col" class="px-8 py-6">{{ 'index.goalBlueTeam'|trans }}</th>
+                                <th scope="col" class="px-8 py-6">{{ 'index.goalGreenTeam'|trans }}</th>
+                                <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">{{ 'index.greenTeam'|trans }}</th>
+                                <th scope="col" class="px-8 py-6">{{ 'index.state'|trans }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,7 +37,7 @@
                     </table>
                 </div>
                 {% else %}
-                    <p class="text-lg text-gray-700">Pas de championnat en cours</p>
+                    <p class="text-lg text-gray-700">{{ 'index.noChampionship'|trans }}</p>
                 {% endif %}           
             </div>         
         </div>
@@ -46,14 +46,15 @@
         <!-- Pied de page -->
         <div class="w-screen h-full bg-black text-white flex flex-col">
             <div class="flex flex-row justify-evenly p-8">
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">{{ 'index.legalNotices'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">{{ 'index.legalNotices'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">{{ 'index.legalNotices'|trans }}</a>
+                
             </div>    
             <div class="flex flex-row justify-evenly p-8">
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="hover:underline">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">{{ 'index.legalNotices'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">{{ 'index.legalNotices'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="hover:underline">{{ 'index.legalNotices'|trans }}</a>
             </div>    
         </div>
     </body>

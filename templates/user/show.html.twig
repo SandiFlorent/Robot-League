@@ -1,26 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}{{ 'show.passwd'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
+    <h1>{{ 'show.user'|trans }}</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>{{ 'show.id'|trans }}</th>
                 <td>{{ user.id }}</td>
             </tr>
             <tr>
-                <th>Email</th>
+                <th>{{ 'show.email'|trans }}</th>
                 <td>{{ user.email }}</td>
             </tr>
             <tr>
-                <th>Roles</th>
+                <th>{{ 'show.roles'|trans }}</th>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
             </tr>
             <tr>
-                <th>Password</th>
+                <th>{{ 'show.passwd'|trans }}</th>
                 <td>{{ user.password }}</td>
             </tr>
         </tbody>
