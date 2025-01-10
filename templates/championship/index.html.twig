@@ -7,10 +7,6 @@
         <h1 class="text-3xl font-bold text-gray-800">Gestion du Championnat</h1>
     </div>
 
-   
-
-    <hr class="my-8 border-gray-300" />
-
     <!-- Formulaire pour sélectionner un championnat -->
     <div class="mb-4">
         <label for="championshiplist_id" class="text-lg font-semibold text-gray-700">Choisir un championnat</label>
@@ -31,10 +27,11 @@
 
     <!-- Si un championnat est sélectionné, afficher la liste des matchs -->
     {% if selected_championship_list %}
-        <!-- Formulaire pour générer ou supprimer le championnat -->
+        <!-- Formulaires pour générer ou supprimer le championnat -->
         <div class="space-y-6">
             <!-- Formulaire pour générer le championnat -->
             <form method="post" action="{{ path('app_championship_generate') }}" class="text-center">
+                <input type="hidden" name="championship_list_id" value="{{ selected_championship_list.id }}" />
                 <button type="submit" class="px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300">
                     Générer Championnat
                 </button>
@@ -49,33 +46,83 @@
                 </button>
             </form>
         </div>
+
         <h2 class="text-2xl mt-8">Matchs du championnat : {{ selected_championship_list.ChampionshipName }}</h2>
 
         <!-- Affichage des matchs du championnat sélectionné -->
-        <table class="mt-4 table-auto w-full">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2 border">Équipe Bleue</th>
-                    <th class="px-4 py-2 border">Équipe Verte</th>
-                    <th class="px-4 py-2 border">Score</th>
-                    <th class="px-4 py-2 border">État</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for championship in championships %}
+        {% if championships is not empty %}
+        <div class="overflow-x-auto shadow-md rounded-lg">
+            <table class="min-w-full text-sm text-left text-gray-800 border-collapse border border-gray-300">
+                <thead class="text-lg text-gray-700 uppercase bg-gray-100">
                     <tr>
-                        <td class="px-4 py-2 border">{{ championship.blueTeam.name }}</td>
-                        <td class="px-4 py-2 border">{{ championship.greenTeam.name }}</td>
-                        <td class="px-4 py-2 border">{{ championship.blueGoal }} - {{ championship.greenGoal }}</td>
-                        <td class="px-4 py-2 border">{{ championship.state.label }}</td>
+                        <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">Équipe Bleue</th>
+                        <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">Équipe Verte</th>
+                        <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
+                        <th scope="col" class="px-8 py-6">But Équipe Verte</th>
+                        <th scope="col" class="px-8 py-6">État</th>
+                        <th scope="col" class="px-8 py-6">Actions</th>
                     </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="4" class="text-center py-2">Aucun match disponible pour ce championnat.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for championship in championships %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
+                            <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.greenTeam.name }}</td>
+                            <td class="px-8 py-6">
+                                <form method="POST" action="{{ path('app_championship_save_score', {'id': championship.id}) }}" onsubmit="saveMatch(event, this)">
+                                    <input type="number" name="blueScore" value="{{ championship.blueGoal }}" min="0" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
+                            </td>
+                            <td class="px-8 py-6">
+                                <input type="number" name="greenScore" value="{{ championship.greenGoal }}" min="0" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
+                            </td>
+                            <td class="px-8 py-6">
+                                <select name="state" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
+                                    {% for state in states %}
+                                        <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>{{ state.value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td class="px-8 py-6">
+                                <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">Sauvegarder</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="text-lg text-gray-700 text-center">Aucun match disponible pour ce championnat. Veuillez générer les matchs.</p>
+        {% endif %}
     {% endif %}
 </div>
+
+<script>
+    // Fonction pour sauvegarder les matchs et recharger la page
+    function saveMatch(event, form) {
+        event.preventDefault();  // Empêcher la soumission par défaut du formulaire
+
+        // Créer un objet FormData à partir du formulaire
+        var formData = new FormData(form);
+
+        // Utiliser fetch pour envoyer les données du formulaire
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())  // On suppose que la réponse est en JSON
+        .then(data => {
+            if (data.success) {
+                // Si la sauvegarde a réussi, rechargez la page actuelle
+                location.reload();
+            } else {
+                alert("Erreur lors de la sauvegarde");
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+        });
+    }
+</script>
+
 {% endblock %}
