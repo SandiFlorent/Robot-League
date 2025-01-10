@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\ChampionshipList;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class ChampionshipListChoiceType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        // Liste d'options d'entiers (par exemple de 1 à 10)
+        $builder
+            ->add('number', ChoiceType::class, [
+                'choices' => array_combine(range(1, 10), range(1, 10)), // Choisir les entiers de 1 à 10
+                'label' => 'Choisir un numéro', // Libellé du champ
+                'placeholder' => 'Sélectionner un numéro', // Texte affiché par défaut
+                'required' => true,
+            ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([]);
+    }
+}
