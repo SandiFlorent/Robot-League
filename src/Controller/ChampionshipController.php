@@ -28,20 +28,37 @@ final class ChampionshipController extends AbstractController
 
     
     #[Route(name: 'app_championship_index', methods: ['GET'])]
-    public function index(ChampionshipRepository $championshipRepository): Response
+    public function index(ChampionshipRepository $championshipRepository, ChampionshipListRepository $championshipListRepository, Request $request): Response
     {
-        // Récupère toutes les équipes
-        $teams = $this->teamRepository->findAll();
+        // On récupère tous les championnats disponibles
+        $championshipLists = $championshipListRepository->findAll();
 
-        // Récupère toutes les rencontres
-        $championships = $championshipRepository->findAll();
+        // On récupère l'ID du championnat sélectionné depuis la requête (si existant)
+        $championshiplistId = $request->query->get('championshiplist_id');
+        
+        // Initialiser la variable qui contiendra le championnat sélectionné
+        $selectedChampionshipList = null;
+        $championships = [];
 
-        // Envoie les états à afficher dans le formulaire
+        // Si un championnat a été sélectionné, on récupère ce championnat spécifique
+        if ($championshiplistId) {
+            $selectedChampionshipList = $championshipListRepository->find($championshiplistId);
+
+            // Récupérer les matchs du championnat sélectionné
+            if ($selectedChampionshipList) {
+                $championships = $selectedChampionshipList->getChampionships();
+            }
+        }
+
+        // Récupérer les états disponibles (si nécessaire)
         $states = State::cases();
 
+        // Passer toutes les données nécessaires à la vue
         return $this->render('championship/index.html.twig', [
+            'championship_lists' => $championshipLists,
+            'selected_championship_list' => $selectedChampionshipList,
             'championships' => $championships,
-            'states' => $states,  // Envoie les valeurs de l'énumération
+            'states' => $states,
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Championship;
+use App\Entity\ChampionshipList;
 use App\Entity\Team;
 use App\Enum\State;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -38,6 +39,10 @@ class ChampionshipType extends AbstractType
                 'expanded' => true, // Affiche les options sous forme de boutons radio
                 'multiple' => false, // On ne permet pas de choisir plusieurs valeurs
                 'data' => State::NOT_STARTED->value, // Par défaut, l'état est "Non Commencé"
+            ])
+            ->add('championship_list_id', EntityType::class, [
+                'class' => ChampionshipList::class,
+                'choice_label' => 'name',  // Affiche le nom du championnat (au lieu de l'ID)
             ])
         ;
     }
