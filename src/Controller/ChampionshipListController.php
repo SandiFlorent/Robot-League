@@ -134,7 +134,7 @@ final class ChampionshipListController extends AbstractController
                 }
 
                 
-                $fields = $FieldRepository->findBy(['championship_list_id' => $championshipList->getId()]);
+                $fields = $FieldRepository->findBy(['championshipList' => $championshipList]);
 
                 foreach ($slots as $slo) {
                     foreach($fields as $field){
@@ -164,26 +164,26 @@ final class ChampionshipListController extends AbstractController
     }
 
 
-    #[Route('{idSlot}/{id}/deleteSlot', name: 'app_championship_list_delete_slot', methods: ['GET', 'POST'])]
-    public function deleteSlot(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager , int $idSlot, SlotRepository $slotRepository, EncounterRepository $encounterRepository): Response
-    {
-        $slot = $slotRepository->findOneBy(['id' => $idSlot]);
+#[Route('{idSlot}/{id}/deleteSlot', name: 'app_championship_list_delete_slot', methods: ['GET', 'POST'])]
+public function deleteSlot(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager, int $idSlot, SlotRepository $slotRepository, EncounterRepository $encounterRepository): Response
+{
+    $slot = $slotRepository->findOneBy(['id' => $idSlot]);
 
-        if ($this->isCsrfTokenValid('delete'.$idSlot, $request->getPayload()->getString('_token'))) {
-            $encounters = $encounterRepository->findBy(['idSlot' => $idSlot]);
+    $encounters = $encounterRepository->findBy(['slot' => $idSlot]);
 
-            foreach ($encounters as $encounter){
-                $entityManager->remove($encounter);
-            }
-
-            $entityManager->remove($slot);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_championship_list_new_slot', [
-            'id' => $championshipList->getId()
-        ]);
+    foreach ($encounters as $encounter) {
+        $entityManager->remove($encounter);
     }
+
+    $entityManager->remove($slot);
+    $entityManager->flush();
+
+
+    // Redirection vers la page des slots
+    return $this->redirectToRoute('app_championship_list_new_slot', [
+        'id' => $championshipList->getId(),
+    ]);
+}
 
     #[Route('{id}/newField', name: 'app_championship_list_new_field', methods: ['GET', 'POST'])]
     public function newField(Request $request, EntityManagerInterface $entityManager, ChampionshipList $championshipList, SlotRepository $slotRepository): Response
@@ -196,9 +196,8 @@ final class ChampionshipListController extends AbstractController
             $championshipList->addField($field);
 
             $entityManager->persist($field);
-            $entityManager->flush();
 
-            $slots = $slotRepository->findBy(['championship_list_id' => $championshipList->getId()]);
+            $slots = $slotRepository->findBy(['championshipList' => $championshipList]);
 
             foreach ($slots as $slo) {
                 $encounter = new Encounter();
@@ -207,6 +206,8 @@ final class ChampionshipListController extends AbstractController
                 $encounter->setMyChampionshipList($championshipList);
                 $entityManager->persist($encounter);
             }
+
+            $entityManager->flush();
 
             $id = $championshipList->getId();
             return $this->redirectToRoute('app_championship_list_new_field', [
@@ -225,16 +226,14 @@ final class ChampionshipListController extends AbstractController
     {
         $field = $fieldRepository->findOneBy(['id' => $idField]);
 
-        if ($this->isCsrfTokenValid('delete'.$idField, $request->getPayload()->getString('_token'))) {
-            $encounters = $encounterRepository->findBy(['idField' => $idField]);
+        $encounters = $encounterRepository->findBy(['field' => $idField]);
 
-            foreach ($encounters as $encounter){
-                $entityManager->remove($encounter);
-            }
-
-            $entityManager->remove($field);
-            $entityManager->flush();
+        foreach ($encounters as $encounter){
+            $entityManager->remove($encounter);
         }
+
+        $entityManager->remove($field);
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_championship_list_new_field', [
             'id' => $championshipList->getId()
