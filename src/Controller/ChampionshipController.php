@@ -145,8 +145,11 @@ final class ChampionshipController extends AbstractController
         // Sauvegarde les modifications
         $this->entityManager->flush();
 
-        // Redirige vers la liste des matchs
-        return $this->redirectToRoute('app_championship_index');
+        
+        // Rediriger vers la même page avec la sélection du championnat déjà en place
+        return $this->redirectToRoute('app_championship_index', [
+            'championshiplist_id' => $championship->getChampionshipList()->getId()
+        ]);
     }
 
     #[Route('/championship/delete_all', name: 'app_championship_delete_all', methods: ['POST'])]
