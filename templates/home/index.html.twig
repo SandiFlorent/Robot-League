@@ -6,30 +6,30 @@
 <html>
     <body>
         <div class="flex justify-start flex-row p-8 space-y-8"> 
-            <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full overflow-auto"> <!-- Ajouter overflow-auto pour limiter les débordements -->
+            <div class="bg-zinc-100 shadow-lg p-8 border border-zinc-50 h-screen w-full overflow-auto rounded-xl hover:shadow-2xl transition-shadow duration-300">
                 {% if championships is not empty %}
                 <h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
-                <div class="overflow-x-auto"> <!-- Gérer l'overflow horizontal -->
-                    
+                <div class="overflow-x-auto">
+
                     <!-- Affichage normal (tableau) sur grand écran -->
                     <div class="hidden sm:block">
-                        <table class="min-w-full text-base text-left text-gray-800 border-collapse border border-gray-300">
-                            <thead class="text-lg text-gray-700 uppercase bg-gray-100">
+                        <table class="min-w-full text-base text-left text-gray-800 border-collapse border border-gray-300 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                            <thead class="text-lg text-gray-700 uppercase bg-gradient-to-r from-blue-500 to-green-500 text-white">
                                 <tr>
-                                    <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">Équipe Bleue</th>
+                                    <th scope="col" class="px-8 py-6">Équipe Bleue</th>
                                     <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
                                     <th scope="col" class="px-8 py-6">But Équipe Verte</th>
-                                    <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">Équipe Verte</th>
+                                    <th scope="col" class="px-8 py-6">Équipe Verte</th>
                                     <th scope="col" class="px-8 py-6">État</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="bg-white">
                                 {% for championship in championships %}
-                                <tr class="hover:bg-gray-50">
+                                <tr class="hover:bg-blue-50 transition-colors duration-300 rounded-lg">
                                     <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
                                     <td class="px-8 py-6">{{ championship.blueGoal }}</td>
                                     <td class="px-8 py-6">{{ championship.greenGoal }}</td>
-                                    <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.greenTeam.name }}</td>
+                                    <td class="px-8 py-6 font-medium text-gray-900">{{ championship.greenTeam.name }}</td>
                                     <td class="px-8 py-6">{{ championship.state.value }}</td>
                                 </tr>
                                 {% endfor %}
@@ -46,24 +46,17 @@
                         {% set currentChampionships = championships | slice(start, end) %}
 
                         {% for championship in currentChampionships %}
-                        <div class="flex flex-col mb-4 border border-gray-300 p-4">
-                            <!-- Ligne - Équipe Bleue et Score -->
-                            <div class="flex justify-between bg-blue-100 px-4 py-2 font-medium text-blue-700">
-                                <div class="flex items-center">
-                                    <div class="font-semibold">Équipe Bleue:</div>
-                                    <div class="ml-4 font-semibold">{{ championship.blueTeam.name }}</div>
-                                </div>
+                        <div class="flex flex-col mb-4 border border-gray-300 p-4 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                            <div class="flex justify-between bg-blue-200 px-4 py-2 font-medium text-blue-700 rounded-lg hover:bg-blue-300 transition-colors duration-300">
+                                <div class="font-semibold">Équipe Bleue:</div>
+                                <div class="ml-4 font-semibold">{{ championship.blueTeam.name }}</div>
                                 <div class="ml-4 text-blue-700 font-medium">Score: {{ championship.blueGoal }}</div>
                             </div>
-                            <!-- Ligne - Équipe Verte et Score -->
-                            <div class="flex justify-between bg-green-100 px-4 py-2 font-medium text-green-700">
-                                <div class="flex items-center">
-                                    <div class="font-semibold">Équipe Verte:</div>
-                                    <div class="ml-4 font-semibold">{{ championship.greenTeam.name }}</div>
-                                </div>
+                            <div class="flex justify-between bg-green-200 px-4 py-2 font-medium text-green-700 rounded-lg hover:bg-green-300 transition-colors duration-300">
+                                <div class="font-semibold">Équipe Verte:</div>
+                                <div class="ml-4 font-semibold">{{ championship.greenTeam.name }}</div>
                                 <div class="ml-4 text-green-700 font-medium">Score: {{ championship.greenGoal }}</div>
                             </div>
-                            <!-- Ligne - État -->
                             <div class="flex justify-between px-4 py-2 font-medium">
                                 <div class="font-semibold">État:</div>
                                 <div>{{ championship.state.value }}</div>
@@ -72,22 +65,17 @@
                         {% endfor %}
 
                         <!-- Pagination (pour les petits écrans) -->
-                        <div class="flex justify-center mt-8">
-                            {% if page > 1 %}
-                            <a href="?page={{ page - 1 }}" class="px-4 py-2 bg-gray-300 rounded-l-lg hover:bg-gray-400">← Précédent</a>
-                            {% else %}
-                            <span class="px-4 py-2 bg-gray-200 rounded-l-lg cursor-not-allowed">← Précédent</span>
-                            {% endif %}
-                            <span class="px-4 py-2">Page {{ page }}</span>
-                            {% if end < championships|length %}
-                            <a href="?page={{ page + 1 }}" class="px-4 py-2 bg-gray-300 rounded-r-lg hover:bg-gray-400">Suivant →</a>
-                            {% else %}
-                            <span class="px-4 py-2 bg-gray-200 rounded-r-lg cursor-not-allowed">Suivant →</span>
-                            {% endif %}
+                        <div class="flex justify-center mt-8 space-x-4">
+                            {% set totalPages = (championships|length // perPage) + (championships|length % perPage > 0 ? 1 : 0) %}
+                            {% for i in 1..totalPages %}
+                                <a href="?page={{ i }}" 
+                                   class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition duration-300 
+                                          {% if i == page %}bg-blue-500 text-white{% endif %}">
+                                    {{ i }}
+                                </a>
+                            {% endfor %}
                         </div>
-
                     </div>
-
                 </div>
                 {% else %}
                     <p class="text-lg text-gray-700">Pas de championnat en cours</p>
@@ -111,3 +99,4 @@
     </body>
 </html>
 {% endblock %}
+    
