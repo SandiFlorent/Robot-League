@@ -18,6 +18,9 @@
             <tr>
                 <td>{{ fiel.Name }}</td>
             </tr>
+            <tr>
+                <a href={{ path('app_championship_list_delete_field', {'id': championship_list.id, 'idField': fiel.id }) }}>Supprimer</a>
+            </tr>
         {% else %}
             <tr>
                 <td colspan="8">Pas de terrain enregistré pour le moment</td>

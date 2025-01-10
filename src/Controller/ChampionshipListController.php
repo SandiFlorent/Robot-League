@@ -13,6 +13,7 @@ use App\Repository\ChampionshipListRepository;
 use App\Repository\ChampionshipRepository;
 use App\Repository\FieldRepository;
 use App\Repository\SlotRepository;
+use App\Repository\EncounterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -133,7 +134,7 @@ final class ChampionshipListController extends AbstractController
                 }
 
                 
-                $fields = $FieldRepository->findAll();
+                $fields = $FieldRepository->findBy(['championship_list_id' => $championshipList->getId()]);
 
                 foreach ($slots as $slo) {
                     foreach($fields as $field){
@@ -159,6 +160,29 @@ final class ChampionshipListController extends AbstractController
             'championship_list' => $championshipList,
             'form' => $form,
         ]);
+        
+    }
+
+
+    #[Route('{idSlot}/{id}/deleteSlot', name: 'app_championship_list_delete_slot', methods: ['GET', 'POST'])]
+    public function deleteSlot(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager , int $idSlot, SlotRepository $slotRepository, EncounterRepository $encounterRepository): Response
+    {
+        $slot = $slotRepository->findOneBy(['id' => $idSlot]);
+
+        if ($this->isCsrfTokenValid('delete'.$idSlot, $request->getPayload()->getString('_token'))) {
+            $encounters = $encounterRepository->findBy(['idSlot' => $idSlot]);
+
+            foreach ($encounters as $encounter){
+                $entityManager->remove($encounter);
+            }
+
+            $entityManager->remove($slot);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_championship_list_new_slot', [
+            'id' => $championshipList->getId()
+        ]);
     }
 
     #[Route('{id}/newField', name: 'app_championship_list_new_field', methods: ['GET', 'POST'])]
@@ -174,7 +198,7 @@ final class ChampionshipListController extends AbstractController
             $entityManager->persist($field);
             $entityManager->flush();
 
-            $slots = $slotRepository->findAll();
+            $slots = $slotRepository->findBy(['championship_list_id' => $championshipList->getId()]);
 
             foreach ($slots as $slo) {
                 $encounter = new Encounter();
@@ -196,64 +220,24 @@ final class ChampionshipListController extends AbstractController
         ]);
     }
 
-    // #[Route('/choose-number', name: 'app_choose_number', methods: ['GET', 'POST'])]
-    // public function chooseNumber(Request $request): Response
-    // {
-    //     // Créer le formulaire
-    //     $form = $this->createForm(ChampionshipListChoiceType::class);
+    #[Route('{idField}/{id}/deleteField', name: 'app_championship_list_delete_field', methods: ['GET', 'POST'])]
+    public function deleteField(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager , int $idField, FieldRepository $fieldRepository, EncounterRepository $encounterRepository): Response
+    {
+        $field = $fieldRepository->findOneBy(['id' => $idField]);
 
-    //     // Traiter la soumission du formulaire
-    //     $form->handleRequest($request);
+        if ($this->isCsrfTokenValid('delete'.$idField, $request->getPayload()->getString('_token'))) {
+            $encounters = $encounterRepository->findBy(['idField' => $idField]);
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         // Récupérer l'entier sélectionné
-    //         $selectedNumber = $form->get('number')->getData();
+            foreach ($encounters as $encounter){
+                $entityManager->remove($encounter);
+            }
 
-    //         // Afficher ou traiter l'entier sélectionné
-    //         $this->addFlash('notice', 'Numéro sélectionné : ' . $selectedNumber);
+            $entityManager->remove($field);
+            $entityManager->flush();
+        }
 
-    //         // Redirection ou traitement supplémentaire
-    //         return $this->redirectToRoute('app_choose_number');
-    //     }
-
-    //     // Rendu du formulaire
-    //     return $this->render('championship/choice.html.twig', [
-    //         'form' => $form->createView(),
-    //     ]);
-    // }
-
-    // #[Route('/choose', name: 'app_championship_choice', methods: ['POST'])]
-    // public function ChampionshipChoice(ChampionshipListRepository $championshipListRepository, Request $request, string $path): Response
-    // {
-    //     // Récupérer la liste des championnats
-    //     $Championshiplists = $championshipListRepository->findAll();
-
-    //     // Récupérer le paramètre 'championshiplist_id' envoyé par le formulaire via POST
-    //     $championshiplistId = $request->request->get('championshiplist_id');
-        
-    //     // Vérifier si l'ID a bien été récupéré
-    //     if ($championshiplistId != null) {
-
-    //         // Redirection vers la route spécifiée avec le paramètre 'champid'
-    //         return $this->redirectToRoute($path, [
-    //             'champid' => $championshiplistId // Passer l'ID du championnat
-    //         ]);
-    //     }
-
-    //     // Si aucun championnat n'est sélectionné, on affiche la page avec la liste des championnats
-    //     return $this->render('championship_list/choice.html.twig', [
-    //         'championshiplists' => $Championshiplists,
-    //     ]);
-    // }
-
-    // #[Route('/choose', name: 'app_championship_choice_base', methods: ['POST'])]
-    // public function ChampionshipChoiceBase(ChampionshipListRepository $championshipListRepository, Request $request, string $path): Response
-    // {
-
-    //     $Championshiplists = $championshipListRepository->findAll();
-
-    //     return $this->redirectToRoute('app_championship_choice', [
-    //         'path' => $path
-    //     ]);
-    // }
+        return $this->redirectToRoute('app_championship_list_new_field', [
+            'id' => $championshipList->getId()
+        ]);
+    }
 }
