@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use DateTimeInterface;
 use DateTime;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 #[UniqueEntity(fields: ['Name'], message: "Une équipe porte déjà ce nom")]
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
@@ -234,5 +235,57 @@ class Team
     {
         $this->nbWin = $nbWin;
         return $this;
+    }
+
+    
+    // Equivalent to SQL triggers 
+    public function updateTotalGoals(int $difference): void
+    {
+        $this->nbGoals += $difference;
+    }
+
+    /**
+     * Update the team's nb of encounter by the specified value. 
+     * A negative value for soustraction and positive for addition
+     */
+    public function updateNbEncounter(int $difference):void
+    {
+        $this->nbEncounter +=$difference;
+    }
+
+    public function updateTotalPoints(int $difference):void
+    {
+        $this->totalPoints +=$difference;
+    }
+
+    public function updateNbWins(int $difference):void
+    {
+        $this->nbWin +=$difference;
+    }
+
+    #[ORM\PreUpdate]
+    public function beforeUpdateTeamTotalPoints(PreUpdateEventArgs $event)    
+    {
+        // If total points has changed, then we update the score
+        if ($event->hasChangedField('totalPoints')) {
+            $newTotalPoints = $event->getNewValue('totalPoints');
+            if ($this->nbEncounter > 0)
+            {
+                $this->score = $newTotalPoints/$this->nbEncounter;
+            }
+        }
+    }
+
+    #[ORM\PreUpdate]
+    public function beforeUpdateTeamNbEncounter(PreUpdateEventArgs $event)    
+    {
+        // If nbEncounter has changed, then we update the score
+        if ($event->hasChangedField('nbEncounter')) {
+            $newNbEncounter = $event->getNewValue('nbEncounter');
+            if ($newNbEncounter > 0)
+            {
+                $this->score = $this->totalPoints/$newNbEncounter;
+            }
+        }
     }
 }
