@@ -14,6 +14,7 @@ use App\Repository\ChampionshipRepository;
 use App\Repository\FieldRepository;
 use App\Repository\SlotRepository;
 use App\Repository\EncounterRepository;
+use App\Repository\TeamRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -237,6 +238,23 @@ public function deleteSlot(Request $request, ChampionshipList $championshipList,
 
         return $this->redirectToRoute('app_championship_list_new_field', [
             'id' => $championshipList->getId()
+        ]);
+    }
+
+    #[Route('{id}/teams', name: 'app_championship_list_teams', methods: ['GET', 'POST'])]
+    public function teamsChange(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager , TeamRepository $teamRepository): Response
+    {
+
+        $teams = $championshipList->getTeams();
+
+        $teamsvalidated = $teamRepository->findBy(['championshipList' => $championshipList, 'isAccepted' => true]);
+
+        $teamsnotvalidated = $teamRepository->findBy(['championshipList' => $championshipList, 'isAccepted' => false]);
+
+        return $this->render('championship_list/gestionequipe.html.twig', [
+            'championship_list' => $championshipList,
+            'teamsvalidated' => $teamsvalidated,
+            'teamsvalidated' => $teamsnotvalidated,
         ]);
     }
 }
