@@ -254,7 +254,47 @@ public function deleteSlot(Request $request, ChampionshipList $championshipList,
         return $this->render('championship_list/gestionequipe.html.twig', [
             'championship_list' => $championshipList,
             'teamsvalidated' => $teamsvalidated,
-            'teamsvalidated' => $teamsnotvalidated,
+            'teamsnotvalidated' => $teamsnotvalidated,
+        ]);
+    }
+
+    #[Route('{id}-{idTeam}/teamValidate', name: 'app_championship_list_validate_team', methods: ['GET', 'POST'])]
+    public function teamValidate(Request $request,  EntityManagerInterface $entityManager , TeamRepository $teamRepository, int $idTeam, ChampionshipList $championshipList): Response
+    {
+
+
+        $team = $teamRepository->findOneBy(['id' => $idTeam]);
+        $team->setAccepted(true);
+        $entityManager->flush();
+
+        $teams = $championshipList->getTeams();
+        $teamsvalidated = $teamRepository->findBy(['championshipList' => $championshipList, 'isAccepted' => true]);
+        $teamsnotvalidated = $teamRepository->findBy(['championshipList' => $championshipList, 'isAccepted' => false]);
+
+        return $this->render('championship_list/gestionequipe.html.twig', [
+            'championship_list' => $championshipList,
+            'teamsvalidated' => $teamsvalidated,
+            'teamsnotvalidated' => $teamsnotvalidated,
+        ]);
+    }
+
+    #[Route('{id}-{idTeam}/teamUnvalidate', name: 'app_championship_list_unvalidate_team', methods: ['GET', 'POST'])]
+    public function teamUnvalidate(Request $request,  EntityManagerInterface $entityManager , TeamRepository $teamRepository, int $idTeam, ChampionshipList $championshipList): Response
+    {
+
+
+        $team = $teamRepository->findOneBy(['id' => $idTeam]);
+        $team->setAccepted(false);
+        $entityManager->flush();
+
+        $teams = $championshipList->getTeams();
+        $teamsvalidated = $teamRepository->findBy(['championshipList' => $championshipList, 'isAccepted' => true]);
+        $teamsnotvalidated = $teamRepository->findBy(['championshipList' => $championshipList, 'isAccepted' => false]);
+
+        return $this->render('championship_list/gestionequipe.html.twig', [
+            'championship_list' => $championshipList,
+            'teamsvalidated' => $teamsvalidated,
+            'teamsnotvalidated' => $teamsnotvalidated,
         ]);
     }
 }

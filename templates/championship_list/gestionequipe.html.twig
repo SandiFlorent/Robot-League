@@ -5,12 +5,33 @@
 {% block body %}
     <h1>Gérer les équipes</h1>
 
+    <hr />
+
+    <h2>Equipes validées</h1>
+
+    <ul>
     {% for team in teamsvalidated %}
+        <li>{{ team.Name }}</li>
+        <a href={{ path('app_championship_list_unvalidate_team', {'id': championship_list.id, 'idTeam': team.id }) }}>Retirer l'équipe</a>
 
     {% endfor %}
+    </ul>
 
+    <hr />
+
+    <h2>Demandes de validation</h1>
+
+    <ul>
     {% for team in teamsnotvalidated %}
+        <li>{{ team.Name }}</li>
+        <a href={{ path('app_championship_list_validate_team', {'id': championship_list.id, 'idTeam':team.id }) }}>Valider</a>
 
     {% endfor %}
+    </ul>
+
+    <hr />
+
+    <a href={{ path('app_championship_index') }}>Retour aux championnats</a>
+
 
 {% endblock %}
