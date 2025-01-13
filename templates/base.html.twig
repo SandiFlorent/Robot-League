@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        {% block title %}Welcome!{% endblock %}
+        {% block title %}{{ 'base.welcome'|trans }} !{% endblock %}
     </title>
     <link rel="icon" href="{{ asset('Images/logo.png') }}">
     {% block stylesheets %}
@@ -17,6 +16,10 @@
             {{ message }}
         </div>
     {% endfor %}
+
+    {% set route = app.request.attributes.get('_route') %}
+    {% set route_params = app.request.attributes.get('_route_params') %}
+    {% set params = route_params|merge(app.request.query.all) %}
 
     <div class="min-h-full">
         <nav class="bg-gradient-to-r from-blue-500 via-teal-400 to-indigo-600 flex items-center justify-between px-6 py-4 shadow-lg rounded-b-xl">
@@ -47,14 +50,14 @@
                         {% if app.user %}
                             {% if is_granted('ROLE_USER') %}
                                 {% if app.user.myTeam == null %}
-                                    <a href="{{ path('app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">{{ 'base.create'|trans }}</a>
+                                    <a href="{{ path('/{_locale}/app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">{{ 'base.create'|trans }}</a>
                                 {% else %}
-                                    <a href="{{ path('app_team_member', {'id': app.user.myTeam.id}) }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">{{ 'base.team'|trans }}</a>
+                                    <a href="{{ path('/{_locale}/app_team_member', {'id': app.user.myTeam.id}) }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">{{ 'base.team'|trans }}</a>
                                 {% endif %}
                             {% endif %}
 						{% endif %}
 						{% if is_granted('ROLE_ORGANISATEUR') %}
-                            <a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.championship'|trans }}</a>
+                            <a href="{{path('/{_locale}/app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.championship'|trans }}</a>
                         {% endif %}
                         <a href="{{ path('app_team_show') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">{{ 'show.displayTeams'|trans }}</a>
                     </div>
@@ -109,6 +112,17 @@
         </div>
     </div>
 
+
+
+
+
+
+<a href="{{ path(route, params|merge({ _locale: 'en' })) }}">English</a>
+<a href="{{ path(route, params|merge({ _locale: 'fr' })) }}">Français</a>
+    
+
+
+<div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const menuToggle = document.getElementById('menu-toggle');
@@ -144,6 +158,8 @@
             });
         });
     </script>
+
+	
 
 </body>
 </html>

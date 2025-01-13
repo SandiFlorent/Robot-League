@@ -8,6 +8,8 @@ base:
   notification: Voir les notifications
   login: Connexion
   register: Inscription
+  lang: Website in english
+  welcome: Bienvenue
 
 show:
   score: Score

@@ -8,6 +8,8 @@ base:
   notification: See notifications
   login: Log in
   register: Register
+  lang: Site en français
+  welcome: Welcome
 
 show:
   score: Score
@@ -17,7 +19,7 @@ show:
   user: User
   users: Users
   id: Id
-  email: E-mail
+  email: Email
   roles: Roles
   passwd: Password
   name: Name

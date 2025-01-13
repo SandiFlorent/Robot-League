@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Enum\State;
 
-#[Route('/championship')]
+#[Route('/{_locale}/championship')]
 final class ChampionshipController extends AbstractController
 {
     private $entityManager;
@@ -25,7 +25,7 @@ final class ChampionshipController extends AbstractController
     }
 
     
-    #[Route(name: 'app_championship_index', methods: ['GET'])]
+    #[Route(name: '/{_locale}/app_championship_index', methods: ['GET'])]
     public function index(ChampionshipRepository $championshipRepository): Response
     {
         // Récupère toutes les équipes

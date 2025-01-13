@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/member')]
+#[Route('{_locale}/member')]
 final class MemberController extends AbstractController
 {
-    #[Route(name: 'app_member_index', methods: ['GET'])]
+    #[Route(name: '{_locale}/app_member_index', methods: ['GET'])]
     public function index(MemberRepository $memberRepository): Response
     {
         return $this->render('member/index.html.twig', [
@@ -22,7 +22,7 @@ final class MemberController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_member_new', methods: ['GET', 'POST'])]
+    #[Route('{_locale}/new', name: 'app_member_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $member = new Member();
@@ -48,7 +48,7 @@ final class MemberController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_member_show', methods: ['GET'])]
+    #[Route('{_locale}/{id}', name: 'app_member_show', methods: ['GET'])]
     public function show(Member $member): Response
     {
         return $this->render('member/show.html.twig', [
@@ -56,7 +56,7 @@ final class MemberController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_member_edit', methods: ['GET', 'POST'])]
+    #[Route('{_locale}/{id}/edit', name: 'app_member_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Member $member, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MemberType::class, $member);
@@ -74,7 +74,7 @@ final class MemberController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_member_delete', methods: ['POST'])]
+    #[Route('{_locale}/{id}', name: 'app_member_delete', methods: ['POST'])]
     public function delete(Request $request, Member $member, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$member->getId(), $request->getPayload()->getString('_token'))) {

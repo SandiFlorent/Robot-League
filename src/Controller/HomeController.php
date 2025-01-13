@@ -17,7 +17,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/', name: 'app_home', methods: ['GET'])]
+    #[Route('/{_locale}', name: 'app_home', methods: ['GET'])]
     public function home(ChampionshipRepository $championshipRepository): Response
     {
         // Récupère toutes les rencontres
