@@ -116,11 +116,12 @@
 
 
 
-
-<a href="{{ path(route, params|merge({ _locale: 'en' })) }}">English</a>
-<a href="{{ path(route, params|merge({ _locale: 'fr' })) }}">Français</a>
-    
-
+<div class="relative">
+    <div class="fixed top-0 left-0 z-50">
+        <a class="text-blue-100" href="{{ path(route, params|merge({ _locale: 'en' })) }}">English</a>
+        <a href="{{ path(route, params|merge({ _locale: 'fr' })) }}">Français</a>
+    </div>
+</div>
 
 <div>
     <script>
