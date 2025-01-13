@@ -30,6 +30,7 @@
             <div class="sm:block md:hidden lg:hidden">
                 <label for="menu-toggle" class="cursor-pointer">
                     <svg class="w-6 h-6 text-white transition-all hover:text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-6 h-6 text-white transition-all hover:text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </label>
@@ -46,11 +47,12 @@
                     <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
                         {% if app.user %}
                             {% if is_granted('ROLE_USER') %}
-                                <a href="{{ path('app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer une équipe</a>
+                                {% if app.user.myTeam == null %}
+                                    <a href="{{ path('app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer une équipe</a>
+                                {% else %}
+                                    <a href="{{ path('app_team_member', {'id': app.user.myTeam.id}) }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Mon équipe</a>
+                                {% endif %}
                             {% endif %}
-						{% endif %}
-						{% if is_granted('ROLE_ORGANISATEUR') %}
-                            <a href="{{path('app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.championship'|trans }}</a>
                         {% endif %}
                         <a href="{{ path('app_team_show') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Voir les équipes</a>
                     </div>
@@ -87,7 +89,11 @@
             <a href="{{ path('app_team_show') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Equipes</a>
             {% if app.user %}
                 {% if is_granted('ROLE_USER') %}
-                    <a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Créer une équipe</a>
+                    {% if app.user.myTeam == null %}
+                        <a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Créer une équipe</a>
+                    {% else %}
+                        <a href="{{ path('app_team_member', {'id': app.user.myTeam.id }) }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Mon équipe</a>
+                    {% endif %}
                 {% endif %}
                 {% if is_granted('ROLE_ORGANISATEUR') %}
                     <a href="{{ path('app_user_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Utilisateurs</a>
