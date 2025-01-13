@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Enum\State;
+use App\Repository\EncounterRepository;
 
 #[Route('/championship')]
 final class ChampionshipController extends AbstractController
@@ -64,7 +65,7 @@ final class ChampionshipController extends AbstractController
     }
 
     #[Route('/championship/generate', name: 'app_championship_generate', methods: ['POST'])]
-    public function generateChampionshipsPost(Request $request): Response
+    public function generateChampionshipsPost(Request $request, EncounterRepository $encounterRepository): Response
     {
         // Récupérer l'ID du championnat sélectionné depuis la requête
         $championshipListId = $request->get('championship_list_id');
@@ -86,7 +87,7 @@ final class ChampionshipController extends AbstractController
         $filteredTeams = array_values($filteredTeams);
 
         // Générer les matchs
-        $this->generateChampionships($filteredTeams, $championshipList);
+        $this->generateChampionships($filteredTeams, $championshipList, $encounterRepository);
 
         // Rediriger vers la page des matchs
         return $this->redirectToRoute('app_championship_index', [
@@ -95,7 +96,7 @@ final class ChampionshipController extends AbstractController
     }
     
     // Fonction pour générer les matchs
-    private function generateChampionships(array $teams, ChampionshipList $championshipList)
+    private function generateChampionships(array $teams, ChampionshipList $championshipList, EncounterRepository $encounterRepository)
     {
         // Génère les matchs sans matchs retour (évite les doublons)
         foreach ($teams as $index1 => $team1) {
