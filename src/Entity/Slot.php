@@ -31,12 +31,20 @@ class Slot
     #[ORM\ManyToOne(inversedBy: 'slot')]
     private ?ChampionshipList $championshipList = null;
 
+
     #[ORM\Column]
     private ?int $length = null;
+
+    /**
+     * @var Collection<int, Team>
+     */
+    #[ORM\ManyToMany(targetEntity: Team::class, inversedBy: 'slots')]
+    private Collection $teams;
 
     public function __construct()
     {
         $this->encounters = new ArrayCollection();
+        $this->teams = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,6 +126,30 @@ class Slot
     public function setLength(int $length): static
     {
         $this->length = $length;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Team>
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(Team $team): static
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams->add($team);
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): static
+    {
+        $this->teams->removeElement($team);
 
         return $this;
     }

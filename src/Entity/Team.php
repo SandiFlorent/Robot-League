@@ -72,12 +72,19 @@ class Team
     #[ORM\ManyToOne(inversedBy: 'myTeams')]
     private ?User $creator = null;
 
+    /**
+     * @var Collection<int, Slot>
+     */
+    #[ORM\ManyToMany(targetEntity: Slot::class, mappedBy: 'teams')]
+    private Collection $slots;
+
     public function __construct()
     {
         $this->TeamMembers = new ArrayCollection();
         $this->championships = new ArrayCollection();
         $this->inscriptionDate = new DateTime();
         $this->isAccepted=false;
+        $this->slots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -255,6 +262,33 @@ class Team
     public function setCreator(?User $creator): static
     {
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Slot>
+     */
+    public function getSlots(): Collection
+    {
+        return $this->slots;
+    }
+
+    public function addSlot(Slot $slot): static
+    {
+        if (!$this->slots->contains($slot)) {
+            $this->slots->add($slot);
+            $slot->addTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSlot(Slot $slot): static
+    {
+        if ($this->slots->removeElement($slot)) {
+            $slot->removeTeam($this);
+        }
 
         return $this;
     }
