@@ -11,14 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ImpersonateController extends AbstractController
 {
-    #[Route('/impersonate', name: 'app_impersonate')]
-    public function index(): Response
-    {
-        return $this->render('impersonate/index.html.twig', [
-            'controller_name' => 'ImpersonateController',
-        ]);
-    }
-
     private UserRepository $userRepository;
 
     public function __construct(UserRepository $userRepository)
@@ -26,26 +18,17 @@ class ImpersonateController extends AbstractController
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * @Route("/find-user-id", name="app_find_user_id", methods={"POST"})
-     */
-    public function findUserId(Request $request): RedirectResponse
+    #[Route('/impersonate/{id}', name: 'app_impersonate_user', methods: ['POST'])]
+    public function impersonateUser(int $id): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANISATEUR');
 
-        $email = $request->request->get('email');
-        if (!$email) {
-            $this->addFlash('error', 'Email is required.');
-            return $this->redirectToRoute('app_home');
-        }
-
-        $user = $this->userRepository->findOneBy(['email' => $email]);
+        $user = $this->userRepository->find($id);
         if (!$user) {
-            $this->addFlash('error', "No user found with email: {$email}");
+            $this->addFlash('error', 'Utilisateur non trouvé.');
             return $this->redirectToRoute('app_home');
         }
 
-        // Redirect to impersonate route with the `_switch_user` query parameter
         return $this->redirectToRoute('app_home', ['_switch_user' => $user->getEmail()]);
     }
 }
