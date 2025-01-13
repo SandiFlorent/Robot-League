@@ -6,6 +6,11 @@ use App\Enum\State;
 use App\Repository\ChampionshipRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Enum\State as ChampionshipState;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use App\triggers\triggers;
 
 #[ORM\Entity(repositoryClass: ChampionshipRepository::class)]
 class Championship
@@ -143,5 +148,69 @@ class Championship
         $this->encounter = $encounter;
 
         return $this;
+    }
+
+    //Equivalent to SQL triggers
+    public function discardGoals(): void
+    {
+        //We reduce the total goals of the blue and green team
+        $this->blueTeam->updateTotalGoals(-$this->blueGoal);
+        $this->greenTeam->updateTotalGoals(-$this->greenGoal);
+
+        //We set back this championship's goals to 0
+        $this->blueGoal = 0;
+        $this->greenGoal = 0;
+    }
+
+    public function updateNbEnCounterByOne($difference): void
+    {
+        $this->blueTeam->updateNbEncounter($difference);
+        $this->greenTeam->updateNbEncounter($difference);
+    }
+
+
+    #[ORM\PreUpdate]
+    public function beforeUpdateChampionshipTeamGoals(PreUpdateEventArgs $event): void
+    {
+        // Check if `blue_goal` has changed
+        if ($event->hasChangedField('blue_goal')) {
+            $oldValue = $event->getOldValue('blue_goal');
+            $newValue = $event->getNewValue('blue_goal');
+            $difference = $newValue - $oldValue;
+
+            // Update the blue team's goals
+            $this->blueTeam->updateTotalGoals($difference);
+        }
+
+        // Check if `green_goal` has changed
+        if ($event->hasChangedField('green_goal')) {
+            $oldValue = $event->getOldValue('green_goal');
+            $newValue = $event->getNewValue('green_goal');
+            $difference = $newValue - $oldValue;
+
+            // Update the green team's goals
+            $this->greenTeam->updateTotalGoals($difference);
+        }
+    }
+    #[ORM\PreUpdate]
+    public function beforeUpdateChampionship(PreUpdateEventArgs $event, EntityManagerInterface $entityManager)
+    {
+        if ($event->hasChangedField('state')) {
+            $oldState = $event->getOldValue('state');
+            $newState = $event->getNewValue('state');
+
+            $entityManager->beginTransaction();
+            try {
+                // Create new triggers that will (hopefully) update the teams' stats
+                $trigger = new triggers($oldState, $newState, $this->blueTeam, $this->greenTeam, $this->blueGoal, $this->greenGoal);
+                $trigger->championshipStateTriggers();
+
+                $entityManager->flush();
+                $entityManager->commit();
+            } catch (\Exception $e) {
+                $entityManager->rollback();
+                throw $e;
+            }
+        }
     }
 }
