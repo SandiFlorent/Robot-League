@@ -1,0 +1,38 @@
+<!-- Menu Desktop (affiché uniquement sur les grands écrans) -->
+<div class="hidden md:flex lg:flex space-x-6">
+    <a href="{{ path('app_home') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
+
+    <!-- Menu Équipes -->
+    <div class="relative">
+        <button class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Équipes</button>
+        <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
+            {% if app.user %}
+                {% if is_granted('ROLE_USER') %}
+                        <a href="{{ path('app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer une équipe</a>
+                        <a href="{{ path('app_choose_championship_member') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Membres</a>
+                {% endif %}
+            {% endif %}
+            <a href="{{ path('app_team_show') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Voir les équipes</a>
+        </div>
+    </div>
+
+    <!-- Menu Admin (affiché uniquement pour les organisateurs) -->
+    {% if is_granted('ROLE_ORGANISATEUR') %}
+        <div class="relative">
+            <button class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Admin</button>
+            <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
+                <a href="{{ path('app_user_index') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Utilisateurs</a>
+                <a href="{{ path('app_championship_index') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Championnat</a>
+                <a href="{{ path('app_championship_list_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer un championnat</a>
+            </div>
+        </div>
+        
+    {% endif %}
+
+    {% if app.user %}
+        <a href="{{ path('app_logout') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
+    {% else %}
+        <a href="{{ path('app_login') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
+        <a href="{{ path('app_register') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Inscription</a>
+    {% endif %}
+</div>

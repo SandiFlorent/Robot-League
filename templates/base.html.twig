@@ -12,143 +12,20 @@
     {% endblock %}
 </head>
 <body class="bg-gray-100">
-    {% for message in app.flashes('notice') %}
-        <div class="flash-notice">
-            {{ message }}
-        </div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-    <div class="bg-red-500 text-white p-4 rounded-md mb-4">
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-    <div class="bg-red-500 text-white p-4 rounded-md mb-4">
-        {{ message }}
-    </div>
-    {% endfor %}
 
+    {% include "includes/notifications.html.twig" %}
     <div class="min-h-full">
-        <nav class="bg-gradient-to-r from-blue-500 via-teal-400 to-indigo-600 flex items-center justify-between px-6 py-4 shadow-lg rounded-b-xl">
-            <!-- Logo -->
-            <div class="flex items-center space-x-3">
-                <img class="w-12 h-12 rounded-full shadow-lg" src="{{ asset('Images/logo.png') }}" alt="Your Company">
-                <p class="text-4xl font-bold text-white">RobotLeague</p>
-            </div>
-
-            <!-- Menu Burger (affiché uniquement sur les écrans moyens) -->
-            <div class="sm:block md:hidden lg:hidden">
-                <label for="menu-toggle" class="cursor-pointer">
-                    <svg class="w-6 h-6 text-white transition-all hover:text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <svg class="w-6 h-6 text-white transition-all hover:text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </label>
-                <input type="checkbox" id="menu-toggle" class="hidden" />
-            </div>
-
-            <!-- Menu Desktop (affiché uniquement sur les grands écrans) -->
-            <div class="hidden md:flex lg:flex space-x-6">
-                <a href="{{ path('app_home') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
-
-                <!-- Menu Équipes -->
-                <div class="relative">
-                    <button class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Équipes</button>
-                    <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
-                        {% if app.user %}
-                            {% if is_granted('ROLE_USER') %}
-                                    <a href="{{ path('app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer une équipe</a>
-                                    <a href="{{ path('app_choose_championship_member') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Membres</a>
-                            {% endif %}
-                        {% endif %}
-                        <a href="{{ path('app_team_show') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Voir les équipes</a>
-                    </div>
-                </div>
-
-                <!-- Menu Admin (affiché uniquement pour les organisateurs) -->
-                {% if is_granted('ROLE_ORGANISATEUR') %}
-                    <div class="relative">
-                        <button class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Admin</button>
-                        <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
-                            <a href="{{ path('app_user_index') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Utilisateurs</a>
-                            <a href="{{ path('app_championship_index') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Championnat</a>
-                            <a href="{{ path('app_championship_list_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer un championnat</a>
-                        </div>
-                    </div>
-                    
-                {% endif %}
-
-                {% if app.user %}
-                    <a href="{{ path('app_logout') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
-                    <a href="{{ path('app_register') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Inscription</a>
-                {% endif %}
-            </div>
-        </nav>
+        
+        {% include "includes/bodyBlock.html.twig" %}
 
         {% block body %}
         {% endblock %}
     </div>
 
     <!-- Menu mobile -->
-    <div class="sm:hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur z-50 hidden" id="menu-mobile">
-        <div class="flex flex-col items-center justify-center h-full space-y-6">
-            <a href="{{ path('app_home') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
-            <a href="{{ path('app_team_show') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Equipes</a>
-            {% if app.user %}
-                {% if is_granted('ROLE_USER') %}
-                        <a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Créer une équipe</a>
-                        <a href="{{ path('app_choose_championship_member') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Membres</a>
-                {% endif %}
-                {% if is_granted('ROLE_ORGANISATEUR') %}
-                    <a href="{{ path('app_user_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Utilisateurs</a>
-                    <a href="{{ path('app_championship_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Championnat</a>
-                    <a href="{{ path('app_championship_list_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer un championnat</a>
-                {% endif %}
-                <a href="{{ path('app_logout') }}" class="text-white text-lg font-semibold hover:bg-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
-                <a href="{{ path('app_register') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Inscription</a>
-            {% endif %}
-        </div>
-    </div>
+    {% include "includes/menuMobile.html.twig" %}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const menuToggle = document.getElementById('menu-toggle');
-            if (menuToggle) {
-                menuToggle.addEventListener('change', function () {
-                    const menu = document.getElementById('menu-mobile');
-                    if (menu) {
-                        if (this.checked) {
-                            menu.classList.remove('hidden');
-                        } else {
-                            menu.classList.add('hidden');
-                        }
-                    }
-                });
-            }
-
-            // Gestion des menus déroulants
-            const menuButtons = document.querySelectorAll('.relative button');
-            menuButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    // Fermer tous les autres menus
-                    const allDropdowns = document.querySelectorAll('.dropdown-content');
-                    allDropdowns.forEach(dropdown => {
-                        if (dropdown !== this.nextElementSibling) {
-                            dropdown.classList.add('hidden');
-                        }
-                    });
-
-                    // Afficher/masquer le menu actuel
-                    const dropdown = this.nextElementSibling;
-                    dropdown.classList.toggle('hidden');
-                });
-            });
-        });
-    </script>
+    <script src="{{asset('js/menuToggle.js') }}"></script>
 
 </body>
 </html>
