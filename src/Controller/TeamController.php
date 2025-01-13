@@ -82,19 +82,23 @@ final class TeamController extends AbstractController
 
         // Si un championnat a été sélectionné
         if ($championshipId) {
-            // Récupérer l'équipe associée à ce championnat
-            $team = $teamRepository->findOneBy(['championshipList' => $championshipId]);
+            // Récupérer les équipes de l'utilisateur dans ce championnat
+            $teams = $teamRepository->findBy([
+                'championshipList' => $championshipId,
+                'creator' => $user // Assurez-vous que l'utilisateur est le créateur de l'équipe
+            ]);
 
-            if ($team) {
-                // Si une équipe est trouvée, rediriger vers la gestion des membres de l'équipe
-                return $this->redirectToRoute('app_team_member', ['id' => $team->getId()]);
+            // Si des équipes sont trouvées pour l'utilisateur dans ce championnat
+            if (!empty($teams)) {
+                // On redirige vers la gestion des membres de la première équipe de l'utilisateur dans ce championnat
+                return $this->redirectToRoute('app_team_member', ['id' => $teams[0]->getId()]);
+            } else {
+                // Si l'utilisateur n'a pas d'équipe dans ce championnat, afficher un message d'erreur
+                $this->addFlash('error', 'Vous n\'avez aucune équipe dans ce championnat.');
             }
-
-            // Si aucune équipe n'a été trouvée, afficher un message d'erreur
-            $this->addFlash('error', 'Aucune équipe trouvée pour ce championnat.');
         }
 
-        // Récupérer les équipes de l'utilisateur et leurs championnats
+        // Récupérer les équipes de l'utilisateur et leurs championnats associés
         $teams = $user->getMyTeams();
 
         // Récupérer les championnats uniques associés à l'utilisateur
@@ -111,7 +115,6 @@ final class TeamController extends AbstractController
             'championships' => $championships,
         ]);
     }
-
 
 
     #[Route('/{id}/edit', name: 'app_team_edit', methods: ['GET', 'POST'])]
