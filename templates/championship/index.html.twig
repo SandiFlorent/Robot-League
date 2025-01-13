@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container mx-auto p-6">
+<div class="container mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
     <!-- Titre principal -->
     <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Gestion du Championnat</h1>
+        <h1 class="text-4xl font-extrabold text-white drop-shadow-lg">Gestion du Championnat</h1>
     </div>
 
     <!-- Formulaire pour sélectionner un championnat -->
-    <div class="mb-4">
-        <label for="championshiplist_id" class="text-lg font-semibold text-gray-700">Choisir un championnat</label>
-        <form method="get" action="{{ path('app_championship_index') }}">
-            <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
+    <div class="mb-6">
+        <label for="championshiplist_id" class="text-lg font-semibold text-gray-300">Choisir un championnat</label>
+        <form method="get" action="{{ path('app_championship_index') }}" class="space-y-4">
+            <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md w-full sm:w-auto">
                 <option value="">Sélectionner un championnat</option>
                 {% for championshipList in championship_lists %}
                     <option value="{{ championshipList.id }}" {% if championshipList == selected_championship_list %}selected{% endif %}>
@@ -19,7 +19,7 @@
                     </option>
                 {% endfor %}
             </select>
-            <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300 mt-4">
+            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300 mt-4">
                 Voir les Matchs
             </button>
         </form>
@@ -28,16 +28,16 @@
     <!-- Si un championnat est sélectionné, afficher la liste des matchs -->
     {% if selected_championship_list %}
 
-        <a href="{{ path('app_championship_list_edit', {'id': selected_championship_list.id }) }}" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300">Modifier le championnat</a>
+        <div class="flex space-x-4 mb-6">
+            <a href="{{ path('app_championship_list_edit', {'id': selected_championship_list.id }) }}" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300">Modifier le championnat</a>
 
-        <a href="{{ path('app_championship_list_teams', {'id': selected_championship_list.id }) }}" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300">Valider les équipes</a>
-
+            <a href="{{ path('app_championship_list_teams', {'id': selected_championship_list.id }) }}" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300">Valider les équipes</a>
+        </div>
 
         <!-- Formulaires pour générer ou supprimer le championnat -->
-        <div class="space-y-6">
-        
+        <div class="space-y-6 text-center">
             <!-- Formulaire pour générer le championnat -->
-            <form method="post" action="{{ path('app_championship_generate') }}" class="text-center">
+            <form method="post" action="{{ path('app_championship_generate') }}">
                 <input type="hidden" name="championship_list_id" value="{{ selected_championship_list.id }}" />
                 <button type="submit" class="px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition duration-300">
                     Générer Championnat
@@ -45,87 +45,64 @@
             </form>
 
             <!-- Formulaire pour supprimer tous les championnats -->
-            <form method="post" action="{{ path('app_championship_delete_all') }}" 
-                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer tous les matchs ?');" 
-                class="text-center">
+            <form method="post" action="{{ path('app_championship_delete_all') }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer tous les matchs ?');">
                 <button type="submit" class="px-6 py-3 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition duration-300">
                     Supprimer le championnat
                 </button>
             </form>
         </div>
 
-        <h2 class="text-2xl mt-8">Matchs du championnat : {{ selected_championship_list.ChampionshipName }}</h2>
-
-        <!-- Affichage des matchs du championnat sélectionné -->
+        <!-- Tableau avec un style amélioré et saisie des buts -->
         {% if championships is not empty %}
-        <div class="overflow-x-auto shadow-md rounded-lg">
-            <table class="min-w-full text-sm text-left text-gray-800 border-collapse border border-gray-300">
-                <thead class="text-lg text-gray-700 uppercase bg-gray-100">
+        <div class="overflow-x-auto rounded-lg shadow-lg border border-gray-700 mt-6">
+            <table class="w-full border-collapse border border-gray-700 text-sm text-left text-gray-300">
+                <thead class="bg-gray-800 text-white">
                     <tr>
-                        <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">Équipe Bleue</th>
-                        <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">Équipe Verte</th>
-                        <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
-                        <th scope="col" class="px-8 py-6">But Équipe Verte</th>
-                        <th scope="col" class="px-8 py-6">Terrain</th>
-                        <th scope="col" class="px-8 py-6">Début du match</th>
-                        <th scope="col" class="px-8 py-6">Fin du match</th>
-                        <th scope="col" class="px-8 py-6">État</th>
-                        <th scope="col" class="px-8 py-6">Actions</th>
+                        <th class="px-6 py-4 font-medium">Équipe Bleue</th>
+                        <th class="px-6 py-4 font-medium">Équipe Verte</th>
+                        <th class="px-6 py-4 font-medium">But Équipe Bleue</th>
+                        <th class="px-6 py-4 font-medium">But Équipe Verte</th>
+                        <th class="px-6 py-4 font-medium">Terrain</th>
+                        <th class="px-6 py-4 font-medium">Début du match</th>
+                        <th class="px-6 py-4 font-medium">Fin du match</th>
+                        <th class="px-6 py-4 font-medium">État</th>
+                        <th class="px-6 py-4 font-medium">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for championship in championships %}
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.blueTeam.name }}</td>
-                            <td class="px-8 py-6 font-medium text-gray-900 whitespace-nowrap">{{ championship.greenTeam.name }}</td>
-                            <td class="px-8 py-6">
-                                <form method="POST" action="{{ path('app_championship_save_score', {'id': championship.id}) }}" onsubmit="saveMatch(event, this)">
-                                    <input type="number" name="blueScore" value="{{ championship.blueGoal }}" min="0" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
-                            </td>
-                            <td class="px-8 py-6">
-                                <input type="number" name="greenScore" value="{{ championship.greenGoal }}" min="0" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
-                            </td>
-                            <td class="px-8 py-6">
-                            {% if championship.encounter == null %}
-                                TBD
-                            {% else %}
-                                {{ championship.encounter.field.Name }}
-                            {% endif %}
-                            </td>
-                            <td class="px-8 py-6">
-                            {% if championship.encounter == null %}
-                                TBD
-                            {% else %}
-                                {{ championship.encounter.slot.dateDebut|date('Y-m-d H:i:s') }}
-                            {% endif %}
-                            </td>
-                            <td class="px-8 py-6">
-                            {% if championship.encounter == null %}
-                                TBD
-                            {% else %}
-                                {{ championship.encounter.slot.dateEnd|date('Y-m-d H:i:s') }}
-                            {% endif %}
-                            </td>
-                            <td class="px-8 py-6">
-                                <select name="state" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
-                                    {% for state in states %}
-                                        <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>{{ state.value }}</option>
-                                    {% endfor %}
-                                </select>
-                            </td>
-                            <td class="px-8 py-6">
-                                <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">Sauvegarder</button>
-                                </form>
-                            </td>
-                        </tr>
+                    <tr class="odd:bg-gray-800 even:bg-gray-700 hover:bg-gray-600 transition duration-300">
+                        <td class="px-6 py-4">{{ championship.blueTeam.name }}</td>
+                        <td class="px-6 py-4">{{ championship.greenTeam.name }}</td>
+                        <td class="px-6 py-4">
+                            <form method="POST" action="{{ path('app_championship_save_score', {'id': championship.id}) }}">
+                                <input type="number" name="blueScore" value="{{ championship.blueGoal }}" min="0" required class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md">
+                        </td>
+                        <td class="px-6 py-4">
+                                <input type="number" name="greenScore" value="{{ championship.greenGoal }}" min="0" required class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md">
+                        </td>
+                        <td class="px-6 py-4">{{ championship.encounter ? championship.encounter.field.Name : 'TBD' }}</td>
+                        <td class="px-6 py-4">{{ championship.encounter ? championship.encounter.slot.dateDebut|date('Y-m-d H:i:s') : 'TBD' }}</td>
+                        <td class="px-6 py-4">{{ championship.encounter ? championship.encounter.slot.dateEnd|date('Y-m-d H:i:s') : 'TBD' }}</td>
+                        <td class="px-6 py-4">
+                            <select name="state" required class="px-3 py-2 border border-gray-600 bg-gray-800 text-white rounded-md">
+                                {% for state in states %}
+                                    <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>{{ state.value }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">Sauvegarder</button>
+                            </form>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
         {% else %}
-            <p class="text-lg text-gray-700 text-center">Aucun match disponible pour ce championnat. Veuillez générer les matchs.</p>
+            <p class="text-center text-gray-400">Aucun match disponible.</p>
         {% endif %}
     {% endif %}
 </div>
-
 {% endblock %}

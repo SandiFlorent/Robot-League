@@ -3,11 +3,42 @@
 {% block title %}Edit Field{% endblock %}
 
 {% block body %}
-    <h1>Edit Field</h1>
+<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+    <p class="text-5xl font-bold mt-12 mb-8">Editer le terrain</p>
 
-    {{ include('field/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="flex-grow p-6 w-full max-w-3xl mx-auto">
+        <div class="bg-gray-900 p-8 rounded-3xl shadow-2xl">
+            {{ include('field/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
 
-    <a href="{{ path('app_field_index') }}">back to list</a>
+        <div class="mt-8 text-center">
+            <a href="{{ path('app_field_index') }}" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">Retour à la liste</a>
+        </div>
 
-    {{ include('field/_delete_form.html.twig') }}
+        <div class="mt-8">
+            {{ include('field/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 text-white py-12 w-full mt-12">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Informations</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">Mentions légales</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">Politique de confidentialité</a>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Support</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">Contact</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">FAQ</a>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Suivez-nous</h3>
+                <a href="#" class="block hover:underline">Twitter</a>
+                <a href="#" class="block hover:underline">Facebook</a>
+                <a href="#" class="block hover:underline">Instagram</a>
+            </div>
+        </div>
+    </footer>
+</div>
 {% endblock %}
