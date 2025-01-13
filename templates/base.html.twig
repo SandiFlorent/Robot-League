@@ -21,6 +21,11 @@
         {{ message }}
     </div>
     {% endfor %}
+    {% for message in app.flashes('error') %}
+    <div class="bg-red-500 text-white p-4 rounded-md mb-4">
+        {{ message }}
+    </div>
+    {% endfor %}
 
     {% set route = app.request.attributes.get('_route') %}
     {% set route_params = app.request.attributes.get('_route_params') %}
@@ -73,6 +78,24 @@
                             <a href="{{ path('app_championship_list_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer un championnat</a>
                         </div>
                     </div>
+
+                    <!-- Impersonation Form -->
+                    <form action="{{ path('app_find_user_id') }}" method="post" class="mt-4">
+                        <div class="flex items-center space-x-2">
+                            <input 
+                                type="email" 
+                                name="email" 
+                                placeholder="Enter user email" 
+                                class="px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300 w-64"
+                                required
+                            />
+                            <button 
+                                type="submit" 
+                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300">
+                                Impersonate
+                            </button>
+                        </div>
+                    </form>
                     
                 {% endif %}
 
