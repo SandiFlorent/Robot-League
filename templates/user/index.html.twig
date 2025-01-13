@@ -28,10 +28,11 @@
                     </td>
                     <td class="px-4 py-3 text-sm text-gray-700 border border-gray-300">
                         <div class="flex space-x-3">
-                            <a href="{{ path('app_user_show', {'id': user.id}) }}" 
-                               class="text-blue-500 hover:underline">{{ 'show.show'|trans }}</a>
                             <a href="{{ path('app_user_edit', {'id': user.id}) }}" 
-                               class="text-green-500 hover:underline">{{ 'show.edit'|trans }}</a>
+                               class="text-green-500 hover:underline">Modifier</a>
+                                <form action="{{ path('app_impersonate_user', {'id': user.id}) }}" method="post" style="display: inline;">
+                                    <button type="submit" class="text-red-500 hover:underline">Se faire passer pour</button>
+                                </form>
                         </div>
                     </td>
                 </tr>
