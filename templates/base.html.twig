@@ -4,85 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        {% block title %}Welcome!{% endblock %}
+        {% block title %}Score!{% endblock %}
     </title>
     <link rel="icon" href="{{ asset('Images/logo.png') }}">
     {% block stylesheets %}
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     {% endblock %}
+    <style>
+        .dropdown-content {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .dropdown-content.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .nav-link {
+            transition: all 0.3s ease-in-out;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover {
+            border-bottom: 2px solid white;
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
     {% for message in app.flashes('notice') %}
-        <div class="flash-notice">
+        <div class="flash-notice text-center py-2 text-green-400">
             {{ message }}
         </div>
     {% endfor %}
-    {% for message in app.flashes('error') %}
-    <div class="bg-red-500 text-white p-4 rounded-md mb-4">
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-    <div class="bg-red-500 text-white p-4 rounded-md mb-4">
-        {{ message }}
-    </div>
-    {% endfor %}
 
-    <div class="min-h-full">
-        <nav class="bg-gradient-to-r from-blue-500 via-teal-400 to-indigo-600 flex items-center justify-between px-6 py-4 shadow-lg rounded-b-xl">
-            <!-- Logo -->
-            <div class="flex items-center space-x-3">
-                <img class="w-12 h-12 rounded-full shadow-lg" src="{{ asset('Images/logo.png') }}" alt="Your Company">
-                <p class="text-4xl font-bold text-white">RobotLeague</p>
+    <div class="min-h-screen flex flex-col">
+        <!-- Navbar de Luxe -->
+        <nav class="bg-gradient-to-r from-black to-gray-900 flex items-center justify-between px-8 py-6 shadow-xl rounded-b-3xl border-b border-gray-700">
+            <div class="flex items-center space-x-4">
+                <img class="w-14 h-14 rounded-full border-2 border-white" src="{{ asset('Images/logo.png') }}" alt="Logo">
+                <p class="text-3xl font-extrabold tracking-wide text-white">RobotLeague</p>
             </div>
 
-            <!-- Menu Burger (affiché uniquement sur les écrans moyens) -->
-            <div class="sm:block md:hidden lg:hidden">
+            <!-- Menu Burger -->
+            <div class="sm:block md:hidden">
                 <label for="menu-toggle" class="cursor-pointer">
-                    <svg class="w-6 h-6 text-white transition-all hover:text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <svg class="w-6 h-6 text-white transition-all hover:text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </label>
                 <input type="checkbox" id="menu-toggle" class="hidden" />
             </div>
 
-            <!-- Menu Desktop (affiché uniquement sur les grands écrans) -->
-            <div class="hidden md:flex lg:flex space-x-6">
-                <a href="{{ path('app_home') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
-
-                <!-- Menu Équipes -->
+            <!-- Menu Principal -->
+            <div class="hidden md:flex space-x-8 text-lg">
+                <a href="{{ path('app_home') }}" class="nav-link font-medium">Acceuil</a>
                 <div class="relative">
-                    <button class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Équipes</button>
-                    <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
+                    <button class="nav-link font-medium">Équipes</button>
+                    <div class="dropdown-content absolute hidden bg-gray-800 text-white shadow-lg rounded-lg mt-2 p-4">
                         {% if app.user %}
                             {% if is_granted('ROLE_USER') %}
-                                    <a href="{{ path('app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer une équipe</a>
-                                    <a href="{{ path('app_choose_championship_member') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Membres</a>
+                                <a href="{{ path('app_team_new') }}" class="block py-2 hover:text-gray-400">Créer une équipe</a>
+                                <a href="{{ path('app_choose_championship_member') }}" class="block py-2 hover:text-gray-400">Membres</a>
                             {% endif %}
                         {% endif %}
-                        <a href="{{ path('app_team_show') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Voir les équipes</a>
+                        <a href="{{ path('app_team_show') }}" class="block py-2 hover:text-gray-400">Voir les équipes</a>
+                        <a href="{{ path('app_score_table') }}" class="block py-2 hover:text-gray-400">Voir les scores</a>
                     </div>
                 </div>
-
-                <!-- Menu Admin (affiché uniquement pour les organisateurs) -->
                 {% if is_granted('ROLE_ORGANISATEUR') %}
                     <div class="relative">
-                        <button class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Admin</button>
-                        <div class="dropdown-content absolute hidden bg-white text-black shadow-md rounded-md mt-2 w-48">
-                            <a href="{{ path('app_user_index') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Utilisateurs</a>
-                            <a href="{{ path('app_championship_index') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Championnat</a>
-                            <a href="{{ path('app_championship_list_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer un championnat</a>
+                        <button class="nav-link font-medium">Admin</button>
+                        <div class="dropdown-content absolute hidden bg-gray-800 text-white shadow-lg rounded-lg mt-2 p-4">
+                            <a href="{{ path('app_user_index') }}" class="block py-2 hover:text-gray-400">Utilisateurs</a>
+                            <a href="{{ path('app_championship_index') }}" class="block py-2 hover:text-gray-400">Championnat</a>
                         </div>
                     </div>
-                    
                 {% endif %}
-
                 {% if app.user %}
-                    <a href="{{ path('app_logout') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
+                    <a href="{{ path('app_logout') }}" class="nav-link font-medium">Déconnexion</a>
                 {% else %}
-                    <a href="{{ path('app_login') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
-                    <a href="{{ path('app_register') }}" class="text-lg font-semibold text-white hover:bg-white hover:text-blue-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Inscription</a>
+                    <a href="{{ path('app_login') }}" class="nav-link font-medium">Connexion</a>
+                    <a href="{{ path('app_register') }}" class="nav-link font-medium">Inscription</a>
                 {% endif %}
             </div>
         </nav>
@@ -91,64 +93,30 @@
         {% endblock %}
     </div>
 
-    <!-- Menu mobile -->
-    <div class="sm:hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur z-50 hidden" id="menu-mobile">
-        <div class="flex flex-col items-center justify-center h-full space-y-6">
-            <a href="{{ path('app_home') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
-            <a href="{{ path('app_team_show') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Equipes</a>
-            {% if app.user %}
-                {% if is_granted('ROLE_USER') %}
-                        <a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Créer une équipe</a>
-                        <a href="{{ path('app_choose_championship_member') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Membres</a>
-                {% endif %}
-                {% if is_granted('ROLE_ORGANISATEUR') %}
-                    <a href="{{ path('app_user_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Utilisateurs</a>
-                    <a href="{{ path('app_championship_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Championnat</a>
-                    <a href="{{ path('app_championship_list_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer un championnat</a>
-                {% endif %}
-                <a href="{{ path('app_logout') }}" class="text-white text-lg font-semibold hover:bg-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
-                <a href="{{ path('app_register') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Inscription</a>
-            {% endif %}
-        </div>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const menuToggle = document.getElementById('menu-toggle');
-            if (menuToggle) {
-                menuToggle.addEventListener('change', function () {
-                    const menu = document.getElementById('menu-mobile');
-                    if (menu) {
-                        if (this.checked) {
-                            menu.classList.remove('hidden');
-                        } else {
-                            menu.classList.add('hidden');
-                        }
-                    }
-                });
-            }
+            const navMenu = document.querySelector('.md\\:flex');
 
-            // Gestion des menus déroulants
+            menuToggle.addEventListener('change', function () {
+                if (menuToggle.checked) {
+                    navMenu.classList.remove('hidden');
+                    navMenu.classList.add('flex', 'flex-col', 'items-center', 'space-y-4');
+                } else {
+                    navMenu.classList.add('hidden');
+                    navMenu.classList.remove('flex');
+                }
+            });
+
             const menuButtons = document.querySelectorAll('.relative button');
             menuButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    // Fermer tous les autres menus
-                    const allDropdowns = document.querySelectorAll('.dropdown-content');
-                    allDropdowns.forEach(dropdown => {
-                        if (dropdown !== this.nextElementSibling) {
-                            dropdown.classList.add('hidden');
-                        }
-                    });
-
-                    // Afficher/masquer le menu actuel
                     const dropdown = this.nextElementSibling;
+                    dropdown.classList.toggle('active');
                     dropdown.classList.toggle('hidden');
                 });
             });
         });
     </script>
-
 </body>
 </html>

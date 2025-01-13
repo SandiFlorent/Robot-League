@@ -3,37 +3,50 @@
 {% block title %}New ChampionshipList{% endblock %}
 
 {% block body %}
-    <h1>Ajouter des terrains</h1>
+<div class="container mx-auto p-8 bg-gray-900 text-white rounded-lg shadow-lg">
+    <h1 class="text-4xl font-bold text-center text-white mb-8">Ajouter des terrains</h1>
 
-    <hr />
+    <hr class="border-gray-700 my-6"/>
 
-    <table class="table">
+    <table class="table-auto w-full border-collapse border border-gray-700">
         <thead>
-            <tr>
-                <th>Name</th>
+            <tr class="bg-gray-800">
+                <th class="text-left text-lg font-semibold p-4 text-white">Nom du Terrain</th>
+                <th class="text-left text-lg font-semibold p-4 text-white">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for fiel in championship_list.field %}
-            <tr>
-                <td>{{ fiel.Name }}</td>
-            </tr>
-            <tr>
-                <a href={{ path('app_championship_list_delete_field', {'id': championship_list.id, 'idField': fiel.id }) }}>Supprimer</a>
+            <tr class="odd:bg-gray-800 even:bg-gray-700 hover:bg-gray-600">
+                <td class="p-4">{{ fiel.Name }}</td>
+                <td class="p-4">
+                    <a href="{{ path('app_championship_list_delete_field', {'id': championship_list.id, 'idField': fiel.id }) }}" 
+                       class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300">
+                        Supprimer
+                    </a>
+                </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">Pas de terrain enregistré pour le moment</td>
+                <td colspan="2" class="p-4 text-center text-gray-400">Pas de terrain enregistré pour le moment</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <hr />
+    <hr class="border-gray-700 my-6"/>
 
-    {{ include('field/_form.html.twig') }}
+    <div class="p-6 bg-gray-800 rounded-lg">
+        {{ include('field/_form.html.twig') }}
+    </div>
 
-     <hr />
+    <hr class="border-gray-700 my-6"/>
 
-    <a href="{{ path('app_championship_list_new_slot', {'id': championship_list.id }) }}">Ajouter des créneaux</a>
+    <div class="text-center">
+        <a href="{{ path('app_championship_list_new_slot', {'id': championship_list.id }) }}" 
+           class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
+            Ajouter des créneaux
+        </a>
+    </div>
+</div>
 {% endblock %}
