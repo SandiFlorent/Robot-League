@@ -80,8 +80,14 @@ final class ChampionshipController extends AbstractController
         // Récupérer toutes les équipes du championnat sélectionné
         $teams = $championshipList->getTeams()->toArray();  // Conversion en tableau
 
+        $filteredTeams = array_filter($teams, function($team) {
+            return $team->isAccepted() === true;
+        });
+
+        $filteredTeams = array_values($filteredTeams);
+
         // Générer les matchs
-        $this->generateChampionships($teams, $championshipList);
+        $this->generateChampionships($filteredTeams, $championshipList);
 
         // Rediriger vers la page des matchs
         return $this->redirectToRoute('app_championship_index', [
