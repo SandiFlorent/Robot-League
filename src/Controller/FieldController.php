@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/field')]
+#[Route('/{_locale}/field')]
 final class FieldController extends AbstractController
 {
     #[Route(name: 'app_field_index', methods: ['GET'])]

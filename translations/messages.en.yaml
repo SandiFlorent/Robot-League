@@ -1,5 +1,5 @@
 base: 
-  menu: Menu
+  home: Home
   teams: Teams
   create: Create a team
   team: My team
@@ -8,6 +8,19 @@ base:
   notification: See notifications
   login: Log in
   register: Register
+  info: Informations
+  legalNotices: Mentions Légales
+  confPolicy: Politique de confidentialité
+  support: Support
+  contact: Contact
+  qna: Q&A
+  followUs: Follow us
+  twt: Twitter
+  fbk: Facebook
+  insta: Instagram
+  description: Description
+  addr: Address
+  
 
 show:
   show: Show
@@ -38,8 +51,13 @@ new:
   newMember: New member
   createNewMember: Create a new member
   newChampionship: New championship
+  newChampionshipList: New championship list
   createNewChampionship: Create a new championship
   createNewTeamMember: Create a new team member
+  createNewSlot: Create a new slot
+  newSlot: New Slot
+  championshipList: Championship list
+  championshipName: Championship name
 
 index: 
   actions: Actions
@@ -61,13 +79,18 @@ index:
   save: Save
   noMatch: No match available. Please generate a championship.
   teamIndex: Team index
+  selectChampionship: Select a championship
+  filterChamp: Filter championships
+  filter: Filter
 
 
 edit: 
+  edit: Edit
   editUser: Edit the user
   editTeam: Edit the team
   editMember: Edit a team member
   editChampionship: Edit the championship
+  actAs: Se faire passer pour
   
 
 login: 

@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
-#[Route('/championship/list')]
+#[Route('/{_locale}/championship/list')]
 final class ChampionshipListController extends AbstractController
 {
     #[Route(name: 'app_championship_list_index', methods: ['GET'])]

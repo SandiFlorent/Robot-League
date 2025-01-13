@@ -31,6 +31,11 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+
+    {% set route = app.request.attributes.get('_route') %}
+    {% set route_params = app.request.attributes.get('_route_params') %}
+    {% set params = route_params|merge(app.request.query.all) %}
+
     {% for message in app.flashes('notice') %}
         <div class="flash-notice text-center py-2 text-green-400">
             {{ message }}
@@ -57,36 +62,36 @@
 
             <!-- Menu Principal -->
             <div class="hidden md:flex space-x-8 text-lg">
-                <a href="{{ path('app_home') }}" class="nav-link font-medium">Acceuil</a>
+                <a href="{{ path('app_home') }}" class="nav-link font-medium">{{ 'base.home'|trans }}</a>
                 <div class="relative">
-                    <button class="nav-link font-medium">Équipes</button>
+                    <button class="nav-link font-medium">{{ 'base.teams'|trans }}</button>
                     <div class="dropdown-content absolute hidden bg-gray-800 text-white shadow-lg rounded-lg mt-2 p-4">
                         {% if app.user %}
                             {% if is_granted('ROLE_USER') %}
-                                <a href="{{ path('app_team_new') }}" class="block py-2 hover:text-gray-400">Créer une équipe</a>
-                                <a href="{{ path('app_choose_championship_member') }}" class="block py-2 hover:text-gray-400">Membres</a>
+                                <a href="{{ path('app_team_new') }}" class="block py-2 hover:text-gray-400">{{ 'base.create'|trans }}</a>
+                                <a href="{{ path('app_choose_championship_member') }}" class="block py-2 hover:text-gray-400">{{ 'show.member'|trans }}</a>
                             {% endif %}
                         {% endif %}
-                        <a href="{{ path('app_team_show') }}" class="block py-2 hover:text-gray-400">Voir les équipes</a>
-                        <a href="{{ path('app_score_table') }}" class="block py-2 hover:text-gray-400">Voir les scores</a>
+                        <a href="{{ path('app_team_show') }}" class="block py-2 hover:text-gray-400">{{ 'base.seeTeams'|trans }}</a>
+                        <a href="{{ path('app_score_table') }}" class="block py-2 hover:text-gray-400">{{ 'base.seeScores'|trans }}</a>
                     </div>
                 </div>
                 {% if is_granted('ROLE_ORGANISATEUR') %}
                     <div class="relative">
-                        <button class="nav-link font-medium">Admin</button>
+                        <button class="nav-link font-medium">{{ 'base.admin'|trans }}</button>
                         <div class="dropdown-content absolute hidden bg-gray-800 text-white shadow-lg rounded-lg mt-2 p-4">
-                            <a href="{{ path('app_user_index') }}" class="block py-2 hover:text-gray-400">Utilisateurs</a>
-                            <a href="{{ path('app_championship_index') }}" class="block py-2 hover:text-gray-400">Championnat</a>
-                            <a href="{{ path('app_championship_list_new') }}" class="block py-2 hover:text-gray-400">Créer un championnat</a>
+                            <a href="{{ path('app_user_index') }}" class="block py-2 hover:text-gray-400">{{ 'base.users'|trans }}</a>
+                            <a href="{{ path('app_championship_index') }}" class="block py-2 hover:text-gray-400">{{ 'base.championship'|trans }}</a>
+                            <a href="{{ path('app_championship_list_new') }}" class="block py-2 hover:text-gray-400">{{ 'base.createAChampionship'|trans }}</a>
 
                         </div>
                     </div>
                 {% endif %}
                 {% if app.user %}
-                    <a href="{{ path('app_logout') }}" class="nav-link font-medium">Déconnexion</a>
+                    <a href="{{ path('app_logout') }}" class="nav-link font-medium">{{ 'base.logout'|trans }}</a>
                 {% else %}
-                    <a href="{{ path('app_login') }}" class="nav-link font-medium">Connexion</a>
-                    <a href="{{ path('app_register') }}" class="nav-link font-medium">Inscription</a>
+                    <a href="{{ path('app_login') }}" class="nav-link font-medium">{{ 'base.login'|trans }}</a>
+                    <a href="{{ path('app_register') }}" class="nav-link font-medium">{{ 'base.register'|trans }}</a>
                 {% endif %}
             </div>
         </nav>
@@ -94,6 +99,9 @@
         {% block body %}
         {% endblock %}
     </div>
+
+    <a href="{{ path(route, params|merge({ _locale: 'en' })) }}">English</a>
+    <a href="{{ path(route, params|merge({ _locale: 'fr' })) }}">Français</a>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

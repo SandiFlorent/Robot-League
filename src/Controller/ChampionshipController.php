@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Enum\State;
 use App\Repository\EncounterRepository;
 
-#[Route('/championship')]
+#[Route('/{_locale}/championship')]
 final class ChampionshipController extends AbstractController
 {
     private $entityManager;
