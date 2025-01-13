@@ -48,6 +48,7 @@
                         {% if app.user %}
                             {% if is_granted('ROLE_USER') %}
                                     <a href="{{ path('app_team_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer une équipe</a>
+                                    <a href="{{ path('app_choose_championship_member') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Membres</a>
                             {% endif %}
                         {% endif %}
                         <a href="{{ path('app_team_show') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Voir les équipes</a>
