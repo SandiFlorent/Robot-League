@@ -107,27 +107,6 @@
                             {% endif %}
                             </td>
                             <td class="px-8 py-6">
-                            {% if championship.encounter == null %}
-                                TBD
-                            {% else %}
-                                {{ championship.encounter.field.Name }}
-                            {% endif %}
-                            </td>
-                            <td class="px-8 py-6">
-                            {% if championship.encounter == null %}
-                                TBD
-                            {% else %}
-                                {{ championship.encounter.slot.dateDebut|date('Y-m-d H:i:s') }}
-                            {% endif %}
-                            </td>
-                            <td class="px-8 py-6">
-                            {% if championship.encounter == null %}
-                                TBD
-                            {% else %}
-                                {{ championship.encounter.slot.dateEnd|date('Y-m-d H:i:s') }}
-                            {% endif %}
-                            </td>
-                            <td class="px-8 py-6">
                                 <select name="state" required class="px-3 py-2 border border-gray-300 rounded-md w-full sm:w-auto">
                                     {% for state in states %}
                                         <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>{{ state.value }}</option>

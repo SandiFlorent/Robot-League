@@ -187,8 +187,17 @@ final class ChampionshipController extends AbstractController
 
         // Supprimer tous les matchs
         foreach ($championships as $championship) {
+
+            if ($championship->getEncounter()){
+                $slot = $championship->getEncounter()->getSlot();
+                foreach ($slot->getTeams() as $team){
+                    $slot->removeTeam($team);
+                }
+            }
+            
             $this->entityManager->remove($championship);
         }
+
 
         // Appliquer les modifications
         $this->entityManager->flush();
