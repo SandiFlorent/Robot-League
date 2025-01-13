@@ -5,16 +5,16 @@
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen">
     <!-- Titre principal -->
-    <p class="text-5xl font-bold text-white mt-12 mb-8">Liste des Matchs</p>
+    <p class="text-5xl font-bold text-white mt-12 mb-8"{{ 'index.matchList'|trans }}</p>
     
     <!-- Contenu principal -->
     <div class="flex-grow p-6 w-full max-w-7xl mx-auto mt-12">
     <!-- Formulaire de sélection du championnat -->
     <form method="get" action="{{ path('app_home') }}" class="mb-8 bg-gray-800 p-6 rounded-lg shadow-lg">
-        <label for="championshiplist_id" class="block text-lg font-semibold text-white mb-2">Choisir un championnat :</label>
+        <label for="championshiplist_id" class="block text-lg font-semibold text-white mb-2">{{ 'base.chooseChamp'|trans }} :</label>
         <select name="championshiplist_id" id="championshiplist_id" 
                 class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto">
-            <option value="">Sélectionner un championnat</option>
+            <option value="">{{ 'base.selectChamp'|trans }}</option>
             {% for championshipList in championshipLists %}
                 <option value="{{ championshipList.id }}" {% if championshipList.id == selected_championship_id %}selected{% endif %}>
                     {{ championshipList.championshipName }}
@@ -24,7 +24,7 @@
 
         <button type="submit" 
                 class="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">
-            Afficher les matchs
+            {{ 'index.displayMatch'|trans }}
         </button>
     </form>
 
@@ -33,33 +33,33 @@
             {% for championship in championships %}
             <div class="border border-blue-700 p-8 rounded-3xl shadow-2xl hover:shadow-3xl transition-shadow duration-300 bg-gray-900 transform hover:scale-105 transition-transform duration-300">
                 <div class="text-center mb-6">
-                    <h2 class="text-2xl font-semibold text-blue-400">Match</h2>
+                    <h2 class="text-2xl font-semibold text-blue-400">{{ 'base.match'|trans }}</h2>
                 </div>
                 <div class="flex justify-between mb-4 border-b pb-2">
-                    <span class="text-lg font-semibold text-blue-400">Équipe Bleue</span>
+                    <span class="text-lg font-semibold text-blue-400">{{ 'index.blueTeam'|trans }}</span>
                     <span class="text-lg font-bold text-blue-500">{{ championship.blueTeam.name }}</span>
                 </div>
                 <div class="flex justify-between mb-4 border-b pb-2">
-                    <span class="text-lg font-semibold text-blue-400">Score Bleue</span>
+                    <span class="text-lg font-semibold text-blue-400">{{ 'base.blueScore'|trans }}</span>
                     <span class="text-lg font-bold text-blue-500">{{ championship.blueGoal }}</span>
                 </div>
                 <div class="flex justify-between mb-4 border-b pb-2">
-                    <span class="text-lg font-semibold text-green-400">Score Verte</span>
+                    <span class="text-lg font-semibold text-green-400">{{ 'base.greenScore'|trans }}</span>
                     <span class="text-lg font-bold text-green-500">{{ championship.greenGoal }}</span>
                 </div>
                 <div class="flex justify-between mb-4 border-b pb-2">
-                    <span class="text-lg font-semibold text-green-400">Équipe Verte</span>
+                    <span class="text-lg font-semibold text-green-400">{{ 'base.greenTeam'|trans }}</span>
                     <span class="text-lg font-bold text-green-500">{{ championship.greenTeam.name }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-lg font-semibold text-gray-400">État</span>
+                    <span class="text-lg font-semibold text-gray-400">{{ 'index.state'|trans }}</span>
                     <span class="text-lg font-bold text-white">{{ championship.state.value }}</span>
                 </div>
             </div>
             {% endfor %}
         </div>
         {% else %}
-            <p class="text-lg text-white text-center">Pas de championnat en cours</p>
+            <p class="text-lg text-white text-center">{{ 'index.noChampionship'|trans }}</p>
         {% endif %}
     </div>
 
@@ -67,20 +67,20 @@
     <footer class="bg-gray-900 text-white py-12 w-full mt-12">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-                <h3 class="text-xl font-semibold mb-4">Informations</h3>
-                <a href="{{ path('app_home') }}" class="block hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="block hover:underline">Politique de confidentialité</a>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.info'|trans }}</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'index.legalNotices'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.confPolicy'|trans }}</a>
             </div>
             <div>
-                <h3 class="text-xl font-semibold mb-4">Support</h3>
-                <a href="{{ path('app_home') }}" class="block hover:underline">Contact</a>
-                <a href="{{ path('app_home') }}" class="block hover:underline">FAQ</a>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.support'|trans }}</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.contact'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.qna'|trans }}</a>
             </div>
             <div>
-                <h3 class="text-xl font-semibold mb-4">Suivez-nous</h3>
-                <a href="#" class="block hover:underline">Twitter</a>
-                <a href="#" class="block hover:underline">Facebook</a>
-                <a href="#" class="block hover:underline">Instagram</a>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.followUs'|trans }}</h3>
+                <a href="#" class="block hover:underline">{{ 'base.twt'|trans }}</a>
+                <a href="#" class="block hover:underline">{{ 'base.fbk'|trans }}</a>
+                <a href="#" class="block hover:underline">{{ 'base.insta'|trans }}</a>
             </div>
         </div>
     </footer>

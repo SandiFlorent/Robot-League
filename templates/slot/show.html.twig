@@ -8,23 +8,23 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>{{ 'show.id'|trans }}</th>
                 <td>{{ slot.id }}</td>
             </tr>
             <tr>
-                <th>DateDebut</th>
+                <th>{{ 'index.beginDate'|trans }}</th>
                 <td>{{ slot.dateDebut ? slot.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>DateEnd</th>
+                <th>{{ 'index.endDate'|trans }}</th>
                 <td>{{ slot.dateEnd ? slot.dateEnd|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_slot_index') }}">back to list</a>
+    <a href="{{ path('app_slot_index') }}">{{ 'new.backToList'|trans }}</a>
 
-    <a href="{{ path('app_slot_edit', {'id': slot.id}) }}">edit</a>
+    <a href="{{ path('app_slot_edit', {'id': slot.id}) }}">{{ 'show.edit'|trans }}</a>
 
     {{ include('slot/_delete_form.html.twig') }}
 {% endblock %}

@@ -9,14 +9,14 @@
     <form method="get" action="{{ path('app_choose_championship_member') }}" class="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md border border-blue-700">
         <label for="championship" class="block mb-2 text-lg font-medium text-blue-400">Sélectionnez un championnat :</label>
         <select id="championship" name="championship" required class="w-full p-3 bg-gray-800 border border-blue-500 text-white rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
-            <option value="" disabled selected>-- Choisissez un championnat --</option>
+            <option value="" disabled selected>-- {{ 'base.chooseChamp'|trans }} --</option>
             {% for championship in championships %}
                 <option value="{{ championship.id }}" class="text-white">{{ championship.ChampionshipName }}</option>
             {% endfor %}
         </select>
 
         <button type="submit" class="mt-6 w-full px-6 py-3 bg-blue-700 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 transform hover:scale-105 transition-all duration-300">
-            Valider
+            {{ 'base.submit'|trans }}
         </button>
     </form>
 </div>

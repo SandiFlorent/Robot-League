@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\TeamRepository;
 
 
-#[Route('/user')]
+#[Route('/{_locale}/user')]
 final class UserController extends AbstractController
 {
     #[Route(name: 'app_user_index', methods: ['GET'])]

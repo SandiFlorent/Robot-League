@@ -26,9 +26,9 @@
                     </td>
                     <td class="px-6 py-4 text-sm flex space-x-4">
                         <a href="{{ path('app_user_edit', {'id': user.id}) }}" 
-                           class="text-green-400 hover:text-green-300">Modifier</a>
+                           class="text-green-400 hover:text-green-300">{{ 'edit.edit'|trans }}</a>
                         <form action="{{ path('app_impersonate_user', {'id': user.id}) }}" method="post">
-                            <button type="submit" class="text-red-400 hover:text-red-300">Se faire passer pour</button>
+                            <button type="submit" class="text-red-400 hover:text-red-300">{{ 'edit.actAs'|trans }}</button>
                         </form>
                     </td>
                 </tr>
@@ -47,7 +47,7 @@
     <div class="mt-8 text-center">
         <a href="{{ path('app_user_new') }}" 
            class="px-6 py-3 bg-blue-700 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 transform hover:scale-105 transition duration-300">
-            Créer un nouvel utilisateur
+            {{ 'new.createNewUser'|trans }}
         </a>
     </div>
 </div>

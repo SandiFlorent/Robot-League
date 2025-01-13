@@ -1,5 +1,5 @@
 base: 
-  menu: Menu
+  home: Accueil
   teams: Equipes
   create: Créer une équipe
   team: Mon équipe
@@ -8,6 +8,19 @@ base:
   notification: Voir les notifications
   login: Connexion
   register: Inscription
+  manageChamp: Gestion du championnat
+  chooseChamp: Choisir un championnat
+  selectChamp: Sélectionner un championnat
+  seeTeams: Voir les équipes
+  seeScores: Voir les scores
+  admin: Admin
+  users: Utilisateurs
+  createAChampionship: Créer un championnat
+  score: Score
+  match: Match
+  blueScore: Score bleu
+  greenScore: Score vert
+  noSpot: Pas de créneau enregistré pour le moment.
 
 show:
   show: Aficher
@@ -27,6 +40,7 @@ show:
   
 
 new: 
+  add: Ajouter
   newTeam: Nouvelle équipe
   createTeam: Créer une nouvelle équipe
   teamName: Nom de l'équipe
@@ -48,6 +62,7 @@ index:
   createNewUser: Créer un nouvel utilisateur
   memberIndex: Index membre
   home: Accueil | RobotLeague
+  displayMatch: Afficher les matchs
   matchList: Liste des matchs
   blueTeam: Équipe bleue
   greenTeam: Équipe verte
@@ -59,8 +74,21 @@ index:
   generateChampionshhip: Générer un championnat
   deleteChampionship: Supprimer le championnat
   save: Sauvegarder
-  noMatch: Aucun match disponible. Veuillez générer le championnat.
+  noMatch: Aucun match disponible. 
   teamIndex: Index équipe
+  fieldList: Liste des terrains
+  field: Terrain
+  fieldInfo: Détails du terrain
+  dateOfBeginning: Début du match
+  dateOfEnd: Fin du match
+  beginDate: Date de début
+  endDate: Date de fin
+  createNewField: Create a new field
+  newField: New field
+  noFields: Pas de terrains
+  editField: Editer le terrain
+  threshold: Seuil
+  addField: Ajouter un terrain
 
 
 edit: 
@@ -68,7 +96,9 @@ edit:
   editTeam: Modifier l'équipe
   editMember: Modifier un membre de l'équipe
   editChampionship: Modifier le championnat 
-  
+  validateTeams: Valider les équipes
+  generateChampionship: Générer le championnat
+  deleteChampionship: Supprimer le championnat
 
 login: 
   loginPage: Se connecter

@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Field{% endblock %}
+{% block title %}{{ 'index.newField'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Field</h1>
+    <h1>{{ 'index.createNewField'|trans }}</h1>
 
     {{ include('field/_form.html.twig') }}
 
-    <a href="{{ path('app_field_index') }}">back to list</a>
+    <a href="{{ path('app_field_index') }}">{{ 'new.backToList'|trans }}</a>
 {% endblock %}
