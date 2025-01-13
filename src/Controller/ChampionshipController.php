@@ -30,7 +30,6 @@ final class ChampionshipController extends AbstractController
         $this->championshipListRepository = $championshipListRepository;
     }
 
-    
     #[Route(name: '/{_locale}/app_championship_index', methods: ['GET'])]
     public function index(ChampionshipRepository $championshipRepository, Request $request): Response
     {

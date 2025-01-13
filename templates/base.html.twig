@@ -40,11 +40,6 @@
         {{ message }}
     </div>
     {% endfor %}
-    {% for message in app.flashes('error') %}
-    <div class="bg-red-500 text-white p-4 rounded-md mb-4">
-        {{ message }}
-    </div>
-    {% endfor %}
 
     {% set route = app.request.attributes.get('_route') %}
     {% set route_params = app.request.attributes.get('_route_params') %}
@@ -72,7 +67,7 @@
             <div class="hidden md:flex space-x-8 text-lg">
                 <a href="{{ path('app_home') }}" class="nav-link font-medium">{{ 'base.menu'|trans }}</a>
                 <div class="relative">
-                    <button class="nav-link font-medium">{ 'base.teams'|trans }}</button>
+                    <button class="nav-link font-medium">{{ 'base.teams'|trans }}</button>
                     <div class="dropdown-content absolute hidden bg-gray-800 text-white shadow-lg rounded-lg mt-2 p-4">
                         {% if app.user %}
                             {% if is_granted('ROLE_USER') %}
@@ -108,29 +103,14 @@
         {% endblock %}
     </div>
 
-    <!-- Menu mobile -->
-    <div class="sm:hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur z-50 hidden" id="menu-mobile">
-        <div class="flex flex-col items-center justify-center h-full space-y-6">
-            <a href="{{ path('app_home') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Menu</a>
-            <a href="{{ path('app_team_show') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Equipes</a>
-            {% if app.user %}
-                {% if is_granted('ROLE_USER') %}
-                        <a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Créer une équipe</a>
-                        <a href="{{ path('app_choose_championship_member') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Membres</a>
-                {% endif %}
-                {% if is_granted('ROLE_ORGANISATEUR') %}
-                    <a href="{{ path('app_user_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Utilisateurs</a>
-                    <a href="{{ path('app_championship_index') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Championnat</a>
-                    <a href="{{ path('app_championship_list_new') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Créer un championnat</a>
-                {% endif %}
-                <a href="{{ path('app_logout') }}" class="text-white text-lg font-semibold hover:bg-red-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Déconnexion</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Connexion</a>
-                <a href="{{ path('app_register') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Inscription</a>
-            {% endif %}
-        </div>
-    </div>
 
+
+<a href="{{ path(route, params|merge({ _locale: 'en' })) }}">English</a>
+<a href="{{ path(route, params|merge({ _locale: 'fr' })) }}">Français</a>
+    
+
+
+<div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const menuToggle = document.getElementById('menu-toggle');
