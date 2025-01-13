@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\Championship;
 use App\Entity\ChampionshipList;
+use App\Entity\Slot;
 use App\Repository\ChampionshipRepository;
 use App\Repository\ChampionshipListRepository;
 use App\Repository\TeamRepository;
@@ -111,6 +112,20 @@ final class ChampionshipController extends AbstractController
                         'greenTeam' => $team2,
                         'championshipList' => $championshipList
                     ]);
+
+
+                $encounters = $encounterRepository->findBy(['matches' => null, 'myChampionshipList' => $championshipList]);
+                $encounterRes = null;
+                foreach ($encounters as $encounter) {
+                    $s = $encounter->getSlot();
+                    $teamsBad = $s->getTeams()->toArray();
+                    if (!in_array($team1, $teamsBad, true) and !in_array($team2, $teamsBad, true))
+                    {
+                        $encounterRes = $encounter;
+                        break;
+                    }
+                }
+
     
                 // Si la rencontre n'existe pas, on la crée
                 if (!$existingChampionship) {
@@ -119,6 +134,12 @@ final class ChampionshipController extends AbstractController
                     $championship->setGreenTeam($team2);
                     $championship->setChampionshipList($championshipList); // Associe le championnat à la liste
                     $championship->setState(State::NOT_STARTED);  // L'état initial peut être "Non Commencé"
+                    $championship->setEncounter($encounterRes);
+
+                    if ($encounterRes){
+                        $encounterRes->getSlot()->addTeam($team1);
+                        $encounterRes->getSlot()->addTeam($team2);
+                    }
     
                     // Sauvegarde la rencontre
                     $this->entityManager->persist($championship);
