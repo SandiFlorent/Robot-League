@@ -53,6 +53,7 @@ final class TeamController extends AbstractController
 
             // Rediriger vers la page de gestion des membres de l'équipe
             $id = $team->getId();
+
             return $this->redirectToRoute('app_team_member', [
                 'id' => $id
             ]);
@@ -61,6 +62,53 @@ final class TeamController extends AbstractController
         return $this->render('team/new.html.twig', [
             'team' => $team,
             'form' => $form->createView(),
+        ]);
+    }
+ 
+    #[Route('/choose-championship-member', name: 'app_choose_championship_member', methods: ['GET', 'POST'])]
+    public function chooseChampionshipForMember(Request $request, TeamRepository $teamRepository): Response
+    {
+        // Récupérer l'utilisateur connecté
+        $user = $this->getUser();
+
+        // Vérifier si l'utilisateur est connecté et une instance valide de User
+        if (!$user instanceof \App\Entity\User) {
+            // Si l'utilisateur n'est pas authentifié ou n'est pas une instance valide, on génère une exception
+            throw $this->createAccessDeniedException('Access denied. You must be logged in as a valid user.');
+        }
+
+        // Récupérer l'ID du championnat à partir de la requête (si disponible)
+        $championshipId = $request->query->get('championship');
+
+        // Si un championnat a été sélectionné
+        if ($championshipId) {
+            // Récupérer l'équipe associée à ce championnat
+            $team = $teamRepository->findOneBy(['championshipList' => $championshipId]);
+
+            if ($team) {
+                // Si une équipe est trouvée, rediriger vers la gestion des membres de l'équipe
+                return $this->redirectToRoute('app_team_member', ['id' => $team->getId()]);
+            }
+
+            // Si aucune équipe n'a été trouvée, afficher un message d'erreur
+            $this->addFlash('error', 'Aucune équipe trouvée pour ce championnat.');
+        }
+
+        // Récupérer les équipes de l'utilisateur et leurs championnats
+        $teams = $user->getMyTeams();
+
+        // Récupérer les championnats uniques associés à l'utilisateur
+        $championships = [];
+        foreach ($teams as $team) {
+            $championship = $team->getChampionshipList();
+            if ($championship && !in_array($championship, $championships, true)) {
+                $championships[] = $championship;
+            }
+        }
+
+        // Retourner la vue avec les championnats associés à l'utilisateur
+        return $this->render('team/choose_championship_member.html.twig', [
+            'championships' => $championships,
         ]);
     }
 
