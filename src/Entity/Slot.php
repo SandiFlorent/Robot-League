@@ -77,6 +77,25 @@ class Slot
         }
 
         // Check if there's no overlap between all slots.
+        // Fetch all slots with the same championshipList
+        $existingSlots = $slotRepository->findBy(['championshipList' => $this->championshipList]);
+
+        foreach ($existingSlots as $existingSlot) {
+            // Skip the current slot if updating an existing one
+            if ($this->id && $this->id === $existingSlot->getId()) {
+                continue;
+            }
+
+            // Check for overlap
+            if (($this->dateDebut < $existingSlot->getDateEnd() && $this->dateEnd > $existingSlot->getDateDebut()) ||
+                ($this->dateEnd > $existingSlot->getDateEnd() && $this->dateDebut < $existingSlot->getDateEnd)
+            ) {
+                $context->buildViolation('The slot overlaps with an existing slot.')
+                    ->atPath('dateDebut')
+                    ->addViolation();
+                break;
+            }
+        }
     }
 
     public function __construct(ChampionshipListRepository $championshipListRepository)

@@ -170,22 +170,26 @@ class Championship
 
 
     #[ORM\PreUpdate]
-    public function beforeUpdateChampionshipTeamGoals(PreUpdateEventArgs $event): void
+    public function beforeUpdateChampionshipTeamGoals(PreUpdateEventArgs $event, EntityManagerInterface $entityManager): void
     {
         // Check if `blue_goal` has changed
-        if ($event->hasChangedField('blue_goal')) {
-            $oldValue = $event->getOldValue('blue_goal');
-            $newValue = $event->getNewValue('blue_goal');
+        if ($event->hasChangedField('blueGoal')) {
+            $oldValue = $event->getOldValue('blueGoal');
+            $newValue = $event->getNewValue('blueGoal');
             $difference = $newValue - $oldValue;
 
             // Update the blue team's goals
             $this->blueTeam->updateTotalGoals($difference);
+            dd($this->blueTeam);
+            $entityManager->persist($this->blueTeam);
+            $entityManager->flush();
+            
         }
 
         // Check if `green_goal` has changed
-        if ($event->hasChangedField('green_goal')) {
-            $oldValue = $event->getOldValue('green_goal');
-            $newValue = $event->getNewValue('green_goal');
+        if ($event->hasChangedField('greenGoal')) {
+            $oldValue = $event->getOldValue('greenGoal');
+            $newValue = $event->getNewValue('greenGoal');
             $difference = $newValue - $oldValue;
 
             // Update the green team's goals
