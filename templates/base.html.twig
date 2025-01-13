@@ -56,6 +56,7 @@
                             <a href="{{path('/{_locale}/app_championship_index')}}" class="rounded-md px-3 py-2 text-lg font-medium text-sky-900 hover:bg-gray-700 hover:text-white">{{ 'base.championship'|trans }}</a>
                         {% endif %}
                         <a href="{{ path('app_team_show') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">{{ 'show.displayTeams'|trans }}</a>
+                        <a href="{{ path('app_score_table') }}" class="block px-4 py-2 hover:bg-blue-100 rounded-md transition-all">Voir le score</a>
                     </div>
                 </div>
 
@@ -86,8 +87,10 @@
     <!-- Menu mobile -->
     <div class="sm:hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur z-50 hidden" id="menu-mobile">
         <div class="flex flex-col items-center justify-center h-full space-y-6">
-            <a href="{{ path('app_home') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">{{ 'base.menu'|trans }}</a>
+            <a href="{{ path('app_home') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">{{ 'show.displayTeams'|trans }}</a>
             <a href="{{ path('app_team_show') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">{{ 'show.teams'|trans }}</a>
+            <a href="{{ path('app_score_table') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">Scores</a>
+            
             {% if app.user %}
                 {% if is_granted('ROLE_USER') %}
                     <a href="{{ path('app_team_new') }}" class="text-white text-lg font-semibold hover:bg-teal-600 px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105">{{ 'new.createTeam'|trans }}</a>

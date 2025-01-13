@@ -3,30 +3,30 @@
 {% block title %}Score!{% endblock %}
 
 {% block body %}
+<div class="bg-gray-100 min-h-screen flex flex-col items-center py-8 px-4">
+    <div class="max-w-7xl w-full bg-white shadow-lg rounded-xl overflow-hidden p-6 md:p-8">
+        <h1 class="text-3xl font-semibold text-center text-gray-800 mb-6">Tableau des scores</h1>
 
-<h1>Tableau des scores!</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>{{ 'show.name'|trans }}</th>
-            <th>Score</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for team in teams %}
-        <tr>
-            <td>{{ team.getName() }}</td>
-            <td>
-                {{ team.getScore() }}
-            </td>
-        </tr>
-    {% else %}
-        <tr>
-            <td colspan="3">{{ 'index.noRecords'|trans }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
+        <table class="min-w-full table-auto">
+            <thead>
+                <tr class="text-left border-b border-gray-200">
+                    <th class="px-6 py-4 text-sm font-medium text-gray-700">{{ 'show.name'|trans }}</th>
+                    <th class="px-6 py-4 text-sm font-medium text-gray-700">Score</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600">
+                {% for team in teams %}
+                    <tr class="hover:bg-gray-100 transition-colors duration-300">
+                        <td class="px-6 py-4 text-sm">{{ team.getName() }}</td>
+                        <td class="px-6 py-4 text-sm">{{ team.getScore() }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2" class="px-6 py-4 text-center text-sm text-gray-500">Aucune donnée</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
