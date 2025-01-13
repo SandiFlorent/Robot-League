@@ -13,7 +13,7 @@ use App\Repository\ChampionshipListRepository;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    #[Route('/{_locale}', name: 'app_home')]
     public function index(
         Request $request,
         ChampionshipRepository $championshipRepository,
