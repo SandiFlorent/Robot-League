@@ -1,41 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'base.register'|trans }}
-{% endblock %}
+{% block title %}{{ 'base.register'|trans }}{% endblock %}
 
 {% block body %}
+<header class="bg-gray-800 shadow">
+   <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+     <h1 class="text-3xl font-bold tracking-tight text-white">{{ 'base.register'|trans }}</h1>
+   </div>
+</header> 
 
-<header class="bg-white shadow">
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ 'base.register'|trans }}</h1>
-    </div>
-</header>  
-<br><br><br><br><br><br><br><br>
-
-<div class="max-w-sm mx-auto p-6 bg-white rounded-lg shadow-md justify-center">
-    <div class="mb-5">
-    {{ form_errors(registrationForm) }}
-        {{ form_start(registrationForm) }}
-       <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ 'show.email'|trans }}</label>
+<div class="max-w-lg mx-auto p-8 bg-gray-800 rounded-lg shadow-md justify-center mt-32 flex flex-col">
+   <div class="mb-5">
+   {{ form_errors(registrationForm) }}
+       {{ form_start(registrationForm) }}
+      <label for="email" class="block mb-2 text-sm font-medium text-white">{{ 'show.email'|trans }}</label>
 {{ form_row(registrationForm.email, {
-    label: false,
-    attr: {
-        placeholder: 'login.placeholderMail',
-        class: 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-    }
+   label: false,
+   attr: {
+       placeholder: 'login.placeholderMail',
+       class: 'bg-gray-700 border border-blue-500 text-white text-sm rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full p-2.5'
+   }
 }) }}
+   </div>
+   <div class="mb-5 ">
+       <label for="password" class="block mb-2 text-sm font-medium text-white">{{ 'show.passwd'|trans }}</label>
+       {{ form_row(registrationForm.plainPassword, {label: false, 'attr': {'placeholder': '6 caractères min.', 'class':'bg-gray-700 border border-blue-500 text-white text-sm rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full p-2.5'}}) }}
+   </div>
 
-        
-    </div>
-    <div class="mb-5 ">
-        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ 'show.passwd'|trans }}</label>
-        {{ form_row(registrationForm.plainPassword, {label: false, 'attr': {'placeholder': '6 caractères min.', 'class':'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'}}) }}
-    </div>
-
-    <button type="submit" class="text-black bg-sky-900 hover:bg-cyan-700 border border-gray-300 text-sm rounded-lg focus:ring-4 focus:ring-blue-300 focus:outline-none block w-full p-3 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg hover:shadow-2xl">
-        {{ 'login.submit'|trans }}
-    </button>
-    {{ form_end(registrationForm) }}
+   <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 border border-blue-500 text-sm rounded-lg focus:ring-4 focus:ring-blue-400 focus:outline-none block w-full p-3 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg hover:shadow-2xl">
+       {{ 'login.submit'|trans }}
+   </button>
+   {{ form_end(registrationForm) }}
 </div>
-
 {% endblock %}
