@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ChampionshipList{% endblock %}
+{% block title %}{{ 'base.newChamp'|trans }}{% endblock %}
 
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen">
-    <p class="text-5xl font-bold text-white mt-12 mb-8">Ajouter des créneaux</p>
+    <p class="text-5xl font-bold text-white mt-12 mb-8">{{ 'base.addSlots'|trans }}</p>
 
     <div class="flex-grow p-6 w-full max-w-7xl mx-auto mt-12 bg-gray-800 rounded-lg shadow-lg">
         <table class="table-auto w-full border-collapse border border-gray-700">

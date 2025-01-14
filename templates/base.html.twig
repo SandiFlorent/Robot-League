@@ -136,7 +136,7 @@
         <div class="mobile-menu-overlay fixed inset-0 z-40 md:hidden">
             <div class="mobile-menu min-h-screen w-64 bg-gray-900 p-4 fixed left-0 top-0 z-50">
                 <div class="flex flex-col space-y-4">
-                    <a href="{{ path('app_home') }}" class="mobile-nav-link">Accueil</a>
+                    <a href="{{ path('app_home') }}" class="mobile-nav-link">{{ 'base.home'|trans }}</a>
                     
                     <div class="space-y-2">
                         <button class="mobile-nav-link w-full text-left" onclick="toggleMobileSubmenu('teams-submenu')">
@@ -145,33 +145,33 @@
                         <div id="teams-submenu" class="hidden pl-4 space-y-2">
                             {% if app.user %}
                                 {% if is_granted('ROLE_USER') %}
-                                    <a href="{{ path('app_team_new') }}" class="mobile-nav-link">Créer une équipe</a>
-                                    <a href="{{ path('app_choose_championship_member') }}" class="mobile-nav-link">Membres</a>
+                                    <a href="{{ path('app_team_new') }}" class="mobile-nav-link">{{ 'new.createTeam'|trans }}</a>
+                                    <a href="{{ path('app_choose_championship_member') }}" class="mobile-nav-link">{{ 'show.members'|trans }}</a>
                                 {% endif %}
                             {% endif %}
-                            <a href="{{ path('app_team_show') }}" class="mobile-nav-link">Voir les équipes</a>
-                            <a href="{{ path('app_score_table') }}" class="mobile-nav-link">Voir les scores</a>
+                            <a href="{{ path('app_team_show') }}" class="mobile-nav-link">{{ 'base.seeTeams'|trans }}</a>
+                            <a href="{{ path('app_score_table') }}" class="mobile-nav-link">{{ 'base.seeScores'|trans }}</a>
                         </div>
                     </div>
 
                     {% if is_granted('ROLE_ORGANISATEUR') %}
                         <div class="space-y-2">
                             <button class="mobile-nav-link w-full text-left" onclick="toggleMobileSubmenu('admin-submenu')">
-                                Admin
+                                {{ 'base.admin'|trans }}
                             </button>
                             <div id="admin-submenu" class="hidden pl-4 space-y-2">
-                                <a href="{{ path('app_user_index') }}" class="mobile-nav-link">Utilisateurs</a>
-                                <a href="{{ path('app_championship_index') }}" class="mobile-nav-link">Championnat</a>
-                                <a href="{{ path('app_championship_list_new') }}" class="mobile-nav-link">Créer un championnat</a>
+                                <a href="{{ path('app_user_index') }}" class="mobile-nav-link">{{ 'base.users'|trans }}</a>
+                                <a href="{{ path('app_championship_index') }}" class="mobile-nav-link">{{ 'base.championship'|trans }}</a>
+                                <a href="{{ path('app_championship_list_new') }}" class="mobile-nav-link">{{ 'base.createAChampionship'|trans }}</a>
                             </div>
                         </div>
                     {% endif %}
 
                     {% if app.user %}
-                        <a href="{{ path('app_logout') }}" class="mobile-nav-link">Déconnexion</a>
+                        <a href="{{ path('app_logout') }}" class="mobile-nav-link">{{ 'base.logout'|trans }}</a>
                     {% else %}
-                        <a href="{{ path('app_login') }}" class="mobile-nav-link">Connexion</a>
-                        <a href="{{ path('app_register') }}" class="mobile-nav-link">Inscription</a>
+                        <a href="{{ path('app_login') }}" class="mobile-nav-link">{{ 'base.login'|trans }}</a>
+                        <a href="{{ path('app_register') }}" class="mobile-nav-link">{{ 'base.register'|trans }}</a>
                     {% endif %}
                 </div>
             </div>

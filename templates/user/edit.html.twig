@@ -8,16 +8,16 @@
 
     {# Sélection du championnat et bouton pour recharger #}
     {{ form_row(form.championship) }}
-    <button type="submit" name="reload" value="1">Afficher les équipes</button>
+    <button type="submit" name="reload" value="1">{{ 'show.displayTeams'|trans }}</button>
 
     {# Bouton pour attribuer une équipe sans créateur #}
     {% if teamsWithoutCreator is not empty and userTeam is empty %}
-        <h3>Équipes sans créateur</h3>
+        <h3>{{ 'show.teamsWithoutCreators'|trans }}</h3>
         <ul>
             {% for team in teamsWithoutCreator %}
                 <li>
                     {{ team.name }}
-                    <button type="submit" name="assign_team" value="{{ team.id }}">Attribuer cette équipe</button>
+                    <button type="submit" name="assign_team" value="{{ team.id }}">{{ 'show.attributeThisTeam'|trans }}</button>
                 </li>
             {% endfor %}
         </ul>
@@ -25,9 +25,9 @@
 
     {# Affichage de l'équipe de l'utilisateur si elle appartient au championnat sélectionné #}
     {% if userTeam is not empty %}
-        <h3>Équipe de l'utilisateur</h3>
+        <h3>{{ 'show.usersTeam'|trans }}</h3>
         <p>{{ userTeam.name }}</p>
-        <button type="submit" name="removeCreator" value="1">Retirer le créateur</button>
+        <button type="submit" name="removeCreator" value="1">{{ 'show.removeCreator'|trans }}</button>
     {% endif %}
 
     {{ form_row(form.email) }}
@@ -35,7 +35,7 @@
     {{ form_row(form.roles) }}
 
     {# Bouton de validation complète #}
-    <button type="submit" name="submit">Mettre à jour</button>
+    <button type="submit" name="submit">{{ 'label.update2'|trans }}</button>
 
 {{ form_end(form) }}
 

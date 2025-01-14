@@ -82,12 +82,12 @@
                             <!-- Scores -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm text-gray-400">Score Bleu</label>
+                                    <label class="block text-sm text-gray-400">{{ 'base.blueScore'|trans }}</label>
                                     <input type="number" name="blueScore" value="{{ championship.blueGoal }}" min="0" required
                                            class="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-md">
                                 </div>
                                 <div>
-                                    <label class="block text-sm text-gray-400">Score Vert</label>
+                                    <label class="block text-sm text-gray-400">{{ 'base.greenScore'|trans }}</label>
                                     <input type="number" name="greenScore" value="{{ championship.greenGoal }}" min="0" required
                                            class="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-md">
                                 </div>
@@ -96,22 +96,22 @@
                             <!-- Informations du match -->
                             <div class="space-y-2">
                                 <div class="flex justify-between">
-                                    <span class="text-gray-400">Terrain:</span>
+                                    <span class="text-gray-400">{{ 'index.field'|trans }} :</span>
                                     <span>{{ championship.encounter ? championship.encounter.field.Name : 'TBD' }}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-400">Début:</span>
+                                    <span class="text-gray-400">{{ 'score.begin'|trans }}:</span>
                                     <span>{{ championship.encounter ? championship.encounter.slot.dateDebut|date('d/m/Y H:i') : 'TBD' }}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-400">Fin:</span>
+                                    <span class="text-gray-400">{{ 'score.end'|trans }} :</span>
                                     <span>{{ championship.encounter ? championship.encounter.slot.dateEnd|date('d/m/Y H:i') : 'TBD' }}</span>
                                 </div>
                             </div>
 
                             <!-- État -->
                             <div>
-                                <label class="block text-sm text-gray-400 mb-1">État</label>
+                                <label class="block text-sm text-gray-400 mb-1">{{ 'index.state'|trans }}</label>
                                 <select name="state" required class="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-md">
                                     {% for state in states %}
                                         <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>
@@ -122,7 +122,7 @@
                             </div>
 
                             <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">
-                                Sauvegarder
+                                {{ 'label.save'|trans }}
                             </button>
                         </form>
                     </div>
@@ -190,7 +190,7 @@
                         {% if pagination.hasPrevious %}
                             <a href="{{ path('app_championship_index', {page: pagination.currentPage - 1, championshiplist_id: selected_championship_list.id}) }}"
                                class="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition duration-300">
-                                Précédent
+                                {{ 'score.previous'|trans }}
                             </a>
                         {% endif %}
 
@@ -204,7 +204,7 @@
                         {% if pagination.hasNext %}
                             <a href="{{ path('app_championship_index', {page: pagination.currentPage + 1, championshiplist_id: selected_championship_list.id}) }}"
                                class="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition duration-300">
-                                Suivant
+                                {{ 'score.next'|trans }}
                             </a>
                         {% endif %}
                     </div>
