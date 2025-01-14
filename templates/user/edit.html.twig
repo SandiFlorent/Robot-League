@@ -15,19 +15,36 @@
         {{ form_row(form.myTeams) }}
     {% endif %}
 
-    
-    
+    {# Bouton pour attribuer une équipe sans créateur #}
+    {% if teamsWithoutCreator is not empty %}
+        <h3>Équipes sans créateur</h3>
+        <ul>
+            {% for team in teamsWithoutCreator %}
+                <li>
+                    {{ team.name }}
+                    <button type="submit" name="assign_team" value="{{ team.id }}">Attribuer cette équipe</button>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {# Bouton pour retirer le créateur de l'équipe de l'utilisateur #}
+    {% if userTeam is not empty %}
+        <h3>Équipe de l'utilisateur</h3>
+        <p>{{ userTeam.name }}</p>
+        <button type="submit" name="removeCreator" value="1">Retirer le créateur</button>
+    {% endif %}
+
     {% if form.removeCreator.vars.disabled == false %}
         {{ form_row(form.removeCreator) }}
     {% endif %}
     {{ form_row(form.email) }}
     {{ form_row(form.password) }}
     {{ form_row(form.roles) }}
-    
+
     {# Bouton de validation complète #}
     <button type="submit">Mettre à jour</button>
 
 {{ form_end(form) }}
-
 
 {% endblock %}
