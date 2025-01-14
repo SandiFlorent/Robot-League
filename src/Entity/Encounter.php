@@ -20,7 +20,6 @@ class Encounter
     private ?Slot $slot = null;
 
     #[ORM\OneToOne(inversedBy: 'encounter', cascade: ['persist'])]
-    #[ORM\Column(nullable: true)]
     private ?Championship $matches = null;
 
     #[ORM\ManyToOne(inversedBy: 'encounters')]
