@@ -99,7 +99,6 @@ public function index(
             'statusFilter' => $statusFilter,  // Passer le filtre pour la vue
         ]);
     }
-    
 
 }
 
