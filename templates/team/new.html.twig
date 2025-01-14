@@ -14,7 +14,7 @@
         <!-- Champ Name -->
         <div>
             {{ form_label(form.Name, 'new.teamName'|trans, { 'label_attr': { 'class': 'block mb-2 text-sm font-medium text-blue-400' } }) }}
-            {{ form_widget(form.Name, { 'attr': { 
+            {{ form_widget(form.Name, { 'attr': { placeholder: 'new.teamName',
                 'class': 'bg-gray-800 border border-blue-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5' } }) }}
 
             {% for error in form_errors(form.Name) %}
@@ -24,7 +24,7 @@
 
         <!-- Champ ChampionshipList (sélection du championnat) -->
         <div>
-            {{ form_label(form.championshipList, 'Choisir un championnat', { 'label_attr': { 'class': 'block mb-2 text-sm font-medium text-blue-400' } }) }}
+            {{ form_label(form.championshipList, 'label.update'|trans, { 'label_attr': { 'class': 'block mb-2 text-sm font-medium text-blue-400' } }) }}
             {{ form_widget(form.championshipList, { 'attr': { 
                 'class': 'bg-gray-800 border border-blue-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5' } }) }}
             
