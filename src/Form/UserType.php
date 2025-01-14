@@ -25,7 +25,7 @@ class UserType extends AbstractType
                 'choice_label' => 'championshipName',
                 'placeholder' => 'Sélectionner un championnat',
                 'mapped' => false,
-                'required' => true
+                'required' => false
             ])
 
             // Champs standards
