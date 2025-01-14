@@ -9,8 +9,8 @@ base:
   login: Log in
   register: Register
   info: Informations
-  legalNotices: Mentions Légales
-  confPolicy: Politique de confidentialité
+  legalNotices: LegalNotices
+  confPolicy: Confidentiality policy
   support: Support
   contact: Contact
   qna: Q&A
@@ -20,7 +20,25 @@ base:
   insta: Instagram
   description: Description
   addr: Address
-  
+  manageChamp: Championship management
+  chooseChamp: Choose a championship
+  selectChamp: Select a championship
+  seeTeams: See teams
+  seeScores: See scores
+  admin: Admin
+  users: Users
+  createAChampionship: Create a championship
+  score: Score
+  match: Match
+  blueScore: Blue score
+  greenScore: Green score
+  noSlot: No score registered yet.
+  addSlots: Add slots
+  createNewChamp: Create a new championship
+  manageTeams: Manage teams
+  validatedTeams: Validated teams
+  removeTeam: Remove team
+  valRequests: Validation requests
 
 show:
   show: Show
@@ -28,7 +46,7 @@ show:
   teams: Teams
   user: User
   id: Id
-  email: E-mail
+  email: Email
   roles: Roles
   passwd: Password
   name: Name
@@ -40,6 +58,7 @@ show:
   
 
 new: 
+  add: Add
   newTeam: New team
   createTeam: Create a new team
   teamName: Name of the team
@@ -66,6 +85,7 @@ index:
   createNewUser: Create a new user
   memberIndex: Member index
   home: Home | RobotLeague
+  displayMatch: Display matches
   matchList: List of matches
   blueTeam: Blue team
   greenTeam: Green team
@@ -79,10 +99,26 @@ index:
   save: Save
   noMatch: No match available. Please generate a championship.
   teamIndex: Team index
+  fieldList: Field list
+  field: Field
+  fieldName: Name of the field
+  fieldInfo: Details of the field
+  dateOfBeginning: Beginning of the match
+  dateOfEnd: End of the match
+  beginDate: Begin date
+  endDate: End date
+  createNewField: Create a new field
+  newField: New field
+  noFields: No fields
+  noField: No field registered yet
+  editField: Edit the field
+  threshold: Threshold
+  addField: Add a field
+  addFields: Add fields
+  backToChamp: Back to championships
   selectChampionship: Select a championship
   filterChamp: Filter championships
   filter: Filter
-
 
 edit: 
   edit: Edit
@@ -90,12 +126,14 @@ edit:
   editTeam: Edit the team
   editMember: Edit a team member
   editChampionship: Edit the championship
-  actAs: Se faire passer pour
+  validateTeams: Validate teams
+  generateChampionship: Generate championships
+  deleteChampionship: Delete championship
+  actAs: Act as
   
-
 login: 
   loginPage: Log in
-  log: Log in
+  log: Log
   placeholderMail: exemple@mail.uk
   placeholderPasswd: p@sswd#
   submit: Submit
@@ -108,5 +146,13 @@ teammember:
   addMember: Add a new member
   teamMembers: Team members
   
-
+php:
+  canceled: Canceled
+  inProgress: In progress
+  notStarted: Not started
+  winBlue: Blue victory
+  winGreen: Green victory
+  draw: Draw
+  forfaitBlue: Blue forfait
+  forfaitGreen: Green forfait
 
