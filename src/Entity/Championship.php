@@ -154,16 +154,15 @@ class Championship
         return $this;
     }
 
-    //Equivalent to SQL triggers
     public function discardGoals(): void
     {
-        //We reduce the total goals of the blue and green team
         $this->blueTeam->updateTotalGoals(-$this->blueGoal);
         $this->greenTeam->updateTotalGoals(-$this->greenGoal);
-
-        //We set back this championship's goals to 0
+    
         $this->blueGoal = 0;
         $this->greenGoal = 0;
+    
+
     }
 
     public function updateNbEnCounterByOne($difference): void
@@ -172,69 +171,52 @@ class Championship
         $this->greenTeam->updateNbEncounter($difference);
     }
 
-
     #[ORM\PreUpdate]
-    public function beforeUpdateChampionshipBlueTeamGoals(PreUpdateEventArgs $event): void
+    public function beforeUpdateGoals(PreUpdateEventArgs $event): void
     {
-        // Get the EntityManager from the event
+        // Obtenir l'EntityManager depuis l'événement
         $entityManager = $event->getObjectManager();
-
-        // Check if `blue_goal` has changed
+        static $isPersisted = false; // Utilisation d'un flag statique pour éviter des persistance en boucle infinie
+    
+        // Ne rien faire si l'entité a déjà été persistée
+        if ($isPersisted) {
+            return;
+        }
+    
+        $isUpdated = false;
+    
+        // Mettre à jour les buts de l'équipe bleue si nécessaire
         if ($event->hasChangedField('blueGoal')) {
             $oldValue = $event->getOldValue('blueGoal');
             $newValue = $event->getNewValue('blueGoal');
             $difference = $newValue - $oldValue;
-
-            $teamRepository = $event->getObjectManager()->getRepository(Team::class);
-            $blueTeam = $teamRepository->findOneBy(['id' => $this->blueTeam->getId()]);
-            
-            // Update the green team's goals
-            $blueTeam->updateTotalGoals($difference);
-            $entityManager->persist($blueTeam);
+    
+            if ($this->blueTeam) {
+                $this->blueTeam->updateTotalGoals($difference);
+                $isUpdated = true;
+            }
         }
-    }
-
-    #[ORM\PreUpdate]
-    public function beforeUpdateChampionshipGreenTeamGoals(PreUpdateEventArgs $event): void
-    {
-        // Get the EntityManager from the event
-        $entityManager = $event->getObjectManager();
-
-        // Check if `green_goal` has changed
+    
+        // Mettre à jour les buts de l'équipe verte si nécessaire
         if ($event->hasChangedField('greenGoal')) {
             $oldValue = $event->getOldValue('greenGoal');
             $newValue = $event->getNewValue('greenGoal');
             $difference = $newValue - $oldValue;
-
-            $teamRepository = $event->getObjectManager()->getRepository(Team::class);
-            $greenTeam = $teamRepository->findOneBy(['id' => $this->greenTeam->getId()]);
-
-            // Update the green team's goals
-            $greenTeam->updateTotalGoals($difference);
-            $entityManager->persist($greenTeam);
-        }
-    }
-
-    /*
-    #[ORM\PreUpdate]
-    public function beforeUpdateChampionship(PreUpdateEventArgs $event)
-    {
-        if ($event->hasChangedField('state')) {
-            $oldState = $event->getOldValue('state');
-            $newState = $event->getNewValue('state');
-
-            $entityManager = $event->getObjectManager();
-            try {
-                // Create new triggers that will (hopefully) update the teams' stats
-                $trigger = new triggers($oldState, $newState, $this->blueTeam, $this->greenTeam, $this->blueGoal, $this->greenGoal);
-                $trigger->championshipStateTriggers();
-
-                $entityManager->flush();
-            } catch (\Exception $e) {
-                $entityManager->clear();
-                throw $e;
+    
+            if ($this->greenTeam) {
+                $this->greenTeam->updateTotalGoals($difference);
+                $isUpdated = true;
             }
         }
+    
+        // Si des modifications ont eu lieu, persistez les changements
+        if ($isUpdated) {
+            // Marquer comme persisté
+            $isPersisted = true;
+    
+            $entityManager->persist($this->blueTeam);
+            $entityManager->persist($this->greenTeam);
+            $entityManager->flush();  // Effectuer un flush pour sauvegarder les modifications
+        }
     }
-        */
 }

@@ -358,7 +358,6 @@ class Team
     public function updateScoreBasedOnChampionship(PreUpdateEventArgs $event): void
     {
         $entityManager = $event->getObjectManager();
-        dd($entityManager);
         $championshipRepository = $entityManager->getRepository(Championship::class);
 
         // Find all championships where this team is referenced
