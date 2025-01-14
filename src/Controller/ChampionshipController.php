@@ -99,6 +99,20 @@ final class ChampionshipController extends AbstractController
     // Fonction pour générer les matchs
     private function generateChampionships(array $teams, ChampionshipList $championshipList, EncounterRepository $encounterRepository)
     {
+
+        // $seenArray = [];
+        // $nbmatchArray = [];
+        // foreach ($teams as $team){
+        //     $seenArray[$team->getId()] = [];
+        //     $nbmatchArray[$team->getId()] = 0; 
+        // }
+
+        // // Récupérer la valeur minimale
+        // $minValue = min($nbmatchArray);
+
+        // // Récupérer la clé associée à la valeur minimale
+        // $minKey = array_search($minValue, $array);
+
         // Génère les matchs sans matchs retour (évite les doublons)
         foreach ($teams as $index1 => $team1) {
             for ($index2 = $index1 + 1; $index2 < count($teams); $index2++) {
@@ -113,7 +127,16 @@ final class ChampionshipController extends AbstractController
                     ]);
 
 
-                $encounters = $encounterRepository->findBy(['matches' => null, 'myChampionshipList' => $championshipList]);
+                $encounters = $encounterRepository->createQueryBuilder('e')
+                    ->leftJoin('e.slot', 's')  // Jointure avec l'entité Slot
+                    ->where('e.matches IS NULL')  // Critère matches null
+                    ->andWhere('e.myChampionshipList = :championshipList')  // Critère pour le championnat
+                    ->setParameter('championshipList', $championshipList)
+                    ->orderBy('s.dateDebut', 'ASC')  // Tri par dateDebut de Slot
+                    ->getQuery()
+                    ->getResult();
+
+
                 $encounterRes = null;
                 foreach ($encounters as $encounter) {
                     $s = $encounter->getSlot();
@@ -198,8 +221,10 @@ final class ChampionshipController extends AbstractController
                     $slot->removeTeam($team);
                 }
             }
-
-            $championship->getEncounter()->setMatches(null);
+            
+            if ($championship->getEncounter()){
+                $championship->getEncounter()->setMatches(null);
+            }
             
             $this->entityManager->remove($championship);
         }
