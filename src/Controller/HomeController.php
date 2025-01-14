@@ -88,17 +88,17 @@ public function index(
 
     $totalPages = (int) ceil($totalItems / $limit);
 
-    return $this->render('home/index.html.twig', [
-        'championships' => $championships,
-        'championshipLists' => $championshipLists,
-        'fields' => $fields,
-        'slots' => $slots,
-        'selected_championship_id' => $championshiplistId,
-        'selected_field_id' => $fieldId,
-        'selected_slot_id' => $slotId,
-        'statusFilter' => $statusFilter,  // Passer le filtre pour la vue
-    ]);
-}
+        return $this->render('home/index.html.twig', [
+            'championships' => $championships,
+            'championshipLists' => $championshipLists,
+            'fields' => $fields,
+            'slots' => $slots,
+            'selected_championship_id' => $championshiplistId,
+            'selected_field_id' => $fieldId,
+            'selected_slot_id' => $slotId,
+            'statusFilter' => $statusFilter,  // Passer le filtre pour la vue
+        ]);
+    }
 
 }
 
