@@ -148,19 +148,41 @@ teammember:
   addMember: Add a new member
   teamMembers: Team members
   
-php:
-  canceled: Canceled
-  inProgress: In progress
-  notStarted: Not started
-  winBlue: Blue victory
-  winGreen: Green victory
-  draw: Draw
-  forfaitBlue: Blue forfait
-  forfaitGreen: Green forfait
-
 label:
   update: Update
   save: Save
   championshipMatches: Championsship matches
   scoreBoard: Score board
 
+score: 
+  selectChamp: Select a championship
+  scoreBoard: Score board
+  seeMatches: See matches
+  ranking: Ranking
+  goalAverage: Goal average
+  registrationDate: Registration date
+
+userNotFound: User not found
+userSuccessfullyCreated: User created
+userSuccessfullyModified: User edited
+userSuccessfullyDeleted: User deleted
+memberCreationSuccessful: Member created
+memberSuccessfullyAdded: Member added
+accountCreationSuccessful: Account created
+teamCreationSuccessful: Team created
+teamSuccessfullyEdited: Team edited
+teamSuccessfullyDeleted: Team deleted
+teamSuccessfullyAttributed: Team attributed
+teamSuccessfullyRemoved: Team removed
+successfullyLoggedOut: Your account has been disconnected
+noTeamInChampionship: You do not have a team in this championship
+creatorSuccessfullyDeleted: Creator deleted
+
+canceled: Canceled
+inProgress: In progress
+notStarted: Not started
+winBlue: Blue victory
+winGreen: Green victory
+draw: Draw
+forfaitBlue: Blue forfait
+forfaitGreen: Green forfait

@@ -78,5 +78,6 @@ class HomeController extends AbstractController
             'totalPages' => $totalPages
         ]);
     }
+
 }
 
