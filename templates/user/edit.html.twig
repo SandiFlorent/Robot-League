@@ -5,9 +5,29 @@
 {% block body %}
     <h1>{{ 'edit.editUser'|trans }}</h1>
 
-    {{ include('user/_form.html.twig', {'button_label': {{ 'label.update'|trans }}}) }}
+    {{ form_start(form, { 'method': 'GET' }) }}
+
+    {{ form_widget(form.championship) }}
+
+    {# Afficher uniquement l'équipe de l'utilisateur si elle existe #}
+    {% if form.myTeams is defined %}
+        <h3>Équipe actuelle :</h3>
+        {{ form_widget(form.myTeams) }}
+    {% endif %}
+
+    {# Option de retrait du créateur uniquement si l'utilisateur a une équipe #}
+    {% if form.removeCreator.vars.disabled == false %}
+        <h3>Retirer le rôle de créateur ?</h3>
+        {{ form_widget(form.removeCreator) }}
+    {% endif %}
+
+    {{ form_widget(form.email) }}
+    {{ form_widget(form.password) }}
+    {{ form_widget(form.roles) }}
+
+    <button type="submit">{{ 'edit.submit'|trans }}</button>
+    {{ form_end(form) }}
 
     <a href="{{ path('app_user_index') }}">{{ 'new.backToList'|trans }}</a>
-
     {{ include('user/_delete_form.html.twig') }}
 {% endblock %}

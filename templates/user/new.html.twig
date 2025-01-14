@@ -5,7 +5,18 @@
 {% block body %}
     <h1>{{ 'new.createNewUser'|trans }}</h1>
 
-    {{ include('user/_form.html.twig') }}
+    {{ form_start(form, { 'method': 'GET' }) }}
+        {{ form_widget(form.championship) }}
+        
+        {% if form.myTeams is defined %}
+            {{ form_widget(form.myTeams) }}
+        {% endif %}
+
+        {{ form_widget(form.email) }}
+        {{ form_widget(form.password) }}
+        {{ form_widget(form.roles) }}
+        <button type="submit">{{ 'new.submit'|trans }}</button>
+    {{ form_end(form) }}
 
     <a href="{{ path('app_user_index') }}">{{ 'new.backToList'|trans }}</a>
 {% endblock %}
