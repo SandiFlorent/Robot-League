@@ -1,0 +1,7 @@
+
+alerts: 
+  positiveGoals: Le nombre de buts doit être positif.
+  niceMail: Veuillez entrer une adresse email valide.
+  emailExists: Il y a déjà un compte avec cet email.
+  teamExists: Un équipe porte déjà ce nom.
+
