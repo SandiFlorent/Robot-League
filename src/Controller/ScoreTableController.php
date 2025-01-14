@@ -27,7 +27,7 @@ class ScoreTableController extends AbstractController
         ]);
     }
 
-    #[Route('/score/table/{idlist}', name: 'app_score_table_id')]
+    #[Route('{_locale}/score/table/{idlist}', name: 'app_score_table_id')]
     public function indexid(TeamRepository $teamRepository, ChampionshipListRepository $championshipListRepository, int $idlist): Response
     {
         $championshipList = $championshipListRepository->findOneBy((['id' => $idlist]));
