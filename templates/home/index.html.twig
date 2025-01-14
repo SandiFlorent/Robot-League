@@ -9,7 +9,8 @@
     
     <!-- Contenu principal -->
     <div class="flex-grow p-6 w-full max-w-7xl mx-auto mt-12">
-    <!-- Formulaire de sélection du championnat -->
+    
+    <!-- Formulaire de sélection du championnat, terrain et créneau -->
     <form method="get" action="{{ path('app_home') }}" class="mb-8 bg-gray-800 p-6 rounded-lg shadow-lg">
         <label for="championshiplist_id" class="block text-lg font-semibold text-white mb-2">{{ 'base.chooseChamp'|trans }} :</label>
         <select name="championshiplist_id" id="championshiplist_id" 
@@ -21,6 +22,34 @@
                 </option>
             {% endfor %}
         </select>
+
+        <!-- Sélection du terrain -->
+        {% if selected_championship_id %}
+        <label for="field_id" class="block text-lg font-semibold text-white mb-2 mt-4">Choisir un terrain :</label>
+        <select name="field_id" id="field_id" 
+                class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto">
+            <option value="">Sélectionner un terrain</option>
+            {% for field in fields %}
+                <option value="{{ field.id }}" {% if field.id == selected_field_id %}selected{% endif %}>
+                    {{ field.name }}
+                </option>
+            {% endfor %}
+        </select>
+        {% endif %}
+
+        <!-- Sélection du créneau -->
+        {% if selected_championship_id %}
+        <label for="slot_id" class="block text-lg font-semibold text-white mb-2 mt-4">Choisir un créneau :</label>
+        <select name="slot_id" id="slot_id" 
+                class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto">
+            <option value="">Sélectionner un créneau</option>
+            {% for slot in slots %}
+                <option value="{{ slot.id }}" {% if slot.id == selected_slot_id %}selected{% endif %}>
+                    {{ slot.dateDebut|date('Y-m-d H:i:s') }}
+                </option>
+            {% endfor %}
+        </select>
+        {% endif %}
 
         <button type="submit" 
                 class="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">

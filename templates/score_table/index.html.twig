@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Score!{% endblock %}
+{% block title %}tableau des scores{% endblock %}
 
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white py-8 px-4">
@@ -18,7 +18,31 @@
                     <p class="text-xl text-gray-400">{{ 'index.noRecords'|trans }}</p>
                 </div>
             {% endfor %}
-        </div>
-    </div>
+        </select>
+        <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300 mt-4">
+            Voir les Matchs
+        </button>
+    </form>
 </div>
+
+    <table class="min-w-full table-auto border-collapse">
+    <thead>
+        <tr class="bg-gray-500 text-left">
+            <th class="px-4 py-2 border-b">Nom Equipe</th>
+            <th class="px-4 py-2 border-b">Score</th>
+            <th class="px-4 py-2 border-b">Moyenne de buts</th>
+            <th class="px-4 py-2 border-b">Date d'inscription</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for team in teams %}
+            <tr class="hover:bg-gray-500">
+                <td class="px-4 py-2 border-b">{{ team.Name }}</td>
+                <td class="px-4 py-2 border-b">{{ team.score }}</td>
+                <td class="px-4 py-2 border-b">{{ team.goalAverage }}</td>
+                <td class="px-4 py-2 border-b">{{ team.inscriptionDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
