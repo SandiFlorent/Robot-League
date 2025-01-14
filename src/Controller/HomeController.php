@@ -65,7 +65,5 @@ class HomeController extends AbstractController
             'selected_slot_id' => $slotId,
         ]);
     }
-    
 
 }
-
