@@ -14,7 +14,7 @@ use DateTime;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
-#[UniqueEntity(fields: ['Name'], message: "Une équipe porte déjà ce nom")]
+#[UniqueEntity(fields: ['Name'], message: "alerts.teamExists")]
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
 {
@@ -40,7 +40,7 @@ class Team
     private Collection $championships;
 
 
-    #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
+    #[Assert\PositiveOrZero(message: 'alerts.equalToZeroGoals')]
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $totalPoints = 0;
 

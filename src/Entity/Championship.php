@@ -27,11 +27,11 @@ class Championship
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $greenTeam = null;
 
-    #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
+    #[Assert\PositiveOrZero(message: 'alerts.positiveGoals')]
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $blueGoal = null;
 
-    #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
+    #[Assert\PositiveOrZero(message: 'alerts.positiveGoals')]
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $greenGoal = null;
 

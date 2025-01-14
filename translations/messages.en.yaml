@@ -163,3 +163,8 @@ label:
   save: Save
   championshipMatches: Championsship matches
   scoreBoard: Score board
+
+alerts: 
+  positiveGoals: The number of goals must be positive.
+  niceMail: Please enter a valid email address.
+  emailExists: There is already an account with this email.
