@@ -4,13 +4,7 @@
 
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen">
-    <!-- Titre principal -->
-    <p class="text-5xl font-bold text-white mt-12 mb-8"{{ 'index.matchList'|trans }}</p>
-    
-    <!-- Contenu principal -->
     <div class="flex-grow p-6 w-full max-w-7xl mx-auto mt-12">
-    
-    <!-- Formulaire de sélection du championnat, terrain et créneau -->
     <form method="get" action="{{ path('app_home') }}" class="mb-8 bg-gray-800 p-6 rounded-lg shadow-lg">
         <label for="championshiplist_id" class="block text-lg font-semibold text-white mb-2">{{ 'base.chooseChamp'|trans }} :</label>
         <select name="championshiplist_id" id="championshiplist_id" 
@@ -60,7 +54,7 @@
         {% if championships is not empty %}
         <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {% for championship in championships %}
-            <div class="border border-blue-700 p-8 rounded-3xl shadow-2xl hover:shadow-3xl transition-shadow duration-300 bg-gray-900 transform hover:scale-105 transition-transform duration-300">
+            <div class="border border-blue-700 p-8 rounded-3xl shadow-2xl hover:shadow-3xl transition-shadow duration-300 bg-gray-900 transform hover:scale-105 transition-transform duration-300 hover:ring-4 hover:ring-blue-500 hover:ring-opacity-50">
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-semibold text-blue-400">{{ 'base.match'|trans }}</h2>
                 </div>
@@ -87,12 +81,43 @@
             </div>
             {% endfor %}
         </div>
+        
+        <!-- Système de pagination avancé corrigé -->
+        <div class="mt-8 flex justify-center space-x-2">
+            {% set startPage = 1 %}
+            {% if page - 2 > 1 %}
+                {% set startPage = page - 2 %}
+            {% endif %}
+
+            {% set endPage = totalPages %}
+            {% if page + 2 < totalPages %}
+                {% set endPage = page + 2 %}
+            {% endif %}
+
+            {% if startPage > 1 %}
+                <a href="{{ path('app_home', {'page': 1, 'championshiplist_id': selected_championship_id}) }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">1</a>
+                {% if startPage > 2 %}
+                    <span class="px-4 py-2 text-white">...</span>
+                {% endif %}
+            {% endif %}
+
+            {% for i in startPage..endPage %}
+                <a href="{{ path('app_home', {'page': i, 'championshiplist_id': selected_championship_id}) }}"
+                   class="px-4 py-2 {% if i == page %}bg-blue-700{% else %}bg-blue-600{% endif %} text-white rounded-lg hover:bg-blue-700">{{ i }}</a>
+            {% endfor %}
+
+            {% if endPage < totalPages %}
+                {% if endPage < totalPages - 1 %}
+                    <span class="px-4 py-2 text-white">...</span>
+                {% endif %}
+                <a href="{{ path('app_home', {'page': totalPages, 'championshiplist_id': selected_championship_id}) }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{{ totalPages }}</a>
+            {% endif %}
+        </div>
+
         {% else %}
             <p class="text-lg text-white text-center">{{ 'index.noChampionship'|trans }}</p>
         {% endif %}
     </div>
-
-    <!-- Pied de page amélioré -->
     <footer class="bg-gray-900 text-white py-12 w-full mt-12">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
