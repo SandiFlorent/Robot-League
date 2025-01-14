@@ -54,4 +54,5 @@ class UserType extends AbstractType
             'show_championship' => true, // Par défaut, afficher le champ de sélection du championnat
         ]);
     }
+
 }
