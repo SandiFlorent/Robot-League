@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Team;
 use App\Form\UserType;
+use App\Entity\ChampionshipList;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\TeamRepository;
+
 
 #[Route('/{_locale}/user')]
 final class UserController extends AbstractController
@@ -24,32 +28,30 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
+    #[Route('/user/new', name: 'app_user_new')]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user, [
+            'show_championship' => false // Ne pas afficher le champ de sélection du championnat
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // Hachage du mot de passe
-            $plainPassword = $user->getPassword();
-            if (!empty($plainPassword)) {
-                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
-                $user->setPassword($hashedPassword); // Mise à jour du mot de passe haché
-            }
+            // Hacher le mot de passe
+            $hashedPassword = $passwordHasher->hashPassword($user, $form->get('password')->getData());
+            $user->setPassword($hashedPassword);
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-                return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-
+            $this->addFlash('success', 'Utilisateur créé avec succès !');
+            return $this->redirectToRoute('app_user_index');
         }
 
         return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -61,35 +63,126 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/user/{id}/edit', name: 'app_user_edit')]
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+        // Récupération de l'ID du championnat à partir de la requête
+        $championshipId = $request->get('user')['championship'] ?? null;
+        $championship = $championshipId
+            ? $entityManager->getRepository(ChampionshipList::class)->find($championshipId)
+            : null;
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifier si un nouveau mot de passe a été fourni
-            $newPassword = $user->getPassword(); // Récupérer le mot de passe dans l'entité User
+        // Initialisation des variables pour l'équipe de l'utilisateur et les équipes sans créateur
+        $userTeam = null;
+        $teamsWithoutCreator = [];
+        if ($championship) {
+            // Recherche de l'équipe existante de l'utilisateur dans ce championnat
+            $userTeam = $entityManager->getRepository(Team::class)->findOneBy([
+                'championshipList' => $championship,
+                'creator' => $user
+            ]);
 
-            if (!empty($newPassword)) {
-                // Si un nouveau mot de passe est fourni, on le hache
-                $encodedPassword = $passwordHasher->hashPassword($user, $newPassword);
-                $user->setPassword($encodedPassword); // Mettre à jour le mot de passe haché
+            // Si l'utilisateur n'a pas d'équipe dans ce championnat, rechercher les équipes sans créateur
+            if (!$userTeam) {
+                $teamsWithoutCreator = $entityManager->getRepository(Team::class)->findBy([
+                    'championshipList' => $championship,
+                    'creator' => null
+                ]);
             }
-
-            // Enregistrer les modifications
-            $entityManager->flush();
-
-            $this->addFlash('notice', 'Utilisateur mis à jour avec succès');
-
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('user/edit.html.twig', [
+        // Création du formulaire
+        $form = $this->createForm(UserType::class, $user, [
+            'championship_id' => $championship ? $championship->getId() : null,
             'user' => $user,
-            'form' => $form,
+            'userTeam' => $userTeam,
+            'show_championship' => true // Afficher le champ de sélection du championnat
+        ]);
+
+        // Traitement de la soumission du formulaire
+        $form->handleRequest($request);
+
+        // Vérification de la soumission du formulaire et gestion des actions spécifiques pour attribuer ou retirer une équipe
+        if ($form->isSubmitted()) {
+            // Action pour "Afficher les équipes"
+            if ($request->request->has('reload') && $request->get('reload') == 1) {
+                // Recharge les équipes sans créateur pour afficher les équipes possibles dans le championnat
+                $teamsWithoutCreator = $entityManager->getRepository(Team::class)->findBy([
+                    'championshipList' => $championship,
+                    'creator' => null
+                ]);
+            }
+
+            // Suppression du créateur de l'équipe de l'utilisateur
+            if ($request->request->has('removeCreator') && $request->get('removeCreator') == '1') {
+                if ($userTeam) {
+                    $userTeam->setCreator(null);
+                    $entityManager->persist($userTeam);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Créateur retiré avec succès.');
+                    return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
+                }
+            }
+
+            // Attribution d'une équipe à l'utilisateur
+            if ($request->request->has('assign_team')) {
+                $teamId = $request->get('assign_team');
+                $team = $entityManager->getRepository(Team::class)->find($teamId);
+                if ($team) {
+                    // Ajouter l'équipe à l'utilisateur
+                    $user->addMyTeam($team);
+                    $entityManager->persist($team);
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Team attribuée avec succès.');
+                    return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
+                }
+            }
+
+            // Retrait d'une équipe de l'utilisateur
+            if ($request->request->has('remove_team')) {
+                $teamId = $request->get('remove_team');
+                $team = $entityManager->getRepository(Team::class)->find($teamId);
+                if ($team) {
+                    // Retirer l'équipe de l'utilisateur
+                    $user->removeMyTeam($team);
+                    $entityManager->persist($team);
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Team retirée avec succès.');
+                    return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
+                }
+            }
+
+            // Traitement du reste du formulaire (mise à jour des données utilisateur)
+            if ($request->request->has('submit') && $form->isValid()) {
+                // Mise à jour des informations de l'utilisateur
+                $user->setEmail($form->get('email')->getData());
+                if ($form->get('password')->getData()) {
+                    $user->setPassword(password_hash($form->get('password')->getData(), PASSWORD_BCRYPT));
+                }
+                $user->setRoles($form->get('roles')->getData());
+
+                // Persister l'utilisateur et les changements dans la base de données
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Utilisateur modifié avec succès.');
+                return $this->redirectToRoute('app_user_index');
+            }
+        }
+
+        // Rendu du template avec le formulaire, l'utilisateur, et les équipes
+        return $this->render('user/edit.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+            'teamsWithoutCreator' => $teamsWithoutCreator,
+            'userTeam' => $userTeam,
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response

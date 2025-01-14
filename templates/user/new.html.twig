@@ -1,11 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'new.newUser'|trans }}{% endblock %}
+{% block title %}{{ 'user.new'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ 'new.createNewUser'|trans }}</h1>
 
-    {{ include('user/_form.html.twig') }}
+{{ form_start(form) }}
 
-    <a href="{{ path('app_user_index') }}">{{ 'new.backToList'|trans }}</a>
+    {{ form_row(form.email) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.roles) }}
+
+    {# Bouton de validation complète #}
+    <button type="submit">Créer</button>
+
+{{ form_end(form) }}
+
 {% endblock %}

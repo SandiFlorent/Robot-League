@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\Team;
 use App\Entity\User;
+use App\Entity\ChampionshipList;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
@@ -11,34 +11,36 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class UserType extends AbstractType
 {
-    
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($options['show_championship']) {
+            $builder->add('championship', EntityType::class, [
+                'class' => ChampionshipList::class,
+                'choice_label' => 'championshipName',
+                'placeholder' => 'Sélectionner un championnat',
+                'mapped' => false,
+                'required' => false
+            ]);
+        }
+
         $builder
-            ->add('email')
+            ->add('email', EmailType::class)
+            ->add('password', PasswordType::class, [
+                'mapped' => false,
+                'required' => false
+            ])
             ->add('roles', ChoiceType::class, [
-                'choices'  => [
-                    'ROLE_USER' => 'ROLE_USER',
-                    'ROLE_ORGANISATEUR' => 'ROLE_ORGANISATEUR',
+                'choices' => [
+                    'Utilisateur' => 'ROLE_USER',
+                    'Organisateur' => 'ROLE_ORGANISATEUR',
+                    'Administrateur' => 'ROLE_ADMIN'
                 ],
                 'multiple' => true,
-                'expanded' => true,
-            ])
-            ->add('password', PasswordType::class, [
-                'required' => false,
-            ])
-            ->add('myTeam', EntityType::class, [
-                'class' => Team::class,
-                'choice_label' => 'id', // Affiche l'id de l'équipe
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('t')
-                        ->leftJoin('t.creator', 'u') // Join avec l'utilisateur créateur
-                        ->where('u.id IS NULL') // Filtrer pour les équipes sans créateur
-                        ->orderBy('t.Name', 'ASC'); // Optionnel : trier par nom de l'équipe
-                },
+                'expanded' => true
             ]);
     }
 
@@ -46,6 +48,11 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'championship_id' => null,
+            'user' => null,
+            'userTeam' => null,
+            'show_championship' => true, // Par défaut, afficher le champ de sélection du championnat
         ]);
     }
+
 }
