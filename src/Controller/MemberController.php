@@ -36,7 +36,7 @@ final class MemberController extends AbstractController
             // The notce message when creating a team member
             $this->addFlash(
                 'notice',
-                'Member created successfully'
+                'memberCreationSuccessful'
             );
 
             return $this->redirectToRoute('app_member_index', [], Response::HTTP_SEE_OTHER);

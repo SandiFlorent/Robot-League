@@ -36,7 +36,7 @@ class RegistrationController extends AbstractController
             //Notice message when an account is created
             $this->addFlash(
                 'notice',
-                'Account successfully created'
+                'accountCreationSuccessful'
             );
 
             return $security->login($user, AppCustomAuthenticator::class, 'main');

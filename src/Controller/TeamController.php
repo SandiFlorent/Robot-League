@@ -49,7 +49,7 @@ final class TeamController extends AbstractController
             $entityManager->flush();
 
             //Message de succès après la création de l'équipe
-            $this->addFlash('notice', 'Team successfully created');
+            $this->addFlash('notice', 'teamCreationSuccessful');
 
             // Rediriger vers la page de gestion des membres de l'équipe
             $id = $team->getId();
@@ -95,7 +95,7 @@ final class TeamController extends AbstractController
                 return $this->redirectToRoute('app_team_member', ['id' => $teams[0]->getId()]);
             } else {
                 // Si l'utilisateur n'a pas d'équipe dans ce championnat, afficher un message d'erreur
-                $this->addFlash('error', 'Vous n\'avez aucune équipe dans ce championnat.');
+                $this->addFlash('error', 'noTeamInChampionship');
             }
         }
 
@@ -130,7 +130,7 @@ final class TeamController extends AbstractController
             //Notice message when a team is edited
             $this->addFlash(
                 'notice',
-                'Team successfully edited'
+                'teamSuccessfullyEdited'
             );
 
             return $this->redirectToRoute('app_team_index', [], Response::HTTP_SEE_OTHER);
@@ -152,7 +152,7 @@ final class TeamController extends AbstractController
             //Notice message when a team is deleted
             $this->addFlash(
                 'notice',
-                'Team successfully deleted'
+                'teamSuccessfullyDeleted'
             );
 
         }
@@ -182,7 +182,7 @@ final class TeamController extends AbstractController
             //Notice message when a new member is added
             $this->addFlash(
                 'notice',
-                'Member successfully added'
+                'memberSuccessfullyAdded'
             );
 
             $id = $team->getId();
