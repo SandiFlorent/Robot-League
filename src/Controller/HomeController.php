@@ -46,6 +46,7 @@ public function index(
             $championshipLists = $championshipListRepository->findAll();
             break;
     }
+    
 
     $fields = [];
     $slots = [];
