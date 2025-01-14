@@ -1,4 +1,6 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('label.save'|trans) }}</button>
+    <button class="mt-4 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-400 text-white font-semibold rounded hover:from-blue-600 hover:to-blue-500 transition duration-300 shadow-lg">
+        {{ button_label|default('label.save'|trans) }}
+    </button>
 {{ form_end(form) }}
