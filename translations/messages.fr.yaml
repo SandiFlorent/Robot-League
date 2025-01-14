@@ -163,11 +163,3 @@ label:
   save: Sauvegarder
   championshipMatches: Matchs du championnat
   scoreBoard: Tableau des scores
-
-score: 
-  selectChamp: Sélectionner un championnat
-  scoreBoard: Tableau des scores
-  seeMatches: Voir les matchs
-  ranking: Rang
-  goalAverage: Moyenne des buts
-  registrationDate: Date d'inscription
