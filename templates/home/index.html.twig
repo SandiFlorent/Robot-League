@@ -81,8 +81,41 @@
             </div>
             {% endfor %}
         </div>
-        
-        
+        <!-- Système de pagination avancé corrigé -->
+       <div class="mt-8 flex justify-center space-x-2">
+           {% set startPage = 1 %}
+           {% if page - 2 > 1 %}
+               {% set startPage = page - 2 %}
+           {% endif %}
+
+
+           {% set endPage = totalPages %}
+           {% if page + 2 < totalPages %}
+               {% set endPage = page + 2 %}
+           {% endif %}
+
+
+           {% if startPage > 1 %}
+               <a href="{{ path('app_home', {'page': 1, 'championshiplist_id': selected_championship_id}) }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">1</a>
+               {% if startPage > 2 %}
+                   <span class="px-4 py-2 text-white">...</span>
+               {% endif %}
+           {% endif %}
+
+
+           {% for i in startPage..endPage %}
+               <a href="{{ path('app_home', {'page': i, 'championshiplist_id': selected_championship_id}) }}"
+                  class="px-4 py-2 {% if i == page %}bg-blue-700{% else %}bg-blue-600{% endif %} text-white rounded-lg hover:bg-blue-700">{{ i }}</a>
+           {% endfor %}
+
+
+           {% if endPage < totalPages %}
+               {% if endPage < totalPages - 1 %}
+                   <span class="px-4 py-2 text-white">...</span>
+               {% endif %}
+               <a href="{{ path('app_home', {'page': totalPages, 'championshiplist_id': selected_championship_id}) }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{{ totalPages }}</a>
+           {% endif %}
+       </div>
 
         {% else %}
             <p class="text-lg text-white text-center">{{ 'index.noChampionship'|trans }}</p>
