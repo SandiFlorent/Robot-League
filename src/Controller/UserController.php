@@ -123,6 +123,7 @@ final class UserController extends AbstractController
                     $entityManager->persist($userTeam);
                     $entityManager->flush();
                     $this->addFlash('success', 'Créateur retiré avec succès.');
+                    return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
                 }
             }
     
@@ -138,6 +139,7 @@ final class UserController extends AbstractController
                     $entityManager->flush();
     
                     $this->addFlash('success', 'Team attribuée avec succès.');
+                    return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
                 }
             }
     
@@ -153,6 +155,7 @@ final class UserController extends AbstractController
                     $entityManager->flush();
     
                     $this->addFlash('success', 'Team retirée avec succès.');
+                    return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
                 }
             }
     
@@ -182,7 +185,7 @@ final class UserController extends AbstractController
             'userTeam' => $userTeam,
         ]);
     }
-    
+
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
