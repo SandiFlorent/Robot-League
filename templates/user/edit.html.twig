@@ -3,31 +3,30 @@
 {% block title %}{{ 'edit.editUser'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ 'edit.editUser'|trans }}</h1>
 
-    {{ form_start(form, { 'method': 'GET' }) }}
+{{ form_start(form) }}
 
-    {{ form_widget(form.championship) }}
+    {# Sélection du championnat et bouton pour recharger #}
+    {{ form_row(form.championship) }}
+    <button type="submit" name="reload" value="1">Afficher les équipes</button>
 
-    {# Afficher uniquement l'équipe de l'utilisateur si elle existe #}
+    {# Affichage des équipes uniquement après sélection du championnat #}
     {% if form.myTeams is defined %}
-        <h3>Équipe actuelle :</h3>
-        {{ form_widget(form.myTeams) }}
+        {{ form_row(form.myTeams) }}
     {% endif %}
-
-    {# Option de retrait du créateur uniquement si l'utilisateur a une équipe #}
+    
     {% if form.removeCreator.vars.disabled == false %}
-        <h3>Retirer le rôle de créateur ?</h3>
-        {{ form_widget(form.removeCreator) }}
+        {{ form_row(form.removeCreator) }}
     {% endif %}
 
-    {{ form_widget(form.email) }}
-    {{ form_widget(form.password) }}
-    {{ form_widget(form.roles) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.roles) }}
+    
+    {# Bouton de validation complète #}
+    <button type="submit">Mettre à jour</button>
 
-    <button type="submit">{{ 'edit.submit'|trans }}</button>
-    {{ form_end(form) }}
+{{ form_end(form) }}
 
-    <a href="{{ path('app_user_index') }}">{{ 'new.backToList'|trans }}</a>
-    {{ include('user/_delete_form.html.twig') }}
+
 {% endblock %}
