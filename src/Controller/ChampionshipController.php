@@ -138,7 +138,11 @@ final class ChampionshipController extends AbstractController
                     if ($encounterRes){
                         $encounterRes->getSlot()->addTeam($team1);
                         $encounterRes->getSlot()->addTeam($team2);
+                        $championship->setSlot($encounterRes->getSlot());
+                        $championship->setField($encounterRes->getField());
                     }
+
+                    
     
                     // Sauvegarde la rencontre
                     $this->entityManager->persist($championship);
@@ -194,6 +198,8 @@ final class ChampionshipController extends AbstractController
                     $slot->removeTeam($team);
                 }
             }
+
+            $championship->getEncounter()->setMatches(null);
             
             $this->entityManager->remove($championship);
         }

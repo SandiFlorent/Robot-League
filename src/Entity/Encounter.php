@@ -19,7 +19,8 @@ class Encounter
     #[ORM\ManyToOne(inversedBy: 'encounters')]
     private ?Slot $slot = null;
 
-    #[ORM\OneToOne(inversedBy: 'encounter', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'encounter', cascade: ['persist'])]
+    #[ORM\Column(nullable: true)]
     private ?Championship $matches = null;
 
     #[ORM\ManyToOne(inversedBy: 'encounters')]

@@ -10,6 +10,8 @@ use App\Entity\Championship;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\ChampionshipListRepository;
+use App\Repository\FieldRepository;
+use App\Repository\SlotRepository;
 
 class HomeController extends AbstractController
 {
@@ -17,26 +19,50 @@ class HomeController extends AbstractController
     public function index(
         Request $request,
         ChampionshipRepository $championshipRepository,
-        ChampionshipListRepository $championshipListRepository
+        ChampionshipListRepository $championshipListRepository,
+        FieldRepository $fieldRepository,  // Ajout de FieldRepository
+        SlotRepository $slotRepository     // Ajout de SlotRepository
     ): Response {
-        // Récupérer l'ID du championnat sélectionné dans la requête
+        // Récupérer les paramètres de la requête
         $championshiplistId = $request->query->get('championshiplist_id');
-
-        // Si un championnat est sélectionné, récupérer les matchs correspondants
+        $fieldId = $request->query->get('field_id');
+        $slotId = $request->query->get('slot_id');
+    
+        // Récupérer la liste des championnats
+        $championshipLists = $championshipListRepository->findAll();
+        $fields = [];
+        $slots = [];
+    
         if ($championshiplistId) {
-            $championships = $championshipRepository->findBy(['championshipList' => $championshiplistId]);
+            // Récupérer les terrains et créneaux associés au championnat sélectionné
+            $championshipList = $championshipListRepository->find($championshiplistId);
+            $fields = $fieldRepository->findBy(['championshipList' => $championshipList]);
+            $slots = $slotRepository->findBy(['championshipList' => $championshipList]);
+    
+            // Récupérer les matchs filtrés par le championnat, terrain et créneau
+            $criteria = ['championshipList' => $championshiplistId];
+    
+            if ($fieldId) {
+                $criteria['field'] = $fieldId;
+            }
+            if ($slotId) {
+                $criteria['slot'] = $slotId;
+            }
+    
+            $championships = $championshipRepository->findBy($criteria);
         } else {
-            // Sinon, récupérer tous les matchs
+            // Si aucun championnat n'est sélectionné, récupérer tous les matchs
             $championships = $championshipRepository->findAll();
         }
-
-        // Récupérer la liste des championnats disponibles
-        $championshipLists = $championshipListRepository->findAll();
-
+    
         return $this->render('home/index.html.twig', [
             'championships' => $championships,
             'championshipLists' => $championshipLists,
-            'selected_championship_id' => $championshiplistId, // Passer l'ID sélectionné (null si non sélectionné)
+            'fields' => $fields,
+            'slots' => $slots,
+            'selected_championship_id' => $championshiplistId,
+            'selected_field_id' => $fieldId,
+            'selected_slot_id' => $slotId,
         ]);
     }
 

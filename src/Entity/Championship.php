@@ -44,6 +44,12 @@ class Championship
     #[ORM\OneToOne(mappedBy: 'matches', cascade: ['persist', 'remove'])]
     private ?Encounter $encounter = null;
 
+    #[ORM\ManyToOne(inversedBy: 'championships')]
+    private ?Slot $slot = null;
+
+    #[ORM\ManyToOne(inversedBy: 'championships')]
+    private ?Field $field = null;
+
     public function __construct()
     {
         if ($this->state === null) {
@@ -212,5 +218,29 @@ class Championship
                 throw $e;
             }
         }
+    }
+
+    public function getSlot(): ?Slot
+    {
+        return $this->slot;
+    }
+
+    public function setSlot(?Slot $slot): static
+    {
+        $this->slot = $slot;
+
+        return $this;
+    }
+
+    public function getField(): ?Field
+    {
+        return $this->field;
+    }
+
+    public function setField(?Field $field): static
+    {
+        $this->field = $field;
+
+        return $this;
     }
 }

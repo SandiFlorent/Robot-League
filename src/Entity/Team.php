@@ -79,6 +79,9 @@ class Team
     #[ORM\ManyToMany(targetEntity: Slot::class, mappedBy: 'teams')]
     private Collection $slots;
 
+    #[ORM\Column]
+    private ?float $goalAverage = 0.0;
+
     public function __construct()
     {
         $this->TeamMembers = new ArrayCollection();
@@ -343,5 +346,17 @@ class Team
                 $this->score = $this->totalPoints/$newNbEncounter;
             }
         }
+    }
+
+    public function getGoalAverage(): ?float
+    {
+        return $this->goalAverage;
+    }
+
+    public function setGoalAverage(float $goalAverage): static
+    {
+        $this->goalAverage = $goalAverage;
+
+        return $this;
     }
 }
