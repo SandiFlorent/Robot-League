@@ -4,12 +4,12 @@ namespace App\Enum;
 
 enum State: string
 {
-    case CANCELED = 'annulé';
-    case IN_PROGRESS = 'en cours';
-    case NOT_STARTED = 'non commencé';
-    case WIN_BLUE = "Victoire Blue";
-    case WIN_GREEN = "Victoire Green";
-    case DRAW = "Égalité";
-    case FORFAIT_GREEN = "Forfait vert";
-    case FORFAIT_BLUE = "Forfait Bleu";
+    case CANCELED = 'canceled';
+    case IN_PROGRESS = 'inProgress';
+    case NOT_STARTED = 'notStarted';
+    case WIN_BLUE = "winBlue";
+    case WIN_GREEN = "winGreen";
+    case DRAW = "draw";
+    case FORFAIT_GREEN = "forfaitGreen";
+    case FORFAIT_BLUE = "forfaitBlue";
 }

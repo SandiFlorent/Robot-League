@@ -147,16 +147,6 @@ teammember:
   addMembers: Ajouter des membres
   addMember: Ajouter un nouveau membre
   teamMembers: Membres de l'équipe
-  
-php:
-  canceled: Annulé
-  inProgress: En cours
-  notStarted: Non commencé
-  winBlue: Victoire Bleue
-  winGreen: Victoire Verte
-  draw: Egalité
-  forfaitBlue: Forfait Bleue
-  forfaitGreen: Forfait Verte
 
 label:
   update: Mise à jour
@@ -171,3 +161,28 @@ score:
   ranking: Rang
   goalAverage: Moyenne des buts
   registrationDate: Date d'inscription
+
+userNotFound: Utilisateur non trouvé
+userSuccessfullyCreated: Utilisateur créé
+userSuccessfullyModified: Utilisateur modifié
+userSuccessfullyDeleted: Utilisateur supprimé
+memberCreationSuccessful: Membre créé
+memberSuccessfullyAdded: Membre ajouté 
+accountCreationSuccessful: Compte créé
+teamCreationSuccessful: Equipe créée
+teamSuccessfullyEdited: Equipe modifiée
+teamSuccessfullyDeleted: Equipe supprimée
+teamSuccessfullyAttributed: Equipe attribuée
+teamSuccessfullyRemoved: Equipe retirée
+successfullyLoggedOut: Votre compte a été déconnecté
+noTeamInChampionship: Vous n'avez pas d'équipe dans ce championnat
+creatorSuccessfullyDeleted: Créateur supprimé
+
+canceled: Annulé
+inProgress: En cours
+notStarted: Non commencé
+winBlue: Victoire Bleue
+winGreen: Victoire Verte
+draw: Egalité
+forfaitBlue: Forfait Bleue
+forfaitGreen: Forfait Verte

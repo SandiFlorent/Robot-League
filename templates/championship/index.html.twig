@@ -10,7 +10,7 @@
     <!-- Formulaire pour sélectionner un championnat -->
     <div class="mb-6">
         <label for="championshiplist_id" class="text-lg font-semibold text-gray-300">{{ 'base.chooseChamp'|trans }}</label>
-        <form method="get" action="{{ path('_locale/app_championship_index') }}" class="space-y-4">
+        <form method="get" action="{{ path('app_championship_index') }}" class="space-y-4">
             <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md w-full sm:w-auto">
                 <option value="">{{ 'base.selectChamp'|trans }}</option>
                 {% for championshipList in championship_lists %}
@@ -87,7 +87,7 @@
                         <td class="px-6 py-4">
                             <select name="state" required class="px-3 py-2 border border-gray-600 bg-gray-800 text-white rounded-md">
                                 {% for state in states %}
-                                    <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>{{ state.value }}</option>
+                                    <option value="{{ state.value }}" {% if championship.state.value == state.value %}selected{% endif %}>{{ state.value|trans }}</option>
                                 {% endfor %}
                             </select>
                         </td>

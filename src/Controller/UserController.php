@@ -46,7 +46,7 @@ final class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Utilisateur créé avec succès !');
+            $this->addFlash('success', 'userSuccessfullyCreated');
             return $this->redirectToRoute('app_user_index');
         }
 
@@ -119,7 +119,7 @@ final class UserController extends AbstractController
                     $userTeam->setCreator(null);
                     $entityManager->persist($userTeam);
                     $entityManager->flush();
-                    $this->addFlash('success', 'Créateur retiré avec succès.');
+                    $this->addFlash('success', 'creatorSuccessfullyDeleted');
                     return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
                 }
             }
@@ -135,7 +135,7 @@ final class UserController extends AbstractController
                     $entityManager->persist($user);
                     $entityManager->flush();
 
-                    $this->addFlash('success', 'Team attribuée avec succès.');
+                    $this->addFlash('success', 'teamSuccessfullyAttributed');
                     return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
                 }
             }
@@ -151,7 +151,7 @@ final class UserController extends AbstractController
                     $entityManager->persist($user);
                     $entityManager->flush();
 
-                    $this->addFlash('success', 'Team retirée avec succès.');
+                    $this->addFlash('success', 'teamSuccessfullyRemoved');
                     return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
                 }
             }
@@ -169,7 +169,7 @@ final class UserController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Utilisateur modifié avec succès.');
+                $this->addFlash('success', 'userSuccessfullyModified');
                 return $this->redirectToRoute('app_user_index');
             }
         }
@@ -190,7 +190,7 @@ final class UserController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->get('_token'))) {
                 $entityManager->remove($user);
                 $entityManager->flush();
-                $this->addFlash('notice', 'Utilisateur supprimé avec succès');
+                $this->addFlash('notice', 'userSuccessfullyDeleted');
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);

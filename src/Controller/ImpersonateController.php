@@ -25,7 +25,7 @@ class ImpersonateController extends AbstractController
 
         $user = $this->userRepository->find($id);
         if (!$user) {
-            $this->addFlash('error', 'Utilisateur non trouvé.');
+            $this->addFlash('error', 'userNotFound');
             return $this->redirectToRoute('app_home');
         }
 
