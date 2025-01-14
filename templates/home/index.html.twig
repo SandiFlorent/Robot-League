@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Matchs du Championnat{% endblock %}
+{% block title %}{{ 'label.championshipMatches'|trans }}{% endblock %}
 
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen">
@@ -48,7 +48,7 @@
                     <span class="text-lg font-bold text-green-500">{{ championship.greenGoal }}</span>
                 </div>
                 <div class="flex justify-between mb-4 border-b pb-2">
-                    <span class="text-lg font-semibold text-green-400">{{ 'base.greenTeam'|trans }}</span>
+                    <span class="text-lg font-semibold text-green-400">{{ 'index.greenTeam'|trans }}</span>
                     <span class="text-lg font-bold text-green-500">{{ championship.greenTeam.name }}</span>
                 </div>
                 <div class="flex justify-between">

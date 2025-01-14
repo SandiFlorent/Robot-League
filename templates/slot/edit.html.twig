@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Slot{% endblock %}
+{% block title %}{{ 'base.editSlot'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Slot</h1>
+    <h1>{{ 'base.editSlot'|trans }}</h1>
 
-    {{ include('slot/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('slot/_form.html.twig', {'button_label': 'label.update'|trans }) }}
 
     <a href="{{ path('app_slot_index') }}">{{ 'new.backToList'|trans }}</a>
 

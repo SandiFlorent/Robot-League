@@ -3,9 +3,9 @@
 {% block title %}{{ 'edit.editMember'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Member</h1>
+    <h1>{{ 'edit.editMember'|trans }}</h1>
 
-    {{ include('member/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('member/_form.html.twig', {'button_label':  'label.update'|trans }) }}
 
     <a href="{{ path('app_member_index') }}">{{ 'new.backToList'|trans }}</a>
 

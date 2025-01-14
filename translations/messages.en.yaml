@@ -39,6 +39,7 @@ base:
   validatedTeams: Validated teams
   removeTeam: Remove team
   valRequests: Validation requests
+  editSlot: Edit slot
 
 show:
   show: Show
@@ -137,6 +138,7 @@ login:
   placeholderMail: exemple@mail.uk
   placeholderPasswd: p@sswd#
   submit: Submit
+  sixCharsAtLeast: At least 6 characters
 
 delete: 
   delete: Delete
@@ -156,3 +158,8 @@ php:
   forfaitBlue: Blue forfait
   forfaitGreen: Green forfait
 
+label:
+  update: Update
+  save: Save
+  championshipMatches: Championsship matches
+  scoreBoard: Score board

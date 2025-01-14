@@ -39,6 +39,7 @@ base:
   validatedTeams: Equipes validées
   removeTeam: Retirer l'équipe
   valRequests: Demandes de validation
+  editSlot: Modifier un créneau
 
 show:
   show: Aficher
@@ -137,6 +138,7 @@ login:
   placeholderMail: exemple@courriel.fr
   placeholderPasswd: motDePasse#
   submit: Valider
+  sixCharsAtLeast: Au moins 6 caractères
 
 delete: 
   delete: Supprimer
@@ -155,5 +157,12 @@ php:
   draw: Egalité
   forfaitBlue: Forfait Bleue
   forfaitGreen: Forfait Verte
+
+label:
+  update: Mise à jour
+  save: Sauvegarder
+  championshipMatches: Matchs du championnat
+  scoreBoard: Tableau des scores
+
 
 
