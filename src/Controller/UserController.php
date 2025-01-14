@@ -86,11 +86,13 @@ final class UserController extends AbstractController
                 'creator' => $user
             ]);
     
-            // Recherche des équipes sans créateur dans ce championnat
-            $teamsWithoutCreator = $entityManager->getRepository(Team::class)->findBy([
-                'championshipList' => $championship,
-                'creator' => null
-            ]);
+            // Si l'utilisateur n'a pas d'équipe dans ce championnat, rechercher les équipes sans créateur
+            if (!$userTeam) {
+                $teamsWithoutCreator = $entityManager->getRepository(Team::class)->findBy([
+                    'championshipList' => $championship,
+                    'creator' => null
+                ]);
+            }
         }
     
         // Création du formulaire
@@ -180,7 +182,7 @@ final class UserController extends AbstractController
             'userTeam' => $userTeam,
         ]);
     }
-
+    
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {

@@ -11,7 +11,7 @@
     <button type="submit" name="reload" value="1">Afficher les équipes</button>
 
     {# Bouton pour attribuer une équipe sans créateur #}
-    {% if teamsWithoutCreator is not empty %}
+    {% if teamsWithoutCreator is not empty and userTeam is empty %}
         <h3>Équipes sans créateur</h3>
         <ul>
             {% for team in teamsWithoutCreator %}
@@ -23,7 +23,7 @@
         </ul>
     {% endif %}
 
-    {# Bouton pour retirer le créateur de l'équipe de l'utilisateur #}
+    {# Affichage de l'équipe de l'utilisateur si elle appartient au championnat sélectionné #}
     {% if userTeam is not empty %}
         <h3>Équipe de l'utilisateur</h3>
         <p>{{ userTeam.name }}</p>
