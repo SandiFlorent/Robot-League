@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ChampionshipList{% endblock %}
+{% block title %}{{ 'new.newChampionship'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Créer un nouveau championnat</h1>
+    <h1>{{ 'base.createNewChamp'|trans }}</h1>
 
     {{ include('championship_list/_form.html.twig') }}
 
