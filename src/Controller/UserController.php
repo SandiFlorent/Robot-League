@@ -72,10 +72,10 @@ final class UserController extends AbstractController
     {
         // Récupération de l'ID du championnat à partir de la requête
         $championshipId = $request->get('user')['championship'] ?? null;
-        $championship = $championshipId 
+        $championship = $championshipId
             ? $entityManager->getRepository(ChampionshipList::class)->find($championshipId)
             : null;
-    
+
         // Initialisation des variables pour l'équipe de l'utilisateur et les équipes sans créateur
         $userTeam = null;
         $teamsWithoutCreator = [];
@@ -85,24 +85,24 @@ final class UserController extends AbstractController
                 'championshipList' => $championship,
                 'creator' => $user
             ]);
-    
+
             // Recherche des équipes sans créateur dans ce championnat
             $teamsWithoutCreator = $entityManager->getRepository(Team::class)->findBy([
                 'championshipList' => $championship,
                 'creator' => null
             ]);
         }
-    
+
         // Création du formulaire
         $form = $this->createForm(UserType::class, $user, [
             'championship_id' => $championship ? $championship->getId() : null,
             'user' => $user,
             'userTeam' => $userTeam
         ]);
-    
+
         // Traitement de la soumission du formulaire
         $form->handleRequest($request);
-    
+
         // Vérification de la soumission du formulaire et gestion des actions spécifiques pour attribuer ou retirer une équipe
         if ($form->isSubmitted()) {
             // Action pour "Afficher les équipes"
@@ -113,7 +113,17 @@ final class UserController extends AbstractController
                     'creator' => null
                 ]);
             }
-    
+
+            // Suppression du créateur de l'équipe de l'utilisateur
+            if ($request->request->has('removeCreator') && $request->get('removeCreator') == '1') {
+                if ($userTeam) {
+                    $userTeam->setCreator(null);
+                    $entityManager->persist($userTeam);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Créateur retiré avec succès.');
+                }
+            }
+
             // Attribution d'une équipe à l'utilisateur
             if ($request->request->has('assign_team')) {
                 $teamId = $request->get('assign_team');
@@ -124,11 +134,11 @@ final class UserController extends AbstractController
                     $entityManager->persist($team);
                     $entityManager->persist($user);
                     $entityManager->flush();
-    
+
                     $this->addFlash('success', 'Team attribuée avec succès.');
                 }
             }
-    
+
             // Retrait d'une équipe de l'utilisateur
             if ($request->request->has('remove_team')) {
                 $teamId = $request->get('remove_team');
@@ -139,11 +149,11 @@ final class UserController extends AbstractController
                     $entityManager->persist($team);
                     $entityManager->persist($user);
                     $entityManager->flush();
-    
+
                     $this->addFlash('success', 'Team retirée avec succès.');
                 }
             }
-    
+
             // Traitement du reste du formulaire (mise à jour des données utilisateur)
             if ($request->request->has('submit') && $form->isValid()) {
                 // Mise à jour des informations de l'utilisateur
@@ -152,16 +162,16 @@ final class UserController extends AbstractController
                     $user->setPassword(password_hash($form->get('password')->getData(), PASSWORD_BCRYPT));
                 }
                 $user->setRoles($form->get('roles')->getData());
-    
+
                 // Persister l'utilisateur et les changements dans la base de données
                 $entityManager->persist($user);
                 $entityManager->flush();
-    
+
                 $this->addFlash('success', 'Utilisateur modifié avec succès.');
                 return $this->redirectToRoute('app_user_index');
             }
         }
-    
+
         // Rendu du template avec le formulaire, l'utilisateur, et les équipes
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
