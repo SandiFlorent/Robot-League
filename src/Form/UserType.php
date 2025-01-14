@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\Team;
@@ -18,17 +17,17 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            // Sélection du championnat (non lié à l'entité User)
-            ->add('championship', EntityType::class, [
+        if ($options['show_championship']) {
+            $builder->add('championship', EntityType::class, [
                 'class' => ChampionshipList::class,
                 'choice_label' => 'championshipName',
                 'placeholder' => 'Sélectionner un championnat',
                 'mapped' => false,
                 'required' => false
-            ])
+            ]);
+        }
 
-            // Champs standards
+        $builder
             ->add('email', EmailType::class)
             ->add('password', PasswordType::class, [
                 'mapped' => false,
@@ -51,8 +50,8 @@ class UserType extends AbstractType
             'data_class' => User::class,
             'championship_id' => null,
             'user' => null,
-            'userTeam' => null
+            'userTeam' => null,
+            'show_championship' => true, // Par défaut, afficher le champ de sélection du championnat
         ]);
     }
 }
-

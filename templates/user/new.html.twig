@@ -1,22 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'new.newUser'|trans }}{% endblock %}
+{% block title %}{{ 'user.new'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ 'new.createNewUser'|trans }}</h1>
 
-    {{ form_start(form, { 'method': 'GET' }) }}
-        {{ form_widget(form.championship) }}
-        
-        {% if form.myTeams is defined %}
-            {{ form_widget(form.myTeams) }}
-        {% endif %}
+{{ form_start(form) }}
 
-        {{ form_widget(form.email) }}
-        {{ form_widget(form.password) }}
-        {{ form_widget(form.roles) }}
-        <button type="submit">{{ 'new.submit'|trans }}</button>
-    {{ form_end(form) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.roles) }}
 
-    <a href="{{ path('app_user_index') }}">{{ 'new.backToList'|trans }}</a>
+    {# Bouton de validation complète #}
+    <button type="submit">Créer</button>
+
+{{ form_end(form) }}
+
 {% endblock %}
