@@ -10,25 +10,60 @@
     {% block stylesheets %}
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     {% endblock %}
-    <style>
-        .dropdown-content {
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-        .dropdown-content.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .nav-link {
-            transition: all 0.3s ease-in-out;
-            border-bottom: 2px solid transparent;
-        }
-        .nav-link:hover {
-            border-bottom: 2px solid white;
-            transform: translateY(-2px);
-        }
-    </style>
+<style>
+    .dropdown-content {
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        pointer-events: none;
+        display: block;
+    }
+    .relative:hover .dropdown-content,
+    .relative:hover .dropdown-content:hover {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    .relative button {
+        padding-bottom: 0px; /* Supprime le vide entre le bouton et le dropdown */
+    }
+    .relative .dropdown-content {
+        margin-top: -5px; /* Rapproche la liste déroulante du bouton */
+    }
+    .nav-link {
+        transition: all 0.3s ease-in-out;
+        border-bottom: 2px solid transparent;
+    }
+    .nav-link:hover {
+        border-bottom: 2px solid white;
+        transform: translateY(-2px);
+    }
+    /* Mobile menu styles */
+    .mobile-menu-overlay {
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(8px);
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+    .mobile-menu-overlay.active {
+        visibility: visible;
+        opacity: 1;
+    }
+    .mobile-menu {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    .mobile-menu.active {
+        transform: translateX(0);
+    }
+    .mobile-nav-link {
+        @apply block w-full py-3 px-4 text-lg font-medium text-white hover:bg-gray-700 rounded-lg transition-colors duration-200;
+    }
+</style>
+
+
+
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
 
@@ -43,24 +78,23 @@
     {% endfor %}
 
     <div class="min-h-screen flex flex-col">
-        <!-- Navbar de Luxe -->
+        <!-- Navbar -->
         <nav class="bg-gradient-to-r from-black to-gray-900 flex items-center justify-between px-8 py-6 shadow-xl rounded-b-3xl border-b border-gray-700">
             <div class="flex items-center space-x-4">
                 <img class="w-14 h-14 rounded-full border-2 border-white" src="{{ asset('Images/logo.png') }}" alt="Logo">
                 <p class="text-3xl font-extrabold tracking-wide text-white">RobotLeague</p>
             </div>
 
-            <!-- Menu Burger -->
-            <div class="sm:block md:hidden">
-                <label for="menu-toggle" class="cursor-pointer">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </label>
-                <input type="checkbox" id="menu-toggle" class="hidden" />
-            </div>
+            <!-- Burger Menu Button -->
+            <button id="burger-button" class="md:hidden z-50 relative">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path class="line1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16"></path>
+                    <path class="line2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16"></path>
+                    <path class="line3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 18h16"></path>
+                </svg>
+            </button>
 
-            <!-- Menu Principal -->
+            <!-- Desktop Menu -->
             <div class="hidden md:flex space-x-8 text-lg">
                 <a href="{{ path('app_home') }}" class="nav-link font-medium">{{ 'base.home'|trans }}</a>
                 <div class="relative">
@@ -96,6 +130,51 @@
             </div>
         </nav>
 
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay fixed inset-0 z-40 md:hidden">
+            <div class="mobile-menu min-h-screen w-64 bg-gray-900 p-4 fixed left-0 top-0 z-50">
+                <div class="flex flex-col space-y-4">
+                    <a href="{{ path('app_home') }}" class="mobile-nav-link">Accueil</a>
+                    
+                    <div class="space-y-2">
+                        <button class="mobile-nav-link w-full text-left" onclick="toggleMobileSubmenu('teams-submenu')">
+                            Équipes
+                        </button>
+                        <div id="teams-submenu" class="hidden pl-4 space-y-2">
+                            {% if app.user %}
+                                {% if is_granted('ROLE_USER') %}
+                                    <a href="{{ path('app_team_new') }}" class="mobile-nav-link">Créer une équipe</a>
+                                    <a href="{{ path('app_choose_championship_member') }}" class="mobile-nav-link">Membres</a>
+                                {% endif %}
+                            {% endif %}
+                            <a href="{{ path('app_team_show') }}" class="mobile-nav-link">Voir les équipes</a>
+                            <a href="{{ path('app_score_table') }}" class="mobile-nav-link">Voir les scores</a>
+                        </div>
+                    </div>
+
+                    {% if is_granted('ROLE_ORGANISATEUR') %}
+                        <div class="space-y-2">
+                            <button class="mobile-nav-link w-full text-left" onclick="toggleMobileSubmenu('admin-submenu')">
+                                Admin
+                            </button>
+                            <div id="admin-submenu" class="hidden pl-4 space-y-2">
+                                <a href="{{ path('app_user_index') }}" class="mobile-nav-link">Utilisateurs</a>
+                                <a href="{{ path('app_championship_index') }}" class="mobile-nav-link">Championnat</a>
+                                <a href="{{ path('app_championship_list_new') }}" class="mobile-nav-link">Créer un championnat</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <a href="{{ path('app_logout') }}" class="mobile-nav-link">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="mobile-nav-link">Connexion</a>
+                        <a href="{{ path('app_register') }}" class="mobile-nav-link">Inscription</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
         {% block body %}
         {% endblock %}
     </div>
@@ -105,19 +184,26 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const menuToggle = document.getElementById('menu-toggle');
-            const navMenu = document.querySelector('.md\\:flex');
+            const burgerButton = document.getElementById('burger-button');
+            const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            burgerButton.addEventListener('click', function() {
+                mobileMenuOverlay.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.classList.toggle('overflow-hidden');
+            });
 
-            menuToggle.addEventListener('change', function () {
-                if (menuToggle.checked) {
-                    navMenu.classList.remove('hidden');
-                    navMenu.classList.add('flex', 'flex-col', 'items-center', 'space-y-4');
-                } else {
-                    navMenu.classList.add('hidden');
-                    navMenu.classList.remove('flex');
+            // Close menu when clicking outside
+            mobileMenuOverlay.addEventListener('click', function(e) {
+                if (e.target === mobileMenuOverlay) {
+                    mobileMenuOverlay.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.classList.remove('overflow-hidden');
                 }
             });
 
+            // Desktop dropdown functionality
             const menuButtons = document.querySelectorAll('.relative button');
             menuButtons.forEach(button => {
                 button.addEventListener('click', function () {
@@ -127,6 +213,12 @@
                 });
             });
         });
+
+        // Mobile submenu toggle function
+        function toggleMobileSubmenu(id) {
+            const submenu = document.getElementById(id);
+            submenu.classList.toggle('hidden');
+        }
     </script>
 </body>
 </html>

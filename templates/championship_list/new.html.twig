@@ -3,8 +3,11 @@
 {% block title %}{{ 'new.newChampionship'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ 'base.createNewChamp'|trans }}</h1>
+<div class="min-h-screen flex items-center justify-center p-6 bg-gray-900 text-white">
+    <div class="p-8 bg-gray-800 border border-blue-500 rounded-lg shadow-lg w-full max-w-lg">
+        <h1 class="text-4xl font-extrabold text-white drop-shadow-lg mb-6 text-center">{{ 'base.createNewChamp'|trans }}</h1>
 
-    {{ include('championship_list/_form.html.twig') }}
-
+        {{ include('championship_list/_form.html.twig') }}
+    </div>
+</div>
 {% endblock %}
