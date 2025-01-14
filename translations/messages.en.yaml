@@ -164,3 +164,11 @@ label:
   championshipMatches: Championsship matches
   scoreBoard: Score board
 
+score: 
+  selectChamp: Select a championship
+  scoreBoard: Score board
+  seeMatches: See matches
+  ranking: Ranking
+  goalAverage: Goal average
+  registrationDate: Registration date
+
