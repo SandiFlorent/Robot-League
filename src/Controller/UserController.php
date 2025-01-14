@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Team;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\TeamRepository;
+
 
 #[Route('/user')]
 final class UserController extends AbstractController
@@ -24,32 +27,34 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/user/new', name: 'app_user_new')]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $championshipId = $request->get('user')['championship'] ?? null;
+
+        $form = $this->createForm(UserType::class, $user, [
+            'championship_id' => $championshipId
+        ]);
+        
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // Hachage du mot de passe
-            $plainPassword = $user->getPassword();
-            if (!empty($plainPassword)) {
-                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
-                $user->setPassword($hashedPassword); // Mise à jour du mot de passe haché
+        if ($form->isSubmitted() && $form->isValid() && !$request->isMethod('GET')) {
+            // Associer l'utilisateur comme creator si une équipe a été sélectionnée
+            $selectedTeam = $form->get('myTeams')->getData();
+            if ($selectedTeam) {
+                $selectedTeam->setCreator($user);
             }
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-                return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-
+            $this->addFlash('success', 'Utilisateur créé avec succès !');
+            return $this->redirectToRoute('app_user_index');
         }
 
         return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -61,35 +66,49 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/user/{id}/edit', name: 'app_user_edit')]
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $championshipId = $request->get('user')['championship'] ?? null;
+
+        // Récupérer l'équipe de l'utilisateur dans le championnat sélectionné
+        $userTeam = $entityManager->getRepository(Team::class)->findOneBy([
+            'championshipList' => $championshipId,
+            'creator' => $user
+        ]);
+
+        $form = $this->createForm(UserType::class, $user, [
+            'championship_id' => $championshipId,
+            'user' => $user,
+            'userTeam' => $userTeam  // Ajout de l'équipe existante dans les options
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifier si un nouveau mot de passe a été fourni
-            $newPassword = $user->getPassword(); // Récupérer le mot de passe dans l'entité User
+            $selectedTeam = $form->get('myTeams')->getData();
+            $removeCreator = $form->get('removeCreator')->getData();
 
-            if (!empty($newPassword)) {
-                // Si un nouveau mot de passe est fourni, on le hache
-                $encodedPassword = $passwordHasher->hashPassword($user, $newPassword);
-                $user->setPassword($encodedPassword); // Mettre à jour le mot de passe haché
+            // Si l'utilisateur veut retirer son rôle de créateur
+            if ($userTeam && $removeCreator) {
+                $userTeam->setCreator(null);
+            } elseif ($selectedTeam instanceof Team) {
+                $selectedTeam->setCreator($user);
             }
 
-            // Enregistrer les modifications
+            $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('notice', 'Utilisateur mis à jour avec succès');
-
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Utilisateur modifié avec succès !');
+            return $this->redirectToRoute('app_user_index');
         }
 
         return $this->render('user/edit.html.twig', [
+            'form' => $form->createView(),
             'user' => $user,
-            'form' => $form,
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
