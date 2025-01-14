@@ -22,6 +22,7 @@ base:
   addr: Address
   manageChamp: Championship management
   chooseChamp: Choose a championship
+  chooseField: Choose a field
   selectChamp: Select a championship
   seeTeams: See teams
   seeScores: See scores
@@ -35,11 +36,16 @@ base:
   noSlot: No score registered yet.
   addSlots: Add slots
   createNewChamp: Create a new championship
+  newChamp: New championship
   manageTeams: Manage teams
   validatedTeams: Validated teams
   removeTeam: Remove team
   valRequests: Validation requests
   editSlot: Edit slot
+  slots: Slots
+  slotIndex: Slot index
+  selectSlot: Select a slot
+  chooseSlot: Choose a slot
 
 show:
   show: Show
@@ -53,10 +59,17 @@ show:
   name: Name
   creatorOfTeam: You are the creator of this team.
   noTeams: No teams to display.
+  displayTeams: Display teams
+  teamsWithoutCreators: Teams without creator
   noTeamJoined: You have not created nor joined a team yet.
   member: Member
+  members: Members
   edit: Edit
-  
+  attributeThisTeam: Attribute this team
+  usersTeam: User's team
+  removeCreator: Remove the creator
+  ranking: Ranking
+  registerDate: Register date
 
 new: 
   add: Add
@@ -72,6 +85,7 @@ new:
   createNewMember: Create a new member
   newChampionship: New championship
   newChampionshipList: New championship list
+  championshipListIndex: Championship list index
   createNewChampionship: Create a new championship
   createNewTeamMember: Create a new team member
   createNewSlot: Create a new slot
@@ -118,8 +132,10 @@ index:
   addFields: Add fields
   backToChamp: Back to championships
   selectChampionship: Select a championship
+  selectField: Select a field
   filterChamp: Filter championships
   filter: Filter
+  fieldIndex: Field index
 
 edit: 
   edit: Edit
@@ -150,6 +166,7 @@ teammember:
   
 label:
   update: Update
+  update2: Update
   save: Save
   championshipMatches: Championsship matches
   scoreBoard: Score board
@@ -161,6 +178,10 @@ score:
   ranking: Ranking
   goalAverage: Goal average
   registrationDate: Registration date
+  begin: Begin
+  end: End
+  previous: Previous
+  next: Next
 
 userNotFound: User not found
 userSuccessfullyCreated: User created
@@ -184,5 +205,5 @@ notStarted: Not started
 winBlue: Blue victory
 winGreen: Green victory
 draw: Draw
-forfaitBlue: Blue forfait
-forfaitGreen: Green forfait
+forfaitBlue: Blue forfeit
+forfaitGreen: Green forfeit

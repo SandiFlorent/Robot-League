@@ -19,10 +19,10 @@
 
         <!-- Sélection du terrain -->
         {% if selected_championship_id %}
-        <label for="field_id" class="block text-lg font-semibold text-white mb-2 mt-4">Choisir un terrain :</label>
+        <label for="field_id" class="block text-lg font-semibold text-white mb-2 mt-4">{{ 'base.chooseField'|trans }} :</label>
         <select name="field_id" id="field_id" 
                 class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto">
-            <option value="">Sélectionner un terrain</option>
+            <option value="">{{ 'index.selectField'|trans }}</option>
             {% for field in fields %}
                 <option value="{{ field.id }}" {% if field.id == selected_field_id %}selected{% endif %}>
                     {{ field.name }}
@@ -33,10 +33,10 @@
 
         <!-- Sélection du créneau -->
         {% if selected_championship_id %}
-        <label for="slot_id" class="block text-lg font-semibold text-white mb-2 mt-4">Choisir un créneau :</label>
+        <label for="slot_id" class="block text-lg font-semibold text-white mb-2 mt-4">{{ 'base.chooseSlot'|trans }} :</label>
         <select name="slot_id" id="slot_id" 
                 class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto">
-            <option value="">Sélectionner un créneau</option>
+            <option value="">{{ 'base.selectSlot'|trans }}</option>
             {% for slot in slots %}
                 <option value="{{ slot.id }}" {% if slot.id == selected_slot_id %}selected{% endif %}>
                     {{ slot.dateDebut|date('Y-m-d H:i:s') }}

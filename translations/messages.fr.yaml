@@ -22,6 +22,7 @@ base:
   addr: Adresse
   manageChamp: Gestion du championnat
   chooseChamp: Choisir un championnat
+  chooseField: Choisir un terrain
   selectChamp: Sélectionner un championnat
   seeTeams: Voir les équipes
   seeScores: Voir les scores
@@ -35,11 +36,16 @@ base:
   noSlot: Pas de créneau enregistré pour le moment.
   addSlots: Ajouter des créneaux
   createNewChamp: Créer un nouveau championnat
+  newChamp: Nouveau championnat
   manageTeams: Gérer les équipes
   validatedTeams: Equipes validées
   removeTeam: Retirer l'équipe
   valRequests: Demandes de validation
   editSlot: Modifier un créneau
+  slots: Créneaux
+  slotIndex: Index créneaux
+  selectSlot: Sélectionner un créneau
+  chooseSlot: Choisir un créneau
 
 show:
   show: Aficher
@@ -53,10 +59,17 @@ show:
   name: Nom
   creatorOfTeam: Vous êtes le crérateur de cette équipe.
   noTeams: Pas d'équipes à afficher.
+  displayTeams: Afficher les équipes
+  teamsWithoutCreators: Equipes sans créateurs
   noTeamJoined: Vous n'avez ni créé ni rejoint une équipe pour l'instant.
   member: Membre
+  members: Membres
   edit: Modifier
-  
+  attributeThisTeam: Attribuer cette équipe
+  usersTeam: Equipes de l'utilisateur
+  removeCreator: Retirer le créateur
+  ranking: Classement
+  registerDate: Date d'inscription
 
 new: 
   add: Ajouter
@@ -72,6 +85,7 @@ new:
   createNewMember: Créer un nouveu membre
   newChampionship: Nouveau championnat
   newChampionshipList: Nouvelle liste de championnats
+  championshipListIndex: Index liste des championnats
   createNewChampionship: Créer un nouveau championnat
   createNewTeamMember: Ajouter
   createNewSlot: Créer un nouveau créneau
@@ -118,8 +132,10 @@ index:
   addFields: Ajouter des terrains
   backToChamp: Retour aux championnats
   selectChampionship: Select a championship
+  selectField: Choisir un terrain
   filterChamp: Filter championships
   filter: Filtrer
+  fieldIndex: Index terrain
 
 edit: 
   edit: Modifier
@@ -150,6 +166,7 @@ teammember:
 
 label:
   update: Mise à jour
+  update2: Mettre à jour
   save: Sauvegarder
   championshipMatches: Matchs du championnat
   scoreBoard: Tableau des scores
@@ -161,6 +178,10 @@ score:
   ranking: Rang
   goalAverage: Moyenne des buts
   registrationDate: Date d'inscription
+  begin: Début
+  end: Fin
+  previous: Précédent
+  next: Suivant
 
 userNotFound: Utilisateur non trouvé
 userSuccessfullyCreated: Utilisateur créé
