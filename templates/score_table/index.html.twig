@@ -25,6 +25,7 @@
     <table class="min-w-full table-auto border-collapse">
     <thead>
         <tr class="bg-gray-500 text-left">
+            <th class="px-4 py-2 border-b">Classement</th>
             <th class="px-4 py-2 border-b">Nom Equipe</th>
             <th class="px-4 py-2 border-b">Score</th>
             <th class="px-4 py-2 border-b">Moyenne de buts</th>
@@ -33,12 +34,23 @@
     </thead>
     <tbody>
         {% for team in teams %}
-            <tr class="hover:bg-gray-500">
-                <td class="px-4 py-2 border-b">{{ team.Name }}</td>
-                <td class="px-4 py-2 border-b">{{ team.score }}</td>
-                <td class="px-4 py-2 border-b">{{ team.goalAverage }}</td>
-                <td class="px-4 py-2 border-b">{{ team.inscriptionDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
+            {% if app.user and team.creator == app.user %}
+                <tr class="bg-gray-700 hover:bg-gray-500">
+                    <td class="px-4 py-2 border-b">{{ loop.index }}</td>
+                    <td class="px-4 py-2 border-b">{{ team.Name }}</td>
+                    <td class="px-4 py-2 border-b">{{ team.score }}</td>
+                    <td class="px-4 py-2 border-b">{{ team.goalAverage }}</td>
+                    <td class="px-4 py-2 border-b">{{ team.inscriptionDate|date('Y-m-d H:i:s') }}</td>
+                </tr>
+            {% else %}
+                <tr class="hover:bg-gray-500">
+                    <td class="px-4 py-2 border-b">{{ loop.index }}</td>
+                    <td class="px-4 py-2 border-b">{{ team.Name }}</td>
+                    <td class="px-4 py-2 border-b">{{ team.score }}</td>
+                    <td class="px-4 py-2 border-b">{{ team.goalAverage }}</td>
+                    <td class="px-4 py-2 border-b">{{ team.inscriptionDate|date('Y-m-d H:i:s') }}</td>
+                </tr>
+            {% endif %}
         {% endfor %}
     </tbody>
 </table>

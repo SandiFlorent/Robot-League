@@ -41,7 +41,7 @@ class Championship
     #[ORM\ManyToOne(inversedBy: 'matches')]
     private ?ChampionshipList $championshipList = null;
 
-    #[ORM\OneToOne(mappedBy: 'matches', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'matches', cascade: ['persist'])]
     private ?Encounter $encounter = null;
 
     #[ORM\ManyToOne(inversedBy: 'championships')]
