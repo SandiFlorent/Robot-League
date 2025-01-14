@@ -11,7 +11,7 @@ use App\Repository\ChampionshipRepository;
 
 class ScoreTableController extends AbstractController
 {
-    #[Route('/{_locale}/score/table', name: 'app_score_table')]
+    #[Route('{_locale}/score/table', name: 'app_score_table')]
     public function index(TeamRepository $teamRepository, ChampionshipListRepository $championshipListRepository): Response
     {
         $emptyArray = [];

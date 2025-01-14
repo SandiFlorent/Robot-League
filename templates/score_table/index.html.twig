@@ -3,20 +3,16 @@
 {% block title %}tableau des scores{% endblock %}
 
 {% block body %}
-<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white py-8 px-4">
-    <div class="max-w-7xl w-full bg-gray-900 shadow-2xl rounded-3xl p-6 md:p-8">
-        <h1 class="text-5xl font-bold text-center text-white mb-8">{{ 'label.scoreBoard'|trans }}</h1>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for team in teams %}
-                <div class="p-6 bg-gray-800 rounded-xl shadow-md border-2 border-blue-500 transition duration-300 transform hover:scale-105 hover:bg-gray-700 hover:shadow-xl">
-                    <p class="text-2xl font-bold text-white">{{ team.getName() }}</p>
-                    <p class="text-xl text-blue-400 mt-2">{{ 'base.score'|trans }} {{ team.getScore() }}</p>
-                </div>
-            {% else %}
-                <div class="p-6 bg-gray-800 rounded-xl shadow-md border-2 border-blue-500 text-center">
-                    <p class="text-xl text-gray-400">{{ 'index.noRecords'|trans }}</p>
-                </div>
+<div class="mb-6">
+    <label for="championshiplist_id" class="text-lg font-semibold text-gray-300">Choisir un championnat</label>
+    <form method="get" action="{{ path('app_score_table_id', {'idlist': selected_championship_list.id ?? 0}) }}" class="space-y-4">
+        <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md w-full sm:w-auto">
+            <option value="">Sélectionner un championnat</option> <!-- Option vide par défaut -->
+            {% for championshipList in championshiplists %}
+                <option value="{{ championshipList.id }}" 
+                        {% if championshipList.id == selected_championship_list.id %}selected{% endif %}>
+                    {{ championshipList.ChampionshipName }}
+                </option>
             {% endfor %}
         </select>
         <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300 mt-4">
@@ -24,6 +20,7 @@
         </button>
     </form>
 </div>
+
 
     <table class="min-w-full table-auto border-collapse">
     <thead>
