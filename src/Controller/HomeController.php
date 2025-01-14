@@ -44,6 +44,7 @@ public function index(
             $championshipLists = $championshipListRepository->findAll();
             break;
     }
+    
 
     $fields = [];
     $slots = [];
@@ -83,3 +84,4 @@ public function index(
 }
 
 }
+

@@ -21,49 +21,86 @@ final class ChampionshipController extends AbstractController
     private $entityManager;
     private $teamRepository;
     private $championshipListRepository;
+    private const ITEMS_PER_PAGE = 10;
 
-    // Injection du repository ChampionshipListRepository
-    public function __construct(EntityManagerInterface $entityManager, TeamRepository $teamRepository, ChampionshipListRepository $championshipListRepository)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TeamRepository $teamRepository,
+        ChampionshipListRepository $championshipListRepository
+    ) {
         $this->entityManager = $entityManager;
         $this->teamRepository = $teamRepository;
         $this->championshipListRepository = $championshipListRepository;
     }
 
     #[Route(name: 'app_championship_index', methods: ['GET'])]
-    public function index(ChampionshipRepository $championshipRepository, Request $request): Response
-    {
-        // On récupère tous les championnats disponibles
+    public function index(
+        ChampionshipRepository $championshipRepository,
+        Request $request
+    ): Response {
+        // Récupérer tous les championnats disponibles
         $championshipLists = $this->championshipListRepository->findAll();
 
-        // On récupère l'ID du championnat sélectionné depuis la requête (si existant)
+        // Récupérer l'ID du championnat sélectionné
         $championshiplistId = $request->query->get('championshiplist_id');
-        
-        // Initialiser la variable qui contiendra le championnat sélectionné
+
         $selectedChampionshipList = null;
         $championships = [];
+        $pagination = null;
 
-        // Si un championnat a été sélectionné, on récupère ce championnat spécifique
         if ($championshiplistId) {
             $selectedChampionshipList = $this->championshipListRepository->find($championshiplistId);
 
-            // Récupérer les matchs du championnat sélectionné
             if ($selectedChampionshipList) {
-                $championships = $selectedChampionshipList->getMatches();
+                $currentPage = max(1, $request->query->getInt('page', 1));
+
+                // Compter le nombre total de matchs
+                $totalItems = $championshipRepository->count(['championshipList' => $selectedChampionshipList]);
+
+                // Calculer le nombre total de pages
+                $totalPages = ceil($totalItems / self::ITEMS_PER_PAGE);
+
+                // Assurer que la page courante ne dépasse pas le nombre total de pages
+                $currentPage = min($currentPage, $totalPages);
+
+                // Calculer l'offset
+                $offset = ($currentPage - 1) * self::ITEMS_PER_PAGE;
+
+                // Récupérer les matchs paginés
+                $championships = $championshipRepository->createQueryBuilder('c')
+                    ->where('c.championshipList = :championshipList')
+                    ->setParameter('championshipList', $selectedChampionshipList)
+                    ->orderBy('c.id', 'ASC')
+                    ->setFirstResult($offset)
+                    ->setMaxResults(self::ITEMS_PER_PAGE)
+                    ->getQuery()
+                    ->getResult();
+
+                // Créer l'objet pagination
+                $pagination = [
+                    'currentPage' => $currentPage,
+                    'totalPages' => $totalPages,
+                    'itemsPerPage' => self::ITEMS_PER_PAGE,
+                    'totalItems' => $totalItems,
+                    'hasPrevious' => $currentPage > 1,
+                    'hasNext' => $currentPage < $totalPages,
+                ];
             }
         }
 
-        // Récupérer les états disponibles (si nécessaire)
         $states = State::cases();
 
-        // Passer toutes les données nécessaires à la vue
         return $this->render('championship/index.html.twig', [
             'championship_lists' => $championshipLists,
             'selected_championship_list' => $selectedChampionshipList,
             'championships' => $championships,
+            'pagination' => $pagination,
             'states' => $states,
         ]);
     }
+
+    // Les autres méthodes restent les mêmes...
+
 
     #[Route('/championship/generate', name: 'app_championship_generate', methods: ['POST'])]
     public function generateChampionshipsPost(Request $request, EncounterRepository $encounterRepository): Response
