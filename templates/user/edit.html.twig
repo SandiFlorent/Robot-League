@@ -10,11 +10,6 @@
     {{ form_row(form.championship) }}
     <button type="submit" name="reload" value="1">Afficher les équipes</button>
 
-    {# Affichage des équipes uniquement après sélection du championnat #}
-    {% if form.myTeams is defined %}
-        {{ form_row(form.myTeams) }}
-    {% endif %}
-
     {# Bouton pour attribuer une équipe sans créateur #}
     {% if teamsWithoutCreator is not empty %}
         <h3>Équipes sans créateur</h3>
@@ -35,15 +30,12 @@
         <button type="submit" name="removeCreator" value="1">Retirer le créateur</button>
     {% endif %}
 
-    {% if form.removeCreator.vars.disabled == false %}
-        {{ form_row(form.removeCreator) }}
-    {% endif %}
     {{ form_row(form.email) }}
     {{ form_row(form.password) }}
     {{ form_row(form.roles) }}
 
     {# Bouton de validation complète #}
-    <button type="submit">Mettre à jour</button>
+    <button type="submit" name="submit">Mettre à jour</button>
 
 {{ form_end(form) }}
 
