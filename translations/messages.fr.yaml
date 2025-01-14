@@ -20,7 +20,13 @@ base:
   match: Match
   blueScore: Score bleu
   greenScore: Score vert
-  noSpot: Pas de créneau enregistré pour le moment.
+  noSlot: Pas de créneau enregistré pour le moment.
+  addSlots: Ajouter des créneaux
+  createNewChamp: Créer un nouveau championnat
+  manageTeams: Gérer les équipes
+  validatedTeams: Equipes validées
+  removeTeam: Retirer l'équipe
+  valRequests: Demandes de validation
 
 show:
   show: Aficher
@@ -54,6 +60,8 @@ new:
   newChampionship: Nouveau championnat
   createNewChampionship: Créer un nouveau championnat
   createNewTeamMember: Ajouter
+  add: Ajouter
+  
 
 index: 
   actions: Actions
@@ -78,6 +86,7 @@ index:
   teamIndex: Index équipe
   fieldList: Liste des terrains
   field: Terrain
+  fieldName: Nom du terrain
   fieldInfo: Détails du terrain
   dateOfBeginning: Début du match
   dateOfEnd: Fin du match
@@ -86,9 +95,12 @@ index:
   createNewField: Create a new field
   newField: New field
   noFields: Pas de terrains
+  noField: Pas de terrain enregistré pour le moment
   editField: Editer le terrain
   threshold: Seuil
   addField: Ajouter un terrain
+  addFields: Ajouter des terrains
+  backToChamp: Retour aux championnats
 
 
 edit: 

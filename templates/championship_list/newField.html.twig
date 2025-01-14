@@ -11,8 +11,8 @@
     <table class="table-auto w-full border-collapse border border-gray-700">
         <thead>
             <tr class="bg-gray-800">
-                <th class="text-left text-lg font-semibold p-4 text-white">Nom du Terrain</th>
-                <th class="text-left text-lg font-semibold p-4 text-white">Actions</th>
+                <th class="text-left text-lg font-semibold p-4 text-white">{{ 'index.fieldName'|trans }}</th>
+                <th class="text-left text-lg font-semibold p-4 text-white">{{ 'index.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -22,13 +22,13 @@
                 <td class="p-4">
                     <a href="{{ path('app_championship_list_delete_field', {'id': championship_list.id, 'idField': fiel.id }) }}" 
                        class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300">
-                        Supprimer
+                        {{ 'delete.delete'|trans }}
                     </a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="2" class="p-4 text-center text-gray-400">Pas de terrain enregistré pour le moment</td>
+                <td colspan="2" class="p-4 text-center text-gray-400">{{ 'noField'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -45,7 +45,7 @@
     <div class="text-center">
         <a href="{{ path('app_championship_list_new_slot', {'id': championship_list.id }) }}" 
            class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
-            Ajouter des créneaux
+            {{ 'base.addSlots'|trans }}
         </a>
     </div>
 </div>
