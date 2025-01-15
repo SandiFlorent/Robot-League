@@ -50,6 +50,9 @@ class Championship
     #[ORM\ManyToOne(inversedBy: 'championships')]
     private ?Field $field = null;
 
+    #[ORM\Column]
+    private ?bool $IsElimination = null;
+
     #[ORM\Column(nullable: true)]
     private ?bool $isLocked = null;
 
@@ -243,6 +246,18 @@ class Championship
     public function setField(?Field $field): static
     {
         $this->field = $field;
+
+        return $this;
+    }
+
+    public function isElimination(): ?bool
+    {
+        return $this->IsElimination;
+    }
+
+    public function setElimination(bool $IsElimination): static
+    {
+        $this->IsElimination = $IsElimination;
 
         return $this;
     }
