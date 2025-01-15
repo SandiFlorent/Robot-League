@@ -46,6 +46,7 @@ base:
   slotIndex: Slot index
   selectSlot: Select a slot
   chooseSlot: Choose a slot
+  stopImpersonate: Stop impersonate
 
 show:
   show: Show

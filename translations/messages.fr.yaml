@@ -46,6 +46,7 @@ base:
   slotIndex: Index créneaux
   selectSlot: Sélectionner un créneau
   chooseSlot: Choisir un créneau
+  stopImpersonate: Arrêt incarnation
 
 show:
   show: Aficher

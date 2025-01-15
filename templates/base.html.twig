@@ -141,6 +141,13 @@
 
                 {% if app.user %}
                     <a href="{{ path('app_logout') }}" class="nav-link font-medium">{{ 'base.logout'|trans }}</a>
+                    
+                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                        <a href="{{ path('app_stop_impersonation') }}" class="btn btn-warning">
+                            {{ 'base.stopImpersonate'|trans}}
+                        </a>
+                    {% endif %}
+                    
                 {% else %}
                     <a href="{{ path('app_login') }}" class="nav-link font-medium">{{ 'base.login'|trans }}</a>
                     <a href="{{ path('app_register') }}" class="nav-link font-medium">{{ 'base.register'|trans }}</a>
