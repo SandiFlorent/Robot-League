@@ -31,7 +31,24 @@
         {% endfor %}
     {% endfor %}
 
-    {# Affichage du bouton si tous les matchs sont terminés #}
+
+    {# Vérification si nous sommes à la finale en vérifiant le dernier round #}
+    {% set isFinale = matches_by_round|last|length == 1 %}
+
+    {% if isFinale %}
+        <h3>La team gagnante :</h3>
+        {% for match in matches_by_round|last %}
+            {% if match.state.value == 'winBlue' %}
+                <p>{{ match.blueTeam.name }} a gagné !</p>
+            {% elseif match.state.value == 'winGreen' %}
+                <p>{{ match.greenTeam.name }} a gagné !</p>
+            {% else %}
+                <p>Le match n'est pas encore terminé.</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {# Affichage du bouton "Actualiser" si tous les matchs sont terminés #}
     {% if allMatchesFinished %}
         <a href="{{ path('app_championship_next_round', {'id': championship_list.id}) }}" class="btn btn-primary">
             Actualiser
