@@ -7,6 +7,7 @@
 {% block body %}
     <h1>Phase d'élimination</h1>
 
+    {# Affichage des matchs pour chaque round #}
     {% for round, matches in matches_by_round %}
         <h2>Round {{ round }}</h2>
         
@@ -18,12 +19,22 @@
                 </li>
             {% endfor %}
         </ul>
-
-        {# Vérification si tous les matchs du round sont terminés #}
-        {% if matches|length > 0 and matches|map(m => m.state.value) is not empty and matches|map(m => m.state.value)|join('') == 'winBluewinGreen' %}
-            <a href="{{ path('app_championship_next_round', {'id': championship_list.id}) }}" class="btn btn-primary">
-                Passer au round suivant
-            </a>
-        {% endif %}
     {% endfor %}
+
+    {# Vérification si tous les matchs du tournoi sont terminés #}
+    {% set allMatchesFinished = true %}
+    {% for round, matches in matches_by_round %}
+        {% for match in matches %}
+            {% if match.state.value != 'winBlue' and match.state.value != 'winGreen' %}
+                {% set allMatchesFinished = false %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    {# Affichage du bouton si tous les matchs sont terminés #}
+    {% if allMatchesFinished %}
+        <a href="{{ path('app_championship_next_round', {'id': championship_list.id}) }}" class="btn btn-primary">
+            Actualiser
+        </a>
+    {% endif %}
 {% endblock %}
