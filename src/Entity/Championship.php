@@ -50,6 +50,9 @@ class Championship
     #[ORM\ManyToOne(inversedBy: 'championships')]
     private ?Field $field = null;
 
+    #[ORM\Column]
+    private ?bool $IsElimination = null;
+
     public function __construct()
     {
         if ($this->state === null) {
@@ -240,6 +243,18 @@ class Championship
     public function setField(?Field $field): static
     {
         $this->field = $field;
+
+        return $this;
+    }
+
+    public function isElimination(): ?bool
+    {
+        return $this->IsElimination;
+    }
+
+    public function setElimination(bool $IsElimination): static
+    {
+        $this->IsElimination = $IsElimination;
 
         return $this;
     }
