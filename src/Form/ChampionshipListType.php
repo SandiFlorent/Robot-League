@@ -6,6 +6,7 @@ use App\Entity\ChampionshipList;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ChampionshipListType extends AbstractType
 {
@@ -54,7 +55,12 @@ class ChampionshipListType extends AbstractType
                     'class' => 'block text-lg font-semibold text-white mb-2'
                 ]
             ])
-            ->add('threshold', null, [
+            ->add('threshold', ChoiceType::class, [
+                'choices' => [
+                    '2' => 2,
+                    '4' => 4,
+                    '8' => 8,
+                ],
                 'attr' => [
                     'class' => 'w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md'
                 ],
@@ -62,6 +68,7 @@ class ChampionshipListType extends AbstractType
                     'class' => 'block text-lg font-semibold text-white mb-2'
                 ]
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
