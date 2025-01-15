@@ -64,17 +64,18 @@ final class ChampionshipController extends AbstractController
                 $currentPage = min($currentPage, $totalPages);
 
                 // Calculer l'offset
-                $offset = ($currentPage - 1) * self::ITEMS_PER_PAGE;
-
+                $offset = max(0, ($currentPage - 1) * self::ITEMS_PER_PAGE);
+                
                 // Récupérer les matchs paginés
                 $championships = $championshipRepository->createQueryBuilder('c')
-                    ->where('c.championshipList = :championshipList')
+                ->where('c.championshipList = :championshipList')
                     ->setParameter('championshipList', $selectedChampionshipList)
                     ->orderBy('c.id', 'ASC')
                     ->setFirstResult($offset)
                     ->setMaxResults(self::ITEMS_PER_PAGE)
                     ->getQuery()
                     ->getResult();
+                    
 
                 // Créer l'objet pagination
                 $pagination = [
@@ -162,7 +163,6 @@ final class ChampionshipController extends AbstractController
                         'greenTeam' => $team2,
                         'championshipList' => $championshipList
                     ]);
-
 
                 $encounters = $encounterRepository->createQueryBuilder('e')
                     ->leftJoin('e.slot', 's')  // Jointure avec l'entité Slot
