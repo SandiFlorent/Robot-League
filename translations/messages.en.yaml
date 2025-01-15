@@ -147,6 +147,7 @@ edit:
   generateChampionship: Generate championships
   deleteChampionship: Delete championship
   actAs: Act as
+  eliminationMatches: "Affrontements éliminatoires" 
   
 login: 
   loginPage: Log in
