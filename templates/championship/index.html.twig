@@ -63,6 +63,9 @@
                         <a href="{{ path('app_championship_elimination', {'id': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-yellow-500" role="menuitem">
                             {{ 'edit.eliminationMatches'|trans }}
                         </a>
+                        <a href="{{ path('app_championship_export', {'championshiplist_id': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-blue-500" role="menuitem">
+                            {{ 'edit.export_JSON'|trans }}
+                        </a>
                     </div>
                 </div>
             </div>

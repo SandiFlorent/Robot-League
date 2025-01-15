@@ -53,6 +53,9 @@ class Championship
     #[ORM\Column]
     private ?bool $IsElimination = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isLocked = null;
+
     public function __construct()
     {
         if ($this->state === null) {
@@ -256,6 +259,18 @@ class Championship
     public function setElimination(bool $IsElimination): static
     {
         $this->IsElimination = $IsElimination;
+
+        return $this;
+    }
+
+    public function isLocked(): ?bool
+    {
+        return $this->isLocked;
+    }
+
+    public function setLocked(?bool $isLocked): static
+    {
+        $this->isLocked = $isLocked;
 
         return $this;
     }

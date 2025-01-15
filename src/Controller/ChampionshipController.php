@@ -64,18 +64,17 @@ final class ChampionshipController extends AbstractController
                 $currentPage = min($currentPage, $totalPages);
 
                 // Calculer l'offset
-                $offset = max(0, ($currentPage - 1) * self::ITEMS_PER_PAGE);
-                
+                $offset = ($currentPage - 1) * self::ITEMS_PER_PAGE;
+
                 // Récupérer les matchs paginés
                 $championships = $championshipRepository->createQueryBuilder('c')
-                ->where('c.championshipList = :championshipList')
+                    ->where('c.championshipList = :championshipList')
                     ->setParameter('championshipList', $selectedChampionshipList)
                     ->orderBy('c.id', 'ASC')
                     ->setFirstResult($offset)
                     ->setMaxResults(self::ITEMS_PER_PAGE)
                     ->getQuery()
                     ->getResult();
-                    
 
                 // Créer l'objet pagination
                 $pagination = [
@@ -164,6 +163,7 @@ final class ChampionshipController extends AbstractController
                         'championshipList' => $championshipList
                     ]);
 
+
                 $encounters = $encounterRepository->createQueryBuilder('e')
                     ->leftJoin('e.slot', 's')  // Jointure avec l'entité Slot
                     ->where('e.matches IS NULL')  // Critère matches null
@@ -194,6 +194,7 @@ final class ChampionshipController extends AbstractController
                     $championship->setChampionshipList($championshipList); // Associe le championnat à la liste
                     $championship->setState(State::NOT_STARTED);  // L'état initial peut être "Non Commencé"
                     $championship->setEncounter($encounterRes);
+                    $championship->setLocked(false);
 
                     if ($encounterRes){
                         $encounterRes->getSlot()->addTeam($team1);
@@ -206,7 +207,6 @@ final class ChampionshipController extends AbstractController
     
                     // Sauvegarde la rencontre
                     $this->entityManager->persist($championship);
-                    $this->entityManager->flush();
                 }
             }
         }
@@ -386,4 +386,36 @@ final class ChampionshipController extends AbstractController
         $this->entityManager->persist($match);
     }
 
+
+    #[Route('/championship/export', name: 'app_championship_export', methods: ['POST'])]
+    public function export(Request $request, ChampionshipListRepository $championshipListRepository): Response
+    {
+        $championshiplistId = $request->query->get('championshiplist_id');
+
+        // Récupérer les championnats filtrés en fonction des paramètres
+        $championships = $championshipListRepository->findOne(["id" => $championshiplistId])->getMatches();
+
+        // Convertir les championnats en un tableau de données à exporter
+        $championshipData = [];
+        foreach ($championships as $championship) {
+            $championshipData[] = [
+                'id' => $championship->getId(),
+                'blueGoal' => $championship->getBlueGoal(),
+                'greenGoal' => $championship->getGreenGoal(),
+                'state' => $championship->getState()->getValue(),
+            ];
+        }
+
+        // Créer la réponse avec les données JSON
+        $response = new Response(
+            json_encode($championshipData),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+
+        // Spécifier l'entête pour forcer le téléchargement
+        $response->headers->set('Content-Disposition', 'attachment; filename="championships.json"');
+
+        return $response;
+    }
 }
