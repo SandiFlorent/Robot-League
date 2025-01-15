@@ -16,6 +16,40 @@ class ChampionshipListRepository extends ServiceEntityRepository
         parent::__construct($registry, ChampionshipList::class);
     }
 
+    public function findPastChampionshipLists(): array
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.dateEnd < :now')
+            ->setParameter('now', $now)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findFutureChampionshipLists(): array
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.dateStart > :now')
+            ->setParameter('now', $now)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findActiveAndPastChampionshipLists(): array
+    {
+        $now = new \DateTime();
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.dateStart <= :now')
+            ->andWhere('c.dateEnd >= :now')
+            ->setParameter('now', $now)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return ChampionshipList[] Returns an array of ChampionshipList objects
     //     */

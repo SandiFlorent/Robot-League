@@ -169,6 +169,7 @@ final class ChampionshipController extends AbstractController
     
                     // Sauvegarde la rencontre
                     $this->entityManager->persist($championship);
+                    $this->entityManager->flush();
                 }
             }
         }
