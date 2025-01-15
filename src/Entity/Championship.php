@@ -9,9 +9,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Enum\State as ChampionshipState;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreRemoveEventArgs;
 use App\Repository\TeamRepository;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use App\triggers\triggers;
+use Exception;
 
 #[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: ChampionshipRepository::class)]
@@ -31,11 +33,11 @@ class Championship
 
     #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
     #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
-    private ?int $blueGoal = null;
+    private ?int $blueGoal = 0;
 
     #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
     #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
-    private ?int $greenGoal = null;
+    private ?int $greenGoal = 0;
 
     #[ORM\Column(nullable: true, enumType: State::class)]
     private ?State $state = null;
@@ -50,9 +52,16 @@ class Championship
 
     public function __construct()
     {
-        if ($this->state === null) {
-            $this->state = State::NOT_STARTED;
-        }
+        $this->initializeValues();
+    }
+
+    private function initializeValues(): void
+    {
+        $this->greenGoal = 0;
+        $this->blueGoal = 0;
+        $this->greenGoal = 0;
+        $this->blueGoal = 0;
+        $this->state = State::NOT_STARTED;
     }
 
     public function getId(): ?int
@@ -158,11 +167,9 @@ class Championship
     {
         $this->blueTeam->updateTotalGoals(-$this->blueGoal);
         $this->greenTeam->updateTotalGoals(-$this->greenGoal);
-    
+
         $this->blueGoal = 0;
         $this->greenGoal = 0;
-    
-
     }
 
     public function updateNbEnCounterByOne($difference): void
@@ -171,52 +178,119 @@ class Championship
         $this->greenTeam->updateNbEncounter($difference);
     }
 
-    #[ORM\PreUpdate]
-    public function beforeUpdateGoals(PreUpdateEventArgs $event): void
+    // Reinitialize the teamms before deleting the championship
+    #[ORM\PreRemove]
+    public function beforeRemove(PreRemoveEventArgs $event): void
     {
-        // Obtenir l'EntityManager depuis l'événement
+        $this->blueTeam->reinitialize();
+        $this->greenTeam->reinitialize();
+    }
+
+
+    #[ORM\PreUpdate]
+    public function beforeUpdate(PreUpdateEventArgs $event): void
+    {
+        
         $entityManager = $event->getObjectManager();
-        static $isPersisted = false; // Utilisation d'un flag statique pour éviter des persistance en boucle infinie
-    
+        static $isPersisted = false;
+        $isUpdated = false;
+
         // Ne rien faire si l'entité a déjà été persistée
         if ($isPersisted) {
             return;
         }
-    
-        $isUpdated = false;
-    
-        // Mettre à jour les buts de l'équipe bleue si nécessaire
+
+        //dump('Test 1 !!!', $entityManager, $this->blueTeam, $this->greenTeam);
+        if ($event->hasChangedField('blueGoal') || $event->hasChangedField('greenGoal')) {
+            $this->updateGoals($event);
+            //if goals are negative, we set them to 0
+            if ($this->blueGoal < 0) {
+                dd("wtf");
+                $this->blueGoal = 0;
+            }
+            if ($this->greenGoal < 0) {
+                dd("wtf");
+                $this->greenGoal = 0;
+            }
+            $isUpdated = true;
+        }
+
+        if ($event->hasChangedField('state')) {
+            $this->updateState($event);
+            // If the score or the nbEncounter or the nbWin is negative, we set them to 0
+            $this->checkIfNegativeValues();
+            $isUpdated = true;
+        }
+
+        // Persist and flush changes if there were updates
+        if ($isUpdated) {
+            $this->blueTeam->updateNbEncounter(99);
+            $entityManager->persist($this->blueTeam);
+            $entityManager->persist($this->greenTeam);
+            $isPersisted = true;
+            
+            $entityManager->flush();
+            
+        }
+    }
+
+    private function updateGoals(PreUpdateEventArgs $event): void
+    {
+        // Update blue goals
         if ($event->hasChangedField('blueGoal')) {
             $oldValue = $event->getOldValue('blueGoal');
             $newValue = $event->getNewValue('blueGoal');
             $difference = $newValue - $oldValue;
-    
+
             if ($this->blueTeam) {
                 $this->blueTeam->updateTotalGoals($difference);
-                $isUpdated = true;
             }
         }
-    
-        // Mettre à jour les buts de l'équipe verte si nécessaire
+
+        // Update green goals
         if ($event->hasChangedField('greenGoal')) {
             $oldValue = $event->getOldValue('greenGoal');
             $newValue = $event->getNewValue('greenGoal');
             $difference = $newValue - $oldValue;
-    
+
             if ($this->greenTeam) {
                 $this->greenTeam->updateTotalGoals($difference);
-                $isUpdated = true;
             }
         }
-    
-        // Si des modifications ont eu lieu, persistez les changements
-        if ($isUpdated) {
-            // Marquer comme persisté
-            $isPersisted = true;
-    
-            $entityManager->persist($this->blueTeam);
-            $entityManager->persist($this->greenTeam);
-            $entityManager->flush();  // Effectuer un flush pour sauvegarder les modifications
+    }
+
+    private function updateState(PreUpdateEventArgs $event): void
+    {
+        $oldState = $event->getOldValue('state');
+        $newState = $event->getNewValue('state');
+
+        try {
+            $trigger = new triggers($this, $oldState, $newState);
+            $trigger->championshipStateTriggers();
+        } catch (Exception $e) {
+            // Handle exception as needed
+        }
+    }
+
+    private function checkIfNegativeValues(): void
+    {
+        if ($this->blueTeam->getNbEncounter() < 0) {
+            $this->blueTeam->setNbEncounter(0);
+        }
+        if ($this->blueTeam->getNbWin() < 0) {
+            $this->blueTeam->setNbWin(0);
+        }
+        if ($this->blueTeam->getNbGoals() < 0) {
+            $this->blueTeam->setNbGoals(0);
+        }
+        if ($this->greenTeam->getNbEncounter() < 0) {
+            $this->greenTeam->setNbEncounter(0);
+        }
+        if ($this->greenTeam->getNbWin() < 0) {
+            $this->greenTeam->setNbWin(0);
+        }
+        if ($this->greenTeam->getNbGoals() < 0) {
+            $this->greenTeam->setNbGoals(0);
         }
     }
 }

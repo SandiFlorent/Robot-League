@@ -16,8 +16,12 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PreUpdate;
 
+// I want to precise that in a team, the email is unique
+// So I use the UniqueEntity annotation to specify that
+
 #[HasLifecycleCallbacks]
 #[UniqueEntity(fields: ['Name'], message: "Une équipe porte déjà ce nom")]
+#[ORM\UniqueConstraint(name: 'unique_team_member_email', columns: ['id', 'email'])]
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
 {
@@ -89,6 +93,7 @@ class Team
         $this->inscriptionDate = new DateTime();
         $this->isAccepted = false;
         $this->slots = new ArrayCollection();
+        $this->reinitialize();
     }
 
     public function getId(): ?int
@@ -297,6 +302,16 @@ class Team
         return $this;
     }
 
+    // A function that reinitialize the team's attribute to default values
+    public function reinitialize(): void
+    {
+        $this->nbEncounter = 0;
+        $this->nbGoals = 0;
+        $this->nbWin = 0;
+        $this->score = 0;
+        $this->totalPoints = 0;
+    }
+
     // Equivalent to SQL triggers 
     public function updateTotalGoals(int $difference): void
     {
@@ -320,6 +335,35 @@ class Team
     public function updateNbWins(int $difference): void
     {
         $this->nbWin += $difference;
+    }
+
+    #[ORM\PreUpdate]
+    public function beforeUpdateTeamScore(PreUpdateEventArgs $event): void
+    {
+        $entityManager = $event->getObjectManager();
+        static $isPersisted = false;// Utilisation d'un flag statique pour éviter des persistance en boucle infinie
+        
+        $isUpdated = false;
+        
+
+        // Ne rien faire si l'entité a déjà été persistée
+        if ($isPersisted) {
+            return;
+        }
+        if ($event->hasChangedField('totalPoints')){
+            $newPoints = $event->getNewValue('totalPoints');
+            if ($this->nbEncounter > 0)
+            {
+                $this->score = $newPoints / $this->nbEncounter;
+                $isUpdated = true;
+            }
+            
+        }
+        if ($isUpdated) {
+            $isPersisted = true;
+            $entityManager->persist($this);
+            $entityManager->flush();  // Effectuer un flush pour sauvegarder les modifications
+        }
     }
 
 
@@ -353,41 +397,4 @@ class Team
         }
     }
         */
-
-    #[PreUpdate]
-    public function updateScoreBasedOnChampionship(PreUpdateEventArgs $event): void
-    {
-        $entityManager = $event->getObjectManager();
-        $championshipRepository = $entityManager->getRepository(Championship::class);
-
-        // Find all championships where this team is referenced
-        $championships = $championshipRepository->createQueryBuilder('c')
-            ->where('c.blueTeam = :team OR c.greenTeam = :team')
-            ->setParameter('team', $this->getId())
-            ->getQuery()
-            ->getResult();
-        
-
-        foreach ($championships as $championship) {
-            // Check if blueGoal has changed and this team is the blue team
-            if ($championship->getBlueTeam() === $this && $event->hasChangedField('blueGoal')) {
-                $oldValue = $event->getOldValue('blueGoal');
-                $newValue = $event->getNewValue('blueGoal');
-                
-                $difference = $newValue - $oldValue;
-                $this->updateTotalGoals($difference);
-            }
-
-            // Check if greenGoal has changed and this team is the green team
-            if ($championship->getGreenTeam() === $this && $event->hasChangedField('greenGoal')) {
-                $oldValue = $event->getOldValue('greenGoal');
-                $newValue = $event->getNewValue('greenGoal');
-                $difference = $newValue - $oldValue;
-                $this->updateTotalGoals($difference);
-            }
-
-            // Persist updated team
-            $entityManager->persist($this);
-        }
-    }
 }
