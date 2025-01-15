@@ -274,4 +274,19 @@ class Championship
 
         return $this;
     }
+    // Nouvelle méthode getWinner
+    public function getWinner()
+    {
+        // Si l'état du match est terminé et qu'il y a un gagnant, retourner l'équipe gagnante
+        if ($this->state === State::WIN_BLUE) {
+            return $this->blueTeam;
+        }
+
+        if ($this->state === State::WIN_GREEN) {
+            return $this->greenTeam;
+        }
+
+        // Si le match n'est pas terminé ou si l'état n'est pas un gagnant, retourner null
+        return null;
+    }
 }

@@ -9,13 +9,21 @@
 
     {% for round, matches in matches_by_round %}
         <h2>Round {{ round }}</h2>
+        
         <ul>
             {% for match in matches %}
                 <li>
-                    {{ match.blueTeam.name }} vs {{ match.greenTeam.name }} -
+                    {{ match.blueTeam.name }} vs {{ match.greenTeam.name }} - 
                     {{ match.state.value }}
                 </li>
             {% endfor %}
         </ul>
+
+        {# Vérification si tous les matchs du round sont terminés #}
+        {% if matches|length > 0 and matches|map(m => m.state.value) is not empty and matches|map(m => m.state.value)|join('') == 'winBluewinGreen' %}
+            <a href="{{ path('app_championship_next_round', {'id': championship_list.id}) }}" class="btn btn-primary">
+                Passer au round suivant
+            </a>
+        {% endif %}
     {% endfor %}
 {% endblock %}
