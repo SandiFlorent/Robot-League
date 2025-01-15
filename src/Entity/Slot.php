@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use App\Repository\ChampionshipListRepository;
+use App\Validator\SlotDatesConstraint;
 
 #[ORM\Entity(repositoryClass: SlotRepository::class)]
 class Slot
@@ -19,12 +20,14 @@ class Slot
     #[ORM\Column]
     private ?int $id = null;
 
+    #[SlotDatesConstraint]
     #[Assert\LessThan(propertyPath: 'dateEnd', message: 'The beginning date must be before the ending date.')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateDebut = null;
 
+    #[SlotDatesConstraint]
     #[Assert\GreaterThan(propertyPath: 'dateDebut', message: 'The ending date must be after the beginning date.')]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['check' => '(dateEnd > dateDebut)'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateEnd = null;
 
     /**
@@ -47,62 +50,10 @@ class Slot
     #[ORM\ManyToMany(targetEntity: Team::class, inversedBy: 'slots')]
     private Collection $teams;
 
-    /**
-     * 
-     */
-    #[Assert\Callback]
-    public function validateDates(ExecutionContextInterface $context, SlotRepository $slotRepository): void
-    {
-        //Check if start is before end
-        if ($this->dateEnd <= $this->dateDebut) {
-            $context->buildViolation('End date must be after start date')
-                ->atPath('dateEnd')
-                ->addViolation();
-        }
-
-        // Check if start and end are between championchipList's beginDate and endDate 
-        $championship = $this->championshipListRepository->findOneBy([
-            'id' => $this->championshipList->getId()
-        ]);
-
-        if ($championship) {
-            $championshipStart = $championship->getDateStart();
-            $championshipEnd = $championship->getDateEnd();
-
-            if ($this->dateDebut < $championshipStart || $this->dateEnd > $championshipEnd) {
-                $context->buildViolation('Slot dates must be within the championship dates.')
-                    ->atPath('dateDebut')
-                    ->addViolation();
-            }
-        }
-
-        // Check if there's no overlap between all slots.
-        // Fetch all slots with the same championshipList
-        $existingSlots = $slotRepository->findBy(['championshipList' => $this->championshipList]);
-
-        foreach ($existingSlots as $existingSlot) {
-            // Skip the current slot if updating an existing one
-            if ($this->id && $this->id === $existingSlot->getId()) {
-                continue;
-            }
-
-            // Check for overlap
-            if (($this->dateDebut < $existingSlot->getDateEnd() && $this->dateEnd > $existingSlot->getDateDebut()) ||
-                ($this->dateEnd > $existingSlot->getDateEnd() && $this->dateDebut < $existingSlot->getDateEnd)
-            ) {
-                $context->buildViolation('The slot overlaps with an existing slot.')
-                    ->atPath('dateDebut')
-                    ->addViolation();
-                break;
-            }
-        }
-    }
-
-    public function __construct(ChampionshipListRepository $championshipListRepository)
+    public function __construct()
     {
         $this->encounters = new ArrayCollection();
         $this->teams = new ArrayCollection();
-        $this->championshipListRepository = $championshipListRepository;
     }
 
     public function getId(): ?int

@@ -98,7 +98,7 @@ final class ChampionshipListController extends AbstractController
     #[Route('{id}/newSlot', name: 'app_championship_list_new_slot', methods: ['GET', 'POST'])]
     public function newSlot(Request $request, EntityManagerInterface $entityManager , ChampionshipList $championshipList, FieldRepository $FieldRepository, ChampionshipListRepository $championshipListRepository): Response
     {
-        $slot = new Slot($championshipListRepository);
+        $slot = new Slot();
         $form = $this->createForm(SlotType::class, $slot);
         $form->handleRequest($request);
 
@@ -119,7 +119,7 @@ final class ChampionshipListController extends AbstractController
                     $currentSlotEnd->modify("+$length minutes");
 
                     if ($currentSlotEnd <= $dateEnd) {
-                        $slot = new Slot($championshipListRepository);
+                        $slot = new Slot();
                         $slot->setDateDebut($currentSlotStart);
                         $slot->setDateEnd($currentSlotEnd);
                         $slot->setLength($length);

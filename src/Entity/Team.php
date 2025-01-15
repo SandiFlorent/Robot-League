@@ -21,7 +21,6 @@ use Doctrine\ORM\Mapping\PreUpdate;
 
 #[HasLifecycleCallbacks]
 #[UniqueEntity(fields: ['Name'], message: "Une équipe porte déjà ce nom")]
-#[ORM\UniqueConstraint(name: 'unique_team_member_email', columns: ['id', 'email'])]
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
 {
@@ -46,13 +45,10 @@ class Team
     #[ORM\OneToMany(targetEntity: Championship::class, mappedBy: 'blueTeam')]
     private Collection $championships;
 
-
-    #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
-    #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $totalPoints = 0;
 
-    #[Assert\PositiveOrZero()]
-    #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $score = 0;
 
     #[Assert\PositiveOrZero()]
@@ -337,32 +333,12 @@ class Team
         $this->nbWin += $difference;
     }
 
-    #[ORM\PreUpdate]
-    public function beforeUpdateTeamScore(PreUpdateEventArgs $event): void
+    public function beforeUpdateTeamScore(): void
     {
-        $entityManager = $event->getObjectManager();
-        static $isPersisted = false;// Utilisation d'un flag statique pour éviter des persistance en boucle infinie
-        
-        $isUpdated = false;
-        
-
-        // Ne rien faire si l'entité a déjà été persistée
-        if ($isPersisted) {
-            return;
-        }
-        if ($event->hasChangedField('totalPoints')){
-            $newPoints = $event->getNewValue('totalPoints');
-            if ($this->nbEncounter > 0)
-            {
-                $this->score = $newPoints / $this->nbEncounter;
-                $isUpdated = true;
-            }
-            
-        }
-        if ($isUpdated) {
-            $isPersisted = true;
-            $entityManager->persist($this);
-            $entityManager->flush();  // Effectuer un flush pour sauvegarder les modifications
+        if ($this->nbEncounter <= 0) {
+            $this->score = 0;
+        } else {
+            $this->score = ($this->totalPoints * 1.0) / $this->nbEncounter * 1.0;
         }
     }
 

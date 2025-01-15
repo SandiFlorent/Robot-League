@@ -12,7 +12,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use App\Repository\TeamRepository;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
-use App\triggers\triggers;
+use App\triggers\ChampionshipStatesTriggers;
 use Exception;
 
 #[HasLifecycleCallbacks]
@@ -186,11 +186,9 @@ class Championship
         $this->greenTeam->reinitialize();
     }
 
-
     #[ORM\PreUpdate]
     public function beforeUpdate(PreUpdateEventArgs $event): void
     {
-        
         $entityManager = $event->getObjectManager();
         static $isPersisted = false;
         $isUpdated = false;
@@ -202,6 +200,7 @@ class Championship
 
         //dump('Test 1 !!!', $entityManager, $this->blueTeam, $this->greenTeam);
         if ($event->hasChangedField('blueGoal') || $event->hasChangedField('greenGoal')) {
+
             $this->updateGoals($event);
             //if goals are negative, we set them to 0
             if ($this->blueGoal < 0) {
@@ -216,21 +215,21 @@ class Championship
         }
 
         if ($event->hasChangedField('state')) {
+
             $this->updateState($event);
             // If the score or the nbEncounter or the nbWin is negative, we set them to 0
-            $this->checkIfNegativeValues();
             $isUpdated = true;
         }
 
         // Persist and flush changes if there were updates
         if ($isUpdated) {
-            $this->blueTeam->updateNbEncounter(99);
+            $this->blueTeam->beforeUpdateTeamScore();
+            $this->greenTeam->beforeUpdateTeamScore();
             $entityManager->persist($this->blueTeam);
             $entityManager->persist($this->greenTeam);
             $isPersisted = true;
-            
+
             $entityManager->flush();
-            
         }
     }
 
@@ -240,10 +239,11 @@ class Championship
         if ($event->hasChangedField('blueGoal')) {
             $oldValue = $event->getOldValue('blueGoal');
             $newValue = $event->getNewValue('blueGoal');
-            $difference = $newValue - $oldValue;
+            $newGoal = $this->blueTeam->getNbGoals() + ($newValue - $oldValue);
 
             if ($this->blueTeam) {
-                $this->blueTeam->updateTotalGoals($difference);
+                $this->blueTeam->setNbGoals($newGoal);
+                $this->blueGoal = $newGoal;
             }
         }
 
@@ -251,10 +251,11 @@ class Championship
         if ($event->hasChangedField('greenGoal')) {
             $oldValue = $event->getOldValue('greenGoal');
             $newValue = $event->getNewValue('greenGoal');
-            $difference = $newValue - $oldValue;
+            $newGoal = $this->greenTeam->getNbGoals() + ($newValue - $oldValue);
 
             if ($this->greenTeam) {
-                $this->greenTeam->updateTotalGoals($difference);
+                $this->greenTeam->setNbGoals($newGoal);
+                $this->greenGoal = $newGoal;
             }
         }
     }
@@ -265,10 +266,10 @@ class Championship
         $newState = $event->getNewValue('state');
 
         try {
-            $trigger = new triggers($this, $oldState, $newState);
+            $trigger = new ChampionshipStatesTriggers($this, $oldState, $newState);
             $trigger->championshipStateTriggers();
         } catch (Exception $e) {
-            // Handle exception as needed
+            dd('Whyyyy !!', $e->getMessage());
         }
     }
 

@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-#[UniqueEntity(fields: ['Name'], message: "Une équipe porte déjà ce nom")]
+#[UniqueEntity(fields: ['ChampionshipName'], message: "Un tournois porte déjà ce nom")]
 #[ORM\Entity(repositoryClass: ChampionshipListRepository::class)]
 class ChampionshipList
 {

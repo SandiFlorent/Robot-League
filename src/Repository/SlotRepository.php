@@ -40,4 +40,16 @@ class SlotRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findOverlappingSlots($startDate, $endDate, $championshipList): array
+{
+    return $this->createQueryBuilder('s')
+        ->where('s.championshipList = :championshipList')
+        ->andWhere('s.dateDebut < :endDate')
+        ->andWhere('s.dateEnd > :startDate')
+        ->setParameter('championshipList', $championshipList)
+        ->setParameter('startDate', $startDate)
+        ->setParameter('endDate', $endDate)
+        ->getQuery()
+        ->getResult();
+}
 }
