@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/member')]
+#[Route('/{_locale}/member')]
 final class MemberController extends AbstractController
 {
     #[Route(name: 'app_member_index', methods: ['GET'])]
@@ -36,7 +36,7 @@ final class MemberController extends AbstractController
             // The notce message when creating a team member
             $this->addFlash(
                 'notice',
-                'Member created successfully'
+                'memberCreationSuccessful'
             );
 
             return $this->redirectToRoute('app_member_index', [], Response::HTTP_SEE_OTHER);

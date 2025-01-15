@@ -20,7 +20,7 @@ class Member
     #[ORM\Column(length: 255)]
     private ?string $Name = null;
 
-    #[Assert\Email(message: 'Veuillez entrer une adresse email valide.')]
+    #[Assert\Email(message: 'alerts.positiveGoals')]
     #[ORM\Column(length: 255)]
     private ?string $Email = null;
 

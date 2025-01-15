@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping\PreUpdate;
 // So I use the UniqueEntity annotation to specify that
 
 #[HasLifecycleCallbacks]
-#[UniqueEntity(fields: ['Name'], message: "Une équipe porte déjà ce nom")]
+#[UniqueEntity(fields: ['Name'], message: "alerts.teamExists")]
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
 {
@@ -45,7 +45,9 @@ class Team
     #[ORM\OneToMany(targetEntity: Championship::class, mappedBy: 'blueTeam')]
     private Collection $championships;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+
+    #[Assert\PositiveOrZero(message: 'alerts.equalToZeroGoals')]
+    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $totalPoints = 0;
 
     #[ORM\Column(type: 'float', nullable: true)]
@@ -81,6 +83,9 @@ class Team
      */
     #[ORM\ManyToMany(targetEntity: Slot::class, mappedBy: 'teams')]
     private Collection $slots;
+
+    #[ORM\Column]
+    private ?float $goalAverage = 0.0;
 
     public function __construct()
     {
@@ -342,35 +347,23 @@ class Team
         }
     }
 
-
-    // ToDo #[ORM\PreUpdate]
-    public function beforeUpdateTeamGoalAverage(PreUpdateEventArgs $event)
+    public function getGoalAverage(): ?float
     {
-
-        /*
-        if ($event->hasChangedField('nbGoal')) {
-            $newNbGoal = $event->getNewValue('nbGoal');
-            if ($this->nbEncounter > 0)
-            {
-                $this->goalAverage = $newNbGoal/$this->nbEncounter;
-            }
-        }
-        */
+        return $this->goalAverage;
     }
 
-    /*
-    * ToDo
-    #[ORM\PreUpdate]
-    public function beforeUpdateTeamNbEncounter(PreUpdateEventArgs $event)    
+    public function setGoalAverage(float $goalAverage): static
     {
-        // If nbEncounter has changed, then we update the score
-        if ($event->hasChangedField('nbEncounter')) {
-            $newNbEncounter = $event->getNewValue('nbEncounter');
-            if ($newNbEncounter > 0)
-            {
-                $this->score = $this->totalPoints/$newNbEncounter;
-            }
-        }
+        $this->goalAverage = $goalAverage;
+
+        return $this;
     }
-        */
+
+    public function isQualifiedForElimination(): bool
+    {
+        // Exemple simple : l'équipe est qualifiée si elle a plus de 10 points
+        // Adaptez la logique en fonction de vos besoins.
+        return $this->getGoalAverage() > 10;  // Remplacez `getPoints()` par la méthode qui récupère les points de l'équipe.
+    }
+
 }

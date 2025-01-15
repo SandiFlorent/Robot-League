@@ -50,10 +50,17 @@ class Slot
     #[ORM\ManyToMany(targetEntity: Team::class, inversedBy: 'slots')]
     private Collection $teams;
 
+    /**
+     * @var Collection<int, Championship>
+     */
+    #[ORM\OneToMany(targetEntity: Championship::class, mappedBy: 'slot')]
+    private Collection $championships;
+
     public function __construct()
     {
         $this->encounters = new ArrayCollection();
         $this->teams = new ArrayCollection();
+        $this->championships = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,6 +166,36 @@ class Slot
     public function removeTeam(Team $team): static
     {
         $this->teams->removeElement($team);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Championship>
+     */
+    public function getChampionships(): Collection
+    {
+        return $this->championships;
+    }
+
+    public function addChampionship(Championship $championship): static
+    {
+        if (!$this->championships->contains($championship)) {
+            $this->championships->add($championship);
+            $championship->setSlot($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChampionship(Championship $championship): static
+    {
+        if ($this->championships->removeElement($championship)) {
+            // set the owning side to null (unless already changed)
+            if ($championship->getSlot() === $this) {
+                $championship->setSlot(null);
+            }
+        }
 
         return $this;
     }

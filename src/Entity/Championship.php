@@ -31,11 +31,11 @@ class Championship
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $greenTeam = null;
 
-    #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
+    #[Assert\PositiveOrZero(message: 'alerts.positiveGoals')]
     #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $blueGoal = 0;
 
-    #[Assert\PositiveOrZero(message: 'Le nombre de buts doit être positif ou nul.')]
+    #[Assert\PositiveOrZero(message: 'alerts.positiveGoals')]
     #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $greenGoal = 0;
 
@@ -45,10 +45,25 @@ class Championship
     #[ORM\ManyToOne(inversedBy: 'matches')]
     private ?ChampionshipList $championshipList = null;
 
-    #[ORM\OneToOne(mappedBy: 'matches', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'matches', cascade: ['persist'])]
     private ?Encounter $encounter = null;
 
     private TeamRepository $teamRepository;
+
+    #[ORM\ManyToOne(inversedBy: 'championships')]
+    private ?Slot $slot = null;
+
+    #[ORM\ManyToOne(inversedBy: 'championships')]
+    private ?Field $field = null;
+
+    #[ORM\Column]
+    private ?bool $IsElimination = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isLocked = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $round = null;
 
     public function __construct()
     {
@@ -62,6 +77,7 @@ class Championship
         $this->greenGoal = 0;
         $this->blueGoal = 0;
         $this->state = State::NOT_STARTED;
+        $this->IsElimination = false;
     }
 
     public function getId(): ?int
@@ -198,17 +214,14 @@ class Championship
             return;
         }
 
-        //dump('Test 1 !!!', $entityManager, $this->blueTeam, $this->greenTeam);
         if ($event->hasChangedField('blueGoal') || $event->hasChangedField('greenGoal')) {
 
             $this->updateGoals($event);
             //if goals are negative, we set them to 0
             if ($this->blueGoal < 0) {
-                dd("wtf");
                 $this->blueGoal = 0;
             }
             if ($this->greenGoal < 0) {
-                dd("wtf");
                 $this->greenGoal = 0;
             }
             $isUpdated = true;
@@ -217,7 +230,6 @@ class Championship
         if ($event->hasChangedField('state')) {
 
             $this->updateState($event);
-            // If the score or the nbEncounter or the nbWin is negative, we set them to 0
             $isUpdated = true;
         }
 
@@ -293,5 +305,80 @@ class Championship
         if ($this->greenTeam->getNbGoals() < 0) {
             $this->greenTeam->setNbGoals(0);
         }
+    }
+
+    public function getSlot(): ?Slot
+    {
+        return $this->slot;
+    }
+
+    public function setSlot(?Slot $slot): static
+    {
+        $this->slot = $slot;
+
+        return $this;
+    }
+
+    public function getField(): ?Field
+    {
+        return $this->field;
+    }
+
+    public function setField(?Field $field): static
+    {
+        $this->field = $field;
+
+        return $this;
+    }
+
+    public function isElimination(): ?bool
+    {
+        return $this->IsElimination;
+    }
+
+    public function setElimination(bool $IsElimination): static
+    {
+        $this->IsElimination = $IsElimination;
+
+        return $this;
+    }
+
+    public function isLocked(): ?bool
+    {
+        return $this->isLocked;
+    }
+
+    public function setLocked(?bool $isLocked): static
+    {
+        $this->isLocked = $isLocked;
+
+        return $this;
+    }
+
+    public function getRound(): ?string
+    {
+        return $this->round;
+    }
+
+    public function setRound(?string $round): static
+    {
+        $this->round = $round;
+
+        return $this;
+    }
+    // Nouvelle méthode getWinner
+    public function getWinner()
+    {
+        // Si l'état du match est terminé et qu'il y a un gagnant, retourner l'équipe gagnante
+        if ($this->state === State::WIN_BLUE) {
+            return $this->blueTeam;
+        }
+
+        if ($this->state === State::WIN_GREEN) {
+            return $this->greenTeam;
+        }
+
+        // Si le match n'est pas terminé ou si l'état n'est pas un gagnant, retourner null
+        return null;
     }
 }

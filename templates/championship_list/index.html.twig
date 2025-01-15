@@ -1,45 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ChampionshipList index{% endblock %}
+{% block title %}{{ 'new.championshipListIndex'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>ChampionshipList index</h1>
+<div class="container mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+    <h1 class="text-4xl font-extrabold text-white drop-shadow-lg mb-6">{{ 'new.championshipListIndex'|trans }}</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>ChampionshipName</th>
-                <th>Description</th>
-                <th>Adress</th>
-                <th>DateStart</th>
-                <th>DateEnd</th>
-                <th>Threshold</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for championship_list in championship_lists %}
-            <tr>
-                <td>{{ championship_list.id }}</td>
-                <td>{{ championship_list.ChampionshipName }}</td>
-                <td>{{ championship_list.description }}</td>
-                <td>{{ championship_list.adress }}</td>
-                <td>{{ championship_list.dateStart ? championship_list.dateStart|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ championship_list.dateEnd ? championship_list.dateEnd|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ championship_list.threshold }}</td>
-                <td>
-                    <a href="{{ path('app_championship_list_show', {'id': championship_list.id}) }}">show</a>
-                    <a href="{{ path('app_championship_list_edit', {'id': championship_list.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-gray-800 rounded-lg shadow-lg">
+            <thead>
+                <tr class="bg-gray-700 text-white">
+                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'show.id'|trans }}</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'new.championshipName'|trans }}</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'base.description'|trans }}</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'base.addr'|trans }}</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'index.beginDate'|trans }}</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'index.endDate'|trans }}</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'base.threshold'|trans }}</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'index.actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for championship_list in championship_lists %}
+                    <tr class="bg-gray-800 hover:bg-gray-700 transition duration-300">
+                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.id }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.ChampionshipName }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.description }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.adress }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.dateStart ? championship_list.dateStart|date('Y-m-d H:i:s') : '' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.dateEnd ? championship_list.dateEnd|date('Y-m-d H:i:s') : '' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.threshold }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <a href="{{ path('app_championship_list_show', {'id': championship_list.id}) }}" class="text-blue-500 hover:text-blue-700">{{ 'show.show'|trans }}</a>
+                            <a href="{{ path('app_championship_list_edit', {'id': championship_list.id}) }}" class="text-green-500 hover:text-green-700 ml-2">{{ 'show.edit'|trans }}</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="px-6 py-4 text-center text-gray-400">{{ 'index.noRecords'|trans }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <a href="{{ path('app_championship_list_new') }}">Create new</a>
+    <div class="mt-6 text-center">
+        <a href="{{ path('app_championship_list_new') }}" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">{{ 'new.add'|trans }}</a>
+    </div>
+</div>
 {% endblock %}

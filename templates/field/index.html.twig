@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Field Index{% endblock %}
+{% block title %}{{ 'index.fieldIndex'|trans }}{% endblock %}
 
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-    <p class="text-5xl font-bold mt-12 mb-8">Liste des terrains</p>
+    <p class="text-5xl font-bold mt-12 mb-8">{{ 'index.fieldList'|trans }}</p>
 
     <div class="flex-grow p-6 w-full max-w-7xl mx-auto mt-12">
         {% if fields is not empty %}
@@ -12,9 +12,9 @@
             <table class="min-w-full text-sm text-left text-white border border-gray-700">
                 <thead class="text-lg text-white uppercase bg-gray-900">
                     <tr>
-                        <th class="px-6 py-4">Id</th>
-                        <th class="px-6 py-4">Nom</th>
-                        <th class="px-6 py-4">Actions</th>
+                        <th class="px-6 py-4">{{ 'index.id'|trans }}</th>
+                        <th class="px-6 py-4">{{ 'show.name'|trans }}</th>
+                        <th class="px-6 py-4">{{ 'index.actions'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,44 +23,44 @@
                         <td class="px-6 py-4">{{ field.id }}</td>
                         <td class="px-6 py-4">{{ field.Name }}</td>
                         <td class="px-6 py-4">
-                            <a href="{{ path('app_field_show', {'id': field.id}) }}" class="text-blue-400 hover:text-blue-500 transition">Afficher</a>
-                            <a href="{{ path('app_field_edit', {'id': field.id}) }}" class="ml-4 text-green-400 hover:text-green-500 transition">Editer</a>
+                            <a href="{{ path('app_field_show', {'id': field.id}) }}" class="text-blue-400 hover:text-blue-500 transition">{{ 'show.show'|trans }}</a>
+                            <a href="{{ path('app_field_edit', {'id': field.id}) }}" class="ml-4 text-green-400 hover:text-green-500 transition">{{ 'show.edit'|trans }}</a>
                         </td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="3" class="text-center text-gray-400">Pas de terrains</td>
+                        <td colspan="3" class="text-center text-gray-400">{{ 'index.noFields'|trans }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
         {% else %}
-            <p class="text-lg text-center text-gray-400">Pas de terrains</p>
+            <p class="text-lg text-center text-gray-400">{{ 'index.noFields'|trans }}</p>
         {% endif %}
 
         <div class="mt-8">
-            <a href="{{ path('app_field_new') }}" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">Créer</a>
+            <a href="{{ path('app_field_new') }}" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">{{ 'base.create'|trans }}</a>
         </div>
     </div>
 
     <footer class="bg-gray-900 text-white py-12 w-full mt-12">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-                <h3 class="text-xl font-semibold mb-4">Informations</h3>
-                <a href="{{ path('app_home') }}" class="block hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="block hover:underline">Politique de confidentialité</a>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.info'|trans }}</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'index.legalNotices'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.confPolicy'|trans }}</a>
             </div>
             <div>
-                <h3 class="text-xl font-semibold mb-4">Support</h3>
-                <a href="{{ path('app_home') }}" class="block hover:underline">Contact</a>
-                <a href="{{ path('app_home') }}" class="block hover:underline">FAQ</a>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.support'|trans }}</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.contact'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.qna'|trans }}</a>
             </div>
             <div>
-                <h3 class="text-xl font-semibold mb-4">Suivez-nous</h3>
-                <a href="#" class="block hover:underline">Twitter</a>
-                <a href="#" class="block hover:underline">Facebook</a>
-                <a href="#" class="block hover:underline">Instagram</a>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.followUs'|trans }}</h3>
+                <a href="#" class="block hover:underline">{{ 'base.twt'|trans }}</a>
+                <a href="#" class="block hover:underline">{{ 'base.fbk'|trans }}</a>
+                <a href="#" class="block hover:underline">{{ 'base.insta'|trans }}</a>
             </div>
         </div>
     </footer>

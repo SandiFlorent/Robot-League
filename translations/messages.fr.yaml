@@ -1,5 +1,5 @@
 base: 
-  menu: Menu
+  home: Accueil
   teams: Equipes
   create: Créer une équipe
   team: Mon équipe
@@ -8,6 +8,44 @@ base:
   notification: Voir les notifications
   login: Connexion
   register: Inscription
+  info: Informations
+  legalNotices: Mentions légales
+  confPolicy: Politique de confidentialité
+  support: Support
+  contact: Contact
+  qna: FAQ
+  followUs: Suivez-nous
+  twt: Twitter
+  fbk: Facebook
+  insta: Instagram
+  description: Description
+  addr: Adresse
+  manageChamp: Gestion du championnat
+  chooseChamp: Choisir un championnat
+  chooseField: Choisir un terrain
+  selectChamp: Sélectionner un championnat
+  seeTeams: Voir les équipes
+  seeScores: Voir les scores
+  admin: Admin
+  users: Utilisateurs
+  createAChampionship: Créer un championnat
+  score: Score
+  match: Match
+  blueScore: Score bleu
+  greenScore: Score vert
+  noSlot: Pas de créneau enregistré pour le moment.
+  addSlots: Ajouter des créneaux
+  createNewChamp: Créer un nouveau championnat
+  newChamp: Nouveau championnat
+  manageTeams: Gérer les équipes
+  validatedTeams: Equipes validées
+  removeTeam: Retirer l'équipe
+  valRequests: Demandes de validation
+  editSlot: Modifier un créneau
+  slots: Créneaux
+  slotIndex: Index créneaux
+  selectSlot: Sélectionner un créneau
+  chooseSlot: Choisir un créneau
 
 show:
   show: Aficher
@@ -21,12 +59,20 @@ show:
   name: Nom
   creatorOfTeam: Vous êtes le crérateur de cette équipe.
   noTeams: Pas d'équipes à afficher.
+  displayTeams: Afficher les équipes
+  teamsWithoutCreators: Equipes sans créateurs
   noTeamJoined: Vous n'avez ni créé ni rejoint une équipe pour l'instant.
   member: Membre
+  members: Membres
   edit: Modifier
-  
+  attributeThisTeam: Attribuer cette équipe
+  usersTeam: Equipes de l'utilisateur
+  removeCreator: Retirer le créateur
+  ranking: Classement
+  registerDate: Date d'inscription
 
 new: 
+  add: Ajouter
   newTeam: Nouvelle équipe
   createTeam: Créer une nouvelle équipe
   teamName: Nom de l'équipe
@@ -38,8 +84,23 @@ new:
   newMember: Nouveau membre
   createNewMember: Créer un nouveu membre
   newChampionship: Nouveau championnat
+  newChampionshipList: Nouvelle liste de championnats
+  championshipListIndex: Index liste des championnats
   createNewChampionship: Créer un nouveau championnat
   createNewTeamMember: Ajouter
+  createNewSlot: Créer un nouveau créneau
+  newSlot: Nouveau créneau
+  championshipList: Liste des championnats
+  championshipName: Nom du championnat
+
+elimination:
+  eliminationPhase: Phase d'élimination
+  round: Round
+  state: État
+  winner: La team gagnante
+  won: a gagné
+  matchNotFinished: Le match n'est pas encore terminé
+  refresh: Actualiser
 
 index: 
   actions: Actions
@@ -48,6 +109,7 @@ index:
   createNewUser: Créer un nouvel utilisateur
   memberIndex: Index membre
   home: Accueil | RobotLeague
+  displayMatch: Afficher les matchs
   matchList: Liste des matchs
   blueTeam: Équipe bleue
   greenTeam: Équipe verte
@@ -59,16 +121,42 @@ index:
   generateChampionshhip: Générer un championnat
   deleteChampionship: Supprimer le championnat
   save: Sauvegarder
-  noMatch: Aucun match disponible. Veuillez générer le championnat.
+  noMatch: Aucun match disponible. 
   teamIndex: Index équipe
-
+  fieldList: Liste des terrains
+  field: Terrain
+  fieldName: Nom du terrain
+  fieldInfo: Détails du terrain
+  dateOfBeginning: Début du match
+  dateOfEnd: Fin du match
+  beginDate: Date de début
+  endDate: Date de fin
+  createNewField: Create a new field
+  newField: New field
+  noFields: Pas de terrains
+  noField: Pas de terrain enregistré pour le moment
+  editField: Editer le terrain
+  threshold: Seuil
+  addField: Ajouter un terrain
+  addFields: Ajouter des terrains
+  backToChamp: Retour aux championnats
+  selectChampionship: Select a championship
+  selectField: Choisir un terrain
+  filterChamp: Filter championships
+  filter: Filtrer
+  fieldIndex: Index terrain
 
 edit: 
+  edit: Modifier
   editUser: Modifier l'utilisateur
   editTeam: Modifier l'équipe
   editMember: Modifier un membre de l'équipe
   editChampionship: Modifier le championnat 
-  
+  validateTeams: Valider les équipes
+  generateChampionship: Générer le championnat
+  deleteChampionship: Supprimer le championnat
+  actAs: Se faire passer pour
+  eliminationMatches: "Affrontements éliminatoires"
 
 login: 
   loginPage: Se connecter
@@ -76,6 +164,7 @@ login:
   placeholderMail: exemple@courriel.fr
   placeholderPasswd: motDePasse#
   submit: Valider
+  sixCharsAtLeast: Au moins 6 caractères
 
 delete: 
   delete: Supprimer
@@ -84,15 +173,47 @@ teammember:
   addMembers: Ajouter des membres
   addMember: Ajouter un nouveau membre
   teamMembers: Membres de l'équipe
-  
-php:
-  canceled: Annulé
-  inProgress: En cours
-  notStarted: Non commencé
-  winBlue: Victoire Bleue
-  winGreen: Victoire Verte
-  draw: Egalité
-  forfaitBlue: Forfait Bleue
-  forfaitGreen: Forfait Verte
 
+label:
+  update: Mise à jour
+  update2: Mettre à jour
+  save: Sauvegarder
+  championshipMatches: Matchs du championnat
+  scoreBoard: Tableau des scores
 
+score: 
+  selectChamp: Sélectionner un championnat
+  scoreBoard: Tableau des scores
+  seeMatches: Voir les matchs
+  ranking: Rang
+  goalAverage: Moyenne des buts
+  registrationDate: Date d'inscription
+  begin: Début
+  end: Fin
+  previous: Précédent
+  next: Suivant
+
+userNotFound: Utilisateur non trouvé
+userSuccessfullyCreated: Utilisateur créé
+userSuccessfullyModified: Utilisateur modifié
+userSuccessfullyDeleted: Utilisateur supprimé
+memberCreationSuccessful: Membre créé
+memberSuccessfullyAdded: Membre ajouté 
+accountCreationSuccessful: Compte créé
+teamCreationSuccessful: Equipe créée
+teamSuccessfullyEdited: Equipe modifiée
+teamSuccessfullyDeleted: Equipe supprimée
+teamSuccessfullyAttributed: Equipe attribuée
+teamSuccessfullyRemoved: Equipe retirée
+successfullyLoggedOut: Votre compte a été déconnecté
+noTeamInChampionship: Vous n'avez pas d'équipe dans ce championnat
+creatorSuccessfullyDeleted: Créateur supprimé
+
+canceled: Annulé
+inProgress: En cours
+notStarted: Non commencé
+winBlue: Victoire Bleue
+winGreen: Victoire Verte
+draw: Egalité
+forfaitBlue: Forfait Bleue
+forfaitGreen: Forfait Verte

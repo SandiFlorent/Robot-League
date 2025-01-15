@@ -1,80 +1,73 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}{{ 'teammember.addMembers'|trans }}{% endblock %}
 
-
 {% block body %}
-<div class="flex flex-col items-center justify-center min-h-screen">
-	<p class="text-5xl font-bold text-white mt-12 mb-8">{{ 'show.team'|trans }} : {{ team.Name }}</p>
+<div class="flex flex-col items-center justify-center min-h-screen p-6">
+    <p class="text-5xl font-bold text-white text-center mt-12 mb-8">{{ 'show.team'|trans }} : {{ team.Name }}</p>
 
+    <div class="w-full max-w-7xl mx-auto bg-gray-900 border border-blue-500 rounded-lg shadow-lg p-6">
+        <h2 class="text-3xl font-semibold text-white mb-4">{{ 'teammember.teamMembers'|trans }}</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full border-collapse border border-blue-500 rounded-lg">
+                <thead class="bg-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-lg font-bold text-white border border-blue-500">{{ 'show.name'|trans }}</th>
+                        <th class="px-6 py-3 text-left text-lg font-bold text-white border border-blue-500">{{ 'show.email'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in team.TeamMembers %}
+                        <tr class="odd:bg-blue-800 even:bg-blue-700 hover:bg-blue-600">
+                            <td class="px-6 py-4 text-sm text-white border border-blue-500">{{ member.Name }}</td>
+                            <td class="px-6 py-4 text-sm text-white border border-blue-500">{{ member.Email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-	<div class="flex-grow p-6 w-full max-w-7xl mx-auto mt-12 bg-gray-800 rounded-lg shadow-lg">
-    	<h2 class="text-3xl font-semibold text-blue-400 mb-4">{{ 'teammember.teamMembers'|trans }}</h2>
-    	<div class="overflow-x-auto shadow-md rounded-lg">
-        	<table class="min-w-full border-collapse border border-gray-300">
-            	<thead class="bg-gray-700">
-                	<tr>
-                    	<th class="px-6 py-3 text-left text-sm font-medium text-white border border-gray-300">{{ 'show.name'|trans }}</th>
-                    	<th class="px-6 py-3 text-left text-sm font-medium text-white border border-gray-300">{{ 'show.email'|trans }}</th>
-                	</tr>
-            	</thead>
-            	<tbody>
-                	{% for member in team.TeamMembers %}
-                    	<tr class="odd:bg-gray-800 even:bg-gray-700 hover:bg-gray-600">
-                        	<td class="px-6 py-4 text-sm text-white border border-gray-300">{{ member.Name }}</td>
-                        	<td class="px-6 py-4 text-sm text-white border border-gray-300">{{ member.Email }}</td>
-                    	</tr>
-                	{% endfor %}
-            	</tbody>
-        	</table>
-    	</div>
-	</div>
+    <div class="mt-12 w-full max-w-7xl mx-auto bg-gray-900 border border-blue-500 rounded-lg shadow-lg p-6">
+        <h2 class="text-3xl font-semibold text-white mb-4">{{ 'teammember.addMember'|trans }}</h2>
+        {{ form_start(form) }}
+        <div class="grid gap-6 mb-6 md:grid-cols-2">
+            <div>
+                {{ form_label(form.Name, 'show.name'|trans, {'label_attr': {'class': 'block mb-2 text-sm font-medium text-white'}}) }}
+                {{ form_widget(form.Name, {'attr': {'class': 'bg-gray-700 border border-blue-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
+            </div>
+            <div>
+                {{ form_label(form.Email, 'show.email'|trans, {'label_attr': {'class': 'block mb-2 text-sm font-medium text-white'}}) }}
+                {{ form_widget(form.Email, {'attr': {'class': 'bg-gray-700 border border-blue-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
+            </div>
+        </div>
+        <div class="flex justify-center">
+            <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 border border-blue-500 text-sm rounded-lg focus:ring-4 focus:ring-blue-400 focus:outline-none block w-full p-3 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg hover:shadow-2xl">
+                {{ button_label|default('login.submit'|trans) }}
+            </button>
+        </div>
+        {{ form_end(form) }}
+    </div>
 
-
-	<div class="mt-12 bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-7xl mx-auto">
-    	<h2 class="text-3xl font-semibold text-green-400 mb-4">{{ 'teammember.addMember'|trans }}</h2>
-    	{{ form_start(form) }}
-    	<div class="grid gap-6 mb-6 md:grid-cols-2">
-        	<div>
-            	{{ form_label(form.Name, 'show.name'|trans, {'label_attr': {'class': 'block mb-2 text-sm font-medium text-white'}}) }}
-            	{{ form_widget(form.Name, {'attr': {'class': 'bg-gray-700 border border-gray-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
-        	</div>
-        	<div>
-            	{{ form_label(form.Email, 'show.email'|trans, {'label_attr': {'class': 'block mb-2 text-sm font-medium text-white'}}) }}
-            	{{ form_widget(form.Email, {'attr': {'class': 'bg-gray-700 border border-gray-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'}}) }}
-        	</div>
-    	</div>
-    	<div class="flex justify-center">
-        	<button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 border border-blue-500 text-sm rounded-lg focus:ring-4 focus:ring-blue-400 focus:outline-none block w-full p-3 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg hover:shadow-2xl">
-            	{{ button_label|default('login.submit'|trans) }}
-        	</button>
-    	</div>
-    	{{ form_end(form) }}
-	</div>
-
-
-	<footer class="bg-gray-900 text-white py-12 w-full mt-12 rounded-t-lg">
-    	<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-        	<div>
-            	<h3 class="text-xl font-semibold mb-4">Informations</h3>
-            	<a href="{{ path('app_home') }}" class="block hover:underline">Mentions légales</a>
-            	<a href="{{ path('app_home') }}" class="block hover:underline">Politique de confidentialité</a>
-        	</div>
-        	<div>
-            	<h3 class="text-xl font-semibold mb-4">Support</h3>
-            	<a href="{{ path('app_home') }}" class="block hover:underline">Contact</a>
-            	<a href="{{ path('app_home') }}" class="block hover:underline">FAQ</a>
-        	</div>
-        	<div>
-            	<h3 class="text-xl font-semibold mb-4">Suivez-nous</h3>
-            	<a href="#" class="block hover:underline">Twitter</a>
-            	<a href="#" class="block hover:underline">Facebook</a>
-            	<a href="#" class="block hover:underline">Instagram</a>
-        	</div>
-    	</div>
-	</footer>
+    <footer class="bg-gray-900 text-white py-12 w-full mt-12 rounded-t-lg">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.info'|trans }}</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.legalNotices'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.confPolicy'|trans }}</a>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.support'|trans }}</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.contact'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.qna'|trans }}</a>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.followUs'|trans }}</h3>
+                <a href="#" class="block hover:underline">{{ 'base.twt'|trans }}</a>
+                <a href="#" class="block hover:underline">{{ 'base.fbk'|trans }}</a>
+                <a href="#" class="block hover:underline">{{ 'base.insta'|trans }}</a>
+            </div>
+        </div>
+    </footer>
 </div>
 {% endblock %}
-
-

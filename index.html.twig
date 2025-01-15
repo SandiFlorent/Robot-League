@@ -4,15 +4,15 @@
 
 <!-- Formulaire pour générer le championnat -->
 <form method="post" action="{{ path('app_championship_generate') }}" class="mb-8">
-    <button type="submit" class="px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600">Générer Championnat</button>
+    <button type="submit" class="px-6 py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600">{{ 'index.generateChampionship'|trans }}</button>
 </form>
 
 <!-- Formulaire pour supprimer tous les championnats -->
 <form method="post" action="{{ path('app_championship_delete_all') }}" onsubmit="return confirm('Are you sure you want to delete all the matches?');" class="mb-8">
-    <button type="submit" class="px-6 py-3 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600">Supprimer le championnat</button>
+    <button type="submit" class="px-6 py-3 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600">{{ 'index.deleteChampionship'|trans }}</button>
 </form>
 
-<h1 class="text-3xl font-bold text-gray-800 mb-8">Liste des matchs</h1>
+<h1 class="text-3xl font-bold text-gray-800 mb-8">{{ 'index.matchList'|trans }}</h1>
 
 <!-- Table du championnat avec les rencontres -->
 {% if championships is not empty %}
@@ -20,12 +20,12 @@
         <table class="min-w-full text-sm text-left text-gray-800 border-collapse border border-gray-300">
             <thead class="text-lg text-gray-700 uppercase bg-gray-100">
                 <tr>
-                    <th scope="col" class="px-8 py-6 bg-blue-100 font-semibold">Équipe Bleue</th>
-                    <th scope="col" class="px-8 py-6 bg-green-100 font-semibold">Équipe Verte</th>
-                    <th scope="col" class="px-8 py-6">But Équipe Bleue</th>
-                    <th scope="col" class="px-8 py-6">But Équipe Verte</th>
-                    <th scope="col" class="px-8 py-6">État</th>
-                    <th scope="col" class="px-8 py-6">Actions</th>
+                    <th class="px-6 py-4 font-medium">{{ 'index.blueTeam'|trans }}</th>
+                    <th class="px-6 py-4 font-medium">{{ 'index.greenTeam'|trans }}</th>
+                    <th class="px-6 py-4 font-medium">{{ 'index.goalBlueTeam'|trans }}</th>
+                    <th class="px-6 py-4 font-medium">{{ 'index.goalGreenTeam'|trans }}</th>
+                    <th class="px-6 py-4 font-medium">{{ 'index.state'|trans }}</th>
+                    <th class="px-6 py-4 font-medium">{{ 'index.actions'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,7 +48,7 @@
                             </select>
                         </td>
                         <td class="px-8 py-6">
-                            <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Sauvegarder</button>
+                            <button type="submit" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">{{ 'index.save'|trans }}</button>
                             </form>
                         </td>
                     </tr>
@@ -57,7 +57,7 @@
         </table>
     </div>
 {% else %}
-    <p class="text-lg text-gray-700">Aucun matchs disponible. Veuillez générer le championnat.</p>
+    <p class="text-lg text-gray-700">{{ 'index.noMatch'|trans }}</p>
 {% endif %}
 
 {% endblock %}

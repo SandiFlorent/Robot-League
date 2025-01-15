@@ -18,14 +18,14 @@ class ImpersonateController extends AbstractController
         $this->userRepository = $userRepository;
     }
 
-    #[Route('/impersonate/{id}', name: 'app_impersonate_user', methods: ['POST'])]
+    #[Route('/{_locale}/impersonate/{id}', name: 'app_impersonate_user', methods: ['POST'])]
     public function impersonateUser(int $id): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ORGANISATEUR');
 
         $user = $this->userRepository->find($id);
         if (!$user) {
-            $this->addFlash('error', 'Utilisateur non trouvé.');
+            $this->addFlash('error', 'userNotFound');
             return $this->redirectToRoute('app_home');
         }
         

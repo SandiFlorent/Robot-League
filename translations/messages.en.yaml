@@ -1,5 +1,5 @@
 base: 
-  menu: Menu
+  home: Home
   teams: Teams
   create: Create a team
   team: My team
@@ -8,6 +8,44 @@ base:
   notification: See notifications
   login: Log in
   register: Register
+  info: Informations
+  legalNotices: LegalNotices
+  confPolicy: Confidentiality policy
+  support: Support
+  contact: Contact
+  qna: Q&A
+  followUs: Follow us
+  twt: Twitter
+  fbk: Facebook
+  insta: Instagram
+  description: Description
+  addr: Address
+  manageChamp: Championship management
+  chooseChamp: Choose a championship
+  chooseField: Choose a field
+  selectChamp: Select a championship
+  seeTeams: See teams
+  seeScores: See scores
+  admin: Admin
+  users: Users
+  createAChampionship: Create a championship
+  score: Score
+  match: Match
+  blueScore: Blue score
+  greenScore: Green score
+  noSlot: No score registered yet.
+  addSlots: Add slots
+  createNewChamp: Create a new championship
+  newChamp: New championship
+  manageTeams: Manage teams
+  validatedTeams: Validated teams
+  removeTeam: Remove team
+  valRequests: Validation requests
+  editSlot: Edit slot
+  slots: Slots
+  slotIndex: Slot index
+  selectSlot: Select a slot
+  chooseSlot: Choose a slot
 
 show:
   show: Show
@@ -15,18 +53,26 @@ show:
   teams: Teams
   user: User
   id: Id
-  email: E-mail
+  email: Email
   roles: Roles
   passwd: Password
   name: Name
   creatorOfTeam: You are the creator of this team.
   noTeams: No teams to display.
+  displayTeams: Display teams
+  teamsWithoutCreators: Teams without creator
   noTeamJoined: You have not created nor joined a team yet.
   member: Member
+  members: Members
   edit: Edit
-  
+  attributeThisTeam: Attribute this team
+  usersTeam: User's team
+  removeCreator: Remove the creator
+  ranking: Ranking
+  registerDate: Register date
 
 new: 
+  add: Add
   newTeam: New team
   createTeam: Create a new team
   teamName: Name of the team
@@ -38,8 +84,14 @@ new:
   newMember: New member
   createNewMember: Create a new member
   newChampionship: New championship
+  newChampionshipList: New championship list
+  championshipListIndex: Championship list index
   createNewChampionship: Create a new championship
   createNewTeamMember: Create a new team member
+  createNewSlot: Create a new slot
+  newSlot: New Slot
+  championshipList: Championship list
+  championshipName: Championship name
 
 index: 
   actions: Actions
@@ -48,6 +100,7 @@ index:
   createNewUser: Create a new user
   memberIndex: Member index
   home: Home | RobotLeague
+  displayMatch: Display matches
   matchList: List of matches
   blueTeam: Blue team
   greenTeam: Green team
@@ -61,29 +114,106 @@ index:
   save: Save
   noMatch: No match available. Please generate a championship.
   teamIndex: Team index
-
+  fieldList: Field list
+  field: Field
+  fieldName: Name of the field
+  fieldInfo: Details of the field
+  dateOfBeginning: Beginning of the match
+  dateOfEnd: End of the match
+  beginDate: Begin date
+  endDate: End date
+  createNewField: Create a new field
+  newField: New field
+  noFields: No fields
+  noField: No field registered yet
+  editField: Edit the field
+  threshold: Threshold
+  addField: Add a field
+  addFields: Add fields
+  backToChamp: Back to championships
+  selectChampionship: Select a championship
+  selectField: Select a field
+  filterChamp: Filter championships
+  filter: Filter
+  fieldIndex: Field index
 
 edit: 
+  edit: Edit
   editUser: Edit the user
   editTeam: Edit the team
   editMember: Edit a team member
   editChampionship: Edit the championship
+  validateTeams: Validate teams
+  generateChampionship: Generate championships
+  deleteChampionship: Delete championship
+  actAs: Act as
+  eliminationMatches: "Affrontements éliminatoires" 
   
-
 login: 
   loginPage: Log in
-  log: Log in
+  log: Log
   placeholderMail: exemple@mail.uk
   placeholderPasswd: p@sswd#
   submit: Submit
+  sixCharsAtLeast: At least 6 characters
 
 delete: 
   delete: Delete
+
+elimination:
+  eliminationPhase: Elimination phase
+  round: Round
+  state: State
+  winner: Winning team
+  won: won
+  matchNotFinished: The match is not finished yet
+  refresh: Refresh
 
 teammember: 
   addMembers: Add members
   addMember: Add a new member
   teamMembers: Team members
   
+label:
+  update: Update
+  update2: Update
+  save: Save
+  championshipMatches: Championsship matches
+  scoreBoard: Score board
 
+score: 
+  selectChamp: Select a championship
+  scoreBoard: Score board
+  seeMatches: See matches
+  ranking: Ranking
+  goalAverage: Goal average
+  registrationDate: Registration date
+  begin: Begin
+  end: End
+  previous: Previous
+  next: Next
 
+userNotFound: User not found
+userSuccessfullyCreated: User created
+userSuccessfullyModified: User edited
+userSuccessfullyDeleted: User deleted
+memberCreationSuccessful: Member created
+memberSuccessfullyAdded: Member added
+accountCreationSuccessful: Account created
+teamCreationSuccessful: Team created
+teamSuccessfullyEdited: Team edited
+teamSuccessfullyDeleted: Team deleted
+teamSuccessfullyAttributed: Team attributed
+teamSuccessfullyRemoved: Team removed
+successfullyLoggedOut: Your account has been disconnected
+noTeamInChampionship: You do not have a team in this championship
+creatorSuccessfullyDeleted: Creator deleted
+
+canceled: Canceled
+inProgress: In progress
+notStarted: Not started
+winBlue: Blue victory
+winGreen: Green victory
+draw: Draw
+forfaitBlue: Blue forfeit
+forfaitGreen: Green forfeit

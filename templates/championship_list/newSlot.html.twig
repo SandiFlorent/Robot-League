@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ChampionshipList{% endblock %}
+{% block title %}{{ 'base.newChamp'|trans }}{% endblock %}
 
 {% block body %}
 <div class="flex flex-col items-center justify-center min-h-screen">
-    <p class="text-5xl font-bold text-white mt-12 mb-8">Ajouter des créneaux</p>
+    <p class="text-5xl font-bold text-white mt-12 mb-8">{{ 'base.addSlots'|trans }}</p>
 
     <div class="flex-grow p-6 w-full max-w-7xl mx-auto mt-12 bg-gray-800 rounded-lg shadow-lg">
         <table class="table-auto w-full border-collapse border border-gray-700">
             <thead>
                 <tr class="bg-gray-900">
-                    <th class="text-left text-lg font-semibold p-4 text-white">Date début</th>
-                    <th class="text-left text-lg font-semibold p-4 text-white">Date fin</th>
-                    <th class="text-left text-lg font-semibold p-4 text-white">Actions</th>
+                    <th class="text-left text-lg font-semibold p-4 text-white">{{ 'index.beginDate'|trans }}</th>
+                    <th class="text-left text-lg font-semibold p-4 text-white">{{ 'index.endDate'|trans }}</th>
+                    <th class="text-left text-lg font-semibold p-4 text-white">{{ 'index.actions'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,12 +21,12 @@
                     <td class="p-4 text-white">{{ slo.dateDebut|date('Y-m-d H:i:s') }}</td>
                     <td class="p-4 text-white">{{ slo.dateEnd|date('Y-m-d H:i:s') }}</td>
                     <td class="p-4">
-                        <a href="{{ path('app_championship_list_delete_slot', {'id': championship_list.id, 'idSlot': slo.id }) }}" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300">Supprimer</a>
+                        <a href="{{ path('app_championship_list_delete_slot', {'id': championship_list.id, 'idSlot': slo.id }) }}" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300">{{ 'delete.delete'|trans }}</a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="3" class="p-4 text-center text-gray-400">Pas de créneau enregistré pour le moment</td>
+                    <td colspan="3" class="p-4 text-center text-gray-400">{{ 'base.noSlot'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -38,7 +38,7 @@
 
         <div class="text-center mt-12">
             <a href="{{ path('app_championship_list_new_field', {'id': championship_list.id }) }}" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
-                Ajouter des terrains
+                {{ 'index.addField'|trans }}
             </a>
         </div>
     </div>
@@ -46,20 +46,20 @@
     <footer class="bg-gray-900 text-white py-12 w-full mt-12 rounded-t-lg">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-                <h3 class="text-xl font-semibold mb-4">Informations</h3>
-                <a href="{{ path('app_home') }}" class="block hover:underline">Mentions légales</a>
-                <a href="{{ path('app_home') }}" class="block hover:underline">Politique de confidentialité</a>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.info'|trans }}</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'index.legalNotices'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.confPolicy'|trans }}</a>
             </div>
             <div>
-                <h3 class="text-xl font-semibold mb-4">Support</h3>
-                <a href="{{ path('app_home') }}" class="block hover:underline">Contact</a>
-                <a href="{{ path('app_home') }}" class="block hover:underline">FAQ</a>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.support'|trans }}</h3>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.contact'|trans }}</a>
+                <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'base.qna'|trans }}</a>
             </div>
             <div>
-                <h3 class="text-xl font-semibold mb-4">Suivez-nous</h3>
-                <a href="#" class="block hover:underline">Twitter</a>
-                <a href="#" class="block hover:underline">Facebook</a>
-                <a href="#" class="block hover:underline">Instagram</a>
+                <h3 class="text-xl font-semibold mb-4">{{ 'base.followUs'|trans }}</h3>
+                <a href="#" class="block hover:underline">{{ 'base.twt'|trans }}</a>
+                <a href="#" class="block hover:underline">{{ 'base.fbk'|trans }}</a>
+                <a href="#" class="block hover:underline">{{ 'base.insta'|trans }}</a>
             </div>
         </div>
     </footer>

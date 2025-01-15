@@ -30,9 +30,16 @@ class Field
     #[ORM\ManyToOne(inversedBy: 'field')]
     private ?ChampionshipList $championshipList = null;
 
+    /**
+     * @var Collection<int, Championship>
+     */
+    #[ORM\OneToMany(targetEntity: Championship::class, mappedBy: 'field')]
+    private Collection $championships;
+
     public function __construct()
     {
         $this->encounters = new ArrayCollection();
+        $this->championships = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,6 +97,36 @@ class Field
     public function setChampionshipList(?ChampionshipList $championshipList): static
     {
         $this->championshipList = $championshipList;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Championship>
+     */
+    public function getChampionships(): Collection
+    {
+        return $this->championships;
+    }
+
+    public function addChampionship(Championship $championship): static
+    {
+        if (!$this->championships->contains($championship)) {
+            $this->championships->add($championship);
+            $championship->setField($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChampionship(Championship $championship): static
+    {
+        if ($this->championships->removeElement($championship)) {
+            // set the owning side to null (unless already changed)
+            if ($championship->getField() === $this) {
+                $championship->setField(null);
+            }
+        }
 
         return $this;
     }

@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Slot index{% endblock %}
+{% block title %}{{ 'base.slotIndex'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Slot index</h1>
+    <h1>{{ 'base.slotIndex'|trans }}</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>DateDebut</th>
-                <th>DateEnd</th>
-                <th>actions</th>
+                <th>{{ 'show.id'|trans }}</th>
+                <th>{{ 'index.beginDate'|trans }}</th>
+                <th>{{ 'index.endDate'|trans }}</th>
+                <th>{{ 'index.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -21,17 +21,17 @@
                 <td>{{ slot.dateDebut ? slot.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ slot.dateEnd ? slot.dateEnd|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_slot_show', {'id': slot.id}) }}">show</a>
-                    <a href="{{ path('app_slot_edit', {'id': slot.id}) }}">edit</a>
+                    <a href="{{ path('app_slot_show', {'id': slot.id}) }}">{{ 'show.show'|trans }}</a>
+                    <a href="{{ path('app_slot_edit', {'id': slot.id}) }}">{{ 'show.edit'|trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="4">{{ 'index.noRecords'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_slot_new') }}">Create new</a>
+    <a href="{{ path('app_slot_new') }}">{{ 'new.add'|trans }}</a>
 {% endblock %}

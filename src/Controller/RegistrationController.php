@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
+    #[Route('/{_locale}/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -36,7 +36,7 @@ class RegistrationController extends AbstractController
             //Notice message when an account is created
             $this->addFlash(
                 'notice',
-                'Account successfully created'
+                'accountCreationSuccessful'
             );
 
             return $security->login($user, AppCustomAuthenticator::class, 'main');
