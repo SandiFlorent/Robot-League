@@ -58,6 +58,7 @@ class Championship
         if ($this->state === null) {
             $this->state = State::NOT_STARTED;
         }
+        $this->IsElimination = false;
     }
     
     public function getId(): ?int
