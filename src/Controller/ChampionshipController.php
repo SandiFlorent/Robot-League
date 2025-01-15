@@ -393,7 +393,7 @@ final class ChampionshipController extends AbstractController
     }
 
 
-    #[Route('/championship/export', name: 'app_championship_export', methods: ['POST'])]
+    #[Route('/export', name: 'app_championship_export')]
     public function export(Request $request, ChampionshipListRepository $championshipListRepository): Response
     {
         $championshiplistId = $request->query->get('id');
