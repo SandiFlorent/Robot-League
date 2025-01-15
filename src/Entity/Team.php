@@ -359,4 +359,11 @@ class Team
 
         return $this;
     }
+
+    public function isQualifiedForElimination(): bool
+    {
+        // Exemple simple : l'équipe est qualifiée si elle a plus de 10 points
+        // Adaptez la logique en fonction de vos besoins.
+        return $this->getGoalAverage() > 10;  // Remplacez `getPoints()` par la méthode qui récupère les points de l'équipe.
+    }
 }
