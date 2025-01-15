@@ -59,6 +59,10 @@
                                 {{ 'edit.deleteChampionship'|trans }}
                             </button>
                         </form>
+                                        <!-- Lien pour les affrontements éliminatoires -->
+                        <a href="{{ path('app_championship_elimination', {'id': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-yellow-500" role="menuitem">
+                            {{ 'edit.eliminationMatches'|trans }}
+                        </a>
                     </div>
                 </div>
             </div>

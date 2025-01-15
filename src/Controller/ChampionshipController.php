@@ -308,25 +308,23 @@ final class ChampionshipController extends AbstractController
 
     private function generateEliminationMatches(array $teams, ChampionshipList $championshipList)
     {
-        shuffle($teams);  // Mélange des équipes pour un tirage au sort aléatoire
+        shuffle($teams);  // Mélange des équipes pour assurer un tirage au sort aléatoire
         $totalTeams = count($teams);
         $matches = [];
 
-        if ($totalTeams == 2) {
-            // Final avec 2 équipes
-            $match = new Championship();
-            $match->setBlueTeam($teams[0]);
-            $match->setGreenTeam($teams[1]);
-            $match->setChampionshipList($championshipList);
-            $match->setState(State::NOT_STARTED);
-            $this->entityManager->persist($match);
-            $matches[] = $match;
-        } elseif ($totalTeams == 4) {
-            // Demi-finale et finale avec 4 équipes
-            $this->createEliminationRound($teams, $championshipList, 'Demi-Finale');
-        } elseif ($totalTeams == 8) {
-            // Quart de finale, demi-finale et finale avec 8 équipes
-            $this->createEliminationRound($teams, $championshipList, 'Quart de Finale');
+        for ($i = 0; $i < $totalTeams; $i += 2) {
+            if ($i + 1 < $totalTeams) {
+                // Créer un match entre deux équipes
+                $match = new Championship();
+                $match->setBlueTeam($teams[$i]);
+                $match->setGreenTeam($teams[$i + 1]);
+                $match->setChampionshipList($championshipList);
+                $match->setState(State::NOT_STARTED);
+                $match->setElimination(true);  // Marquer comme match éliminatoire
+                // Sauvegarde du match
+                $this->entityManager->persist($match);
+                $matches[] = $match;
+            }
         }
 
         // Appliquer les changements en base

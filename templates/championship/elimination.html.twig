@@ -1,8 +1,6 @@
-{# templates/championship/elimination.html.twig #}
-
 {% extends 'base.html.twig' %}
 
-{% block title %}Phase d'élimination{% endblock %}
+{% block title %}Phase d'élimination pour le championnat "{{ championship_list.ChampionshipName }}"{% endblock %}
 
 {% block body %}
     <h1>Phase d'élimination pour le championnat "{{ championship_list.ChampionshipName }}"</h1>
@@ -14,48 +12,20 @@
         {% endfor %}
     </ul>
 
-    {% if qualified_teams|length == 2 %}
-        <h3>Finale</h3>
-        <div>
-            <strong>{{ qualified_teams[0].name }} vs {{ qualified_teams[1].name }}</strong>
-        </div>
-    {% elseif qualified_teams|length == 4 %}
-        <h3>Phase de demi-finale</h3>
-        <div>
-            <strong>{{ qualified_teams[0].name }} vs {{ qualified_teams[1].name }}</strong> - Demi-finale 1
-        </div>
-        <div>
-            <strong>{{ qualified_teams[2].name }} vs {{ qualified_teams[3].name }}</strong> - Demi-finale 2
-        </div>
-        <h3>Finale</h3>
-        <div>
-            <strong>Vainqueur 1 vs Vainqueur 2</strong>
-        </div>
-    {% elseif qualified_teams|length == 8 %}
-        <h3>Phase de quart de finale</h3>
-        <div>
-            <strong>{{ qualified_teams[0].name }} vs {{ qualified_teams[1].name }}</strong> - Quart de Finale 1
-        </div>
-        <div>
-            <strong>{{ qualified_teams[2].name }} vs {{ qualified_teams[3].name }}</strong> - Quart de Finale 2
-        </div>
-        <div>
-            <strong>{{ qualified_teams[4].name }} vs {{ qualified_teams[5].name }}</strong> - Quart de Finale 3
-        </div>
-        <div>
-            <strong>{{ qualified_teams[6].name }} vs {{ qualified_teams[7].name }}</strong> - Quart de Finale 4
-        </div>
-        <h3>Phase de demi-finale</h3>
-        <div>
-            <strong>Vainqueur 1 vs Vainqueur 2</strong> - Demi-finale 1
-        </div>
-        <div>
-            <strong>Vainqueur 3 vs Vainqueur 4</strong> - Demi-finale 2
-        </div>
-        <h3>Finale</h3>
-        <div>
-            <strong>Vainqueur 1 vs Vainqueur 2</strong>
-        </div>
-    {% endif %}
+    <h2>Générer les matchs d'élimination</h2>
+    <form action="{{ path('app_championship_generate') }}" method="post">
+        <input type="hidden" name="championship_list_id" value="{{ championship_list.id }}">
+        <button type="submit">Générer les matchs</button>
+    </form>
 
+    <h2>Matchs éliminatoires</h2>
+    <ul>
+        {% for match in championship_list.matches %}
+            {% if match.isElimination %}
+                {% if match.blueTeam.isQualifiedForElimination() and match.greenTeam.isQualifiedForElimination() %}
+                    <li>{{ match.blueTeam.name }} vs {{ match.greenTeam.name }} - {{ match.state.value }}</li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </ul>
 {% endblock %}
