@@ -62,6 +62,9 @@ class Championship
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $round = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isLocked = null;
+
     public function __construct()
     {
         if ($this->state === null) {
