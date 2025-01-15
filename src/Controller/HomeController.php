@@ -105,4 +105,59 @@ public function index(
     ]);
 }
 
+    #[Route('/export/ical', name: 'export_ical')]
+    public function exportToICal(ChampionshipRepository $championshipRepository, Request $request,): Response
+    {
+
+        $championshiplistId = $request->query->get('championshiplist_id');
+        $fieldId = $request->query->get('field_id');
+        $slotId = $request->query->get('slot_id');
+
+        $criteria = [];
+
+        if ($championshiplistId) {
+            $criteria['championshipList'] =  $championshiplistId;
+        }
+        if ($fieldId) {
+            $criteria['field'] = $fieldId;
+        }
+        if ($slotId) {
+            $criteria['slot'] = $slotId;
+        }
+
+        // Récupérer les matchs ou événements depuis la base de données
+        $championships = $championshipRepository->findBy($criteria);
+
+        // Créer le contenu du fichier iCal
+        $icalContent = "BEGIN:VCALENDAR\r\n";
+        $icalContent .= "VERSION:2.0\r\n";
+        $icalContent .= "CALSCALE:GREGORIAN\r\n";
+
+        foreach ($championships as $championship) {
+            if($championship->getSlot()){
+                $icalContent .= "BEGIN:VEVENT\r\n";
+                $icalContent .= "SUMMARY:" . $championship->getGreenTeam()->getName() . " vs " . $championship->getBlueTeam()->getName() . "\r\n";  // Le nom du championnat ou de l'événement
+                $icalContent .= "DESCRIPTION:" . $championship->getChampionshipList()->getChampionshipName() . " : " . $championship->getGreenTeam()->getName() . " vs " . $championship->getBlueTeam()->getName()  . "\r\n";  // La description de l'événement
+                if ($championship->getField()){
+                    $icalContent .= "LOCATION:" . $championship->getField()->getName() . "\r\n";  // L'emplacement
+                }
+                $icalContent .= "DTSTART:" . $championship->getSlot()->getDateDebut()->format('Ymd\THis\Z') . "\r\n";  // La date de début formatée en iCal
+                $icalContent .= "DTEND:" . $championship->getSlot()->getDateEnd()->format('Ymd\THis\Z') . "\r\n";  // La date de fin formatée en iCal
+                $icalContent .= "END:VEVENT\r\n";
+            }
+        }
+
+        $icalContent .= "END:VCALENDAR\r\n";
+
+        // Créer la réponse avec un fichier .ics
+        return new Response(
+            $icalContent,
+            Response::HTTP_OK,
+            [
+                'Content-Type' => 'text/calendar',
+                'Content-Disposition' => 'attachment; filename="events.ics"',
+            ]
+        );
+    }
+
 }
