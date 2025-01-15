@@ -56,6 +56,9 @@ class Championship
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $round = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isLocked = null;
+
     public function __construct()
     {
         if ($this->state === null) {
@@ -288,5 +291,17 @@ class Championship
 
         // Si le match n'est pas terminé ou si l'état n'est pas un gagnant, retourner null
         return null;
+    }
+
+    public function isLocked(): ?bool
+    {
+        return $this->isLocked;
+    }
+
+    public function setLocked(?bool $isLocked): static
+    {
+        $this->isLocked = $isLocked;
+
+        return $this;
     }
 }
