@@ -12,4 +12,7 @@ enum State: string
     case DRAW = "draw";
     case FORFAIT_GREEN = "forfaitGreen";
     case FORFAIT_BLUE = "forfaitBlue";
+
+    //ToDo : Add a trad
+    case FORFAIT = "forfait";
 }

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-#[UniqueEntity(fields: ['Name'], message: "Un terrain porte déjà ce nom")]
+#[UniqueEntity(fields: ['Name'], message: "alerts.fieldName")]
 #[ORM\Entity(repositoryClass: FieldRepository::class)]
 class Field
 {
