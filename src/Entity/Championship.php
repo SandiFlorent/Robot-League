@@ -53,6 +53,9 @@ class Championship
     #[ORM\Column]
     private ?bool $IsElimination = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $round = null;
+
     public function __construct()
     {
         if ($this->state === null) {
@@ -256,6 +259,18 @@ class Championship
     public function setElimination(bool $IsElimination): static
     {
         $this->IsElimination = $IsElimination;
+
+        return $this;
+    }
+
+    public function getRound(): ?string
+    {
+        return $this->round;
+    }
+
+    public function setRound(?string $round): static
+    {
+        $this->round = $round;
 
         return $this;
     }
