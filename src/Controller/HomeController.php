@@ -138,9 +138,11 @@ public function index(
                 $icalContent .= "BEGIN:VEVENT\r\n";
                 $icalContent .= "SUMMARY:" . $championship->getGreenTeam()->getName() . " vs " . $championship->getBlueTeam()->getName() . "\r\n";  // Le nom du championnat ou de l'événement
                 $icalContent .= "DESCRIPTION:" . $championship->getChampionshipList()->getChampionshipName() . " : " . $championship->getGreenTeam()->getName() . " vs " . $championship->getBlueTeam()->getName()  . "\r\n";  // La description de l'événement
-                $icalContent .= "LOCATION:" . $championship->getField()->getName() . "\r\n";  // L'emplacement
+                if ($championship->getField()){
+                    $icalContent .= "LOCATION:" . $championship->getField()->getName() . "\r\n";  // L'emplacement
+                }
                 $icalContent .= "DTSTART:" . $championship->getSlot()->getDateDebut()->format('Ymd\THis\Z') . "\r\n";  // La date de début formatée en iCal
-                $icalContent .= "DTEND:" . $championship->getDateEnd()->getDateEnd()->format('Ymd\THis\Z') . "\r\n";  // La date de fin formatée en iCal
+                $icalContent .= "DTEND:" . $championship->getSlot()->getDateEnd()->format('Ymd\THis\Z') . "\r\n";  // La date de fin formatée en iCal
                 $icalContent .= "END:VEVENT\r\n";
             }
         }
