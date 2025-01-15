@@ -13,18 +13,52 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\TeamRepository;
-
 
 #[Route('/{_locale}/user')]
 final class UserController extends AbstractController
 {
+    private const ITEMS_PER_PAGE = 10;
+
     #[Route(name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, Request $request): Response
     {
+        $currentPage = max(1, $request->query->getInt('page', 1));
+
+        // Compter le nombre total d'utilisateurs
+        $totalItems = $userRepository->count([]);
+
+        // Calculer le nombre total de pages
+        $totalPages = ceil($totalItems / self::ITEMS_PER_PAGE);
+
+        // Assurer que la page courante ne dépasse pas le nombre total de pages
+        $currentPage = min($currentPage, $totalPages);
+
+        // Calculer l'offset
+        $offset = max(0, ($currentPage - 1) * self::ITEMS_PER_PAGE);
+
+        // Récupérer les utilisateurs paginés
+        $users = $userRepository->createQueryBuilder('u')
+            ->orderBy('u.id', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults(self::ITEMS_PER_PAGE)
+            ->getQuery()
+            ->getResult();
+
+        // Créer l'objet pagination
+        $pagination = [
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'itemsPerPage' => self::ITEMS_PER_PAGE,
+            'totalItems' => $totalItems,
+            'hasPrevious' => $currentPage > 1,
+            'hasNext' => $currentPage < $totalPages,
+        ];
+
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
+            'pagination' => $pagination,
         ]);
     }
 
@@ -182,7 +216,6 @@ final class UserController extends AbstractController
             'userTeam' => $userTeam,
         ]);
     }
-
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response

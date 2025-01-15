@@ -23,10 +23,9 @@
         opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
-        
     }
     .relative button {
-        padding-bottom: 0px; /* Supprime le vide entre le bouton et le dropdown */
+        padding-bottom: 0px;
     }
     .relative .dropdown-content {
         margin-top: -5px; 
@@ -39,7 +38,6 @@
         border-bottom: 2px solid white;
         transform: translateY(-2px);
     }
-    /* Mobile menu styles */
     .mobile-menu-overlay {
         visibility: hidden;
         opacity: 0;
@@ -61,13 +59,31 @@
     .mobile-nav-link {
         @apply block w-full py-3 px-4 text-lg font-medium text-white hover:bg-gray-700 rounded-lg transition-colors duration-200;
     }
+    /* Langue styles */
+    .lang-dropdown {
+        position: relative;
+    }
+    .lang-content {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #1F2937;
+        min-width: 160px;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transform: translateY(-10px);
+        visibility: hidden;
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    }
+    .lang-dropdown:hover .lang-content {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+    }
 </style>
-
-
-
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-
     {% set route = app.request.attributes.get('_route') %}
     {% set route_params = app.request.attributes.get('_route_params') %}
     {% set params = route_params|merge(app.request.query.all) %}
@@ -75,8 +91,6 @@
     {% for message in app.flashes('notice') %}
         <div class="flash-notice text-center py-2 text-green-400">
             {{ message|trans }}
-            
-
         </div>
     {% endfor %}
 
@@ -113,6 +127,7 @@
                         <a href="{{ path('app_score_table') }}" class="block py-2 hover:text-gray-400">{{ 'base.seeScores'|trans }}</a>
                     </div>
                 </div>
+
                 {% if is_granted('ROLE_ORGANISATEUR') %}
                     <div class="relative">
                         <button class="nav-link font-medium">{{ 'base.admin'|trans }}</button>
@@ -120,16 +135,36 @@
                             <a href="{{ path('app_user_index') }}" class="block py-2 hover:text-gray-400">{{ 'base.users'|trans }}</a>
                             <a href="{{ path('app_championship_index') }}" class="block py-2 hover:text-gray-400">{{ 'base.championship'|trans }}</a>
                             <a href="{{ path('app_championship_list_new') }}" class="block py-2 hover:text-gray-400">{{ 'base.createAChampionship'|trans }}</a>
-
                         </div>
                     </div>
                 {% endif %}
+
                 {% if app.user %}
                     <a href="{{ path('app_logout') }}" class="nav-link font-medium">{{ 'base.logout'|trans }}</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="nav-link font-medium">{{ 'base.login'|trans }}</a>
                     <a href="{{ path('app_register') }}" class="nav-link font-medium">{{ 'base.register'|trans }}</a>
                 {% endif %}
+
+                <!-- Langue Dropdown -->
+                <div class="lang-dropdown">
+                    <button class="nav-link font-medium flex items-center">
+                        {{ app.request.locale|upper }}
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="lang-content">
+                        <a href="{{ path(route, params|merge({ _locale: 'fr' })) }}" 
+                           class="block px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200">
+                            Français
+                        </a>
+                        <a href="{{ path(route, params|merge({ _locale: 'en' })) }}"
+                           class="block px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200">
+                            English
+                        </a>
+                    </div>
+                </div>
             </div>
         </nav>
 
@@ -141,7 +176,7 @@
                     
                     <div class="space-y-2">
                         <button class="mobile-nav-link w-full text-left" onclick="toggleMobileSubmenu('teams-submenu')">
-                            Équipes
+                            {{ 'base.teams'|trans }}
                         </button>
                         <div id="teams-submenu" class="hidden pl-4 space-y-2">
                             {% if app.user %}
@@ -174,28 +209,27 @@
                         <a href="{{ path('app_login') }}" class="mobile-nav-link">{{ 'base.login'|trans }}</a>
                         <a href="{{ path('app_register') }}" class="mobile-nav-link">{{ 'base.register'|trans }}</a>
                     {% endif %}
+
+                    <!-- Langue Mobile -->
+                    <div class="space-y-2">
+                        <button class="mobile-nav-link w-full text-left" onclick="toggleMobileSubmenu('lang-submenu')">
+                            {{ 'Langue'|trans }}
+                        </button>
+                        <div id="lang-submenu" class="hidden pl-4 space-y-2">
+                            <a href="{{ path(route, params|merge({ _locale: 'fr' })) }}" class="mobile-nav-link">
+                                Français
+                            </a>
+                            <a href="{{ path(route, params|merge({ _locale: 'en' })) }}" class="mobile-nav-link">
+                                English
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {% block body %}
-        {% endblock %}
+        {% block body %}{% endblock %}
     </div>
-
-
-
-
-<a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" href="{{ path(route, params|merge({ _locale: 'en' })) }}">English</a>
-        
-<a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" href="{{ path(route, params|merge({ _locale: 'fr' })) }}">Français</a>
-        
-
-
-
-
-
-
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -209,7 +243,7 @@
                 document.body.classList.toggle('overflow-hidden');
             });
 
-            // Close menu when clicking outside
+            // Fermer le menu en cliquant à l'extérieur
             mobileMenuOverlay.addEventListener('click', function(e) {
                 if (e.target === mobileMenuOverlay) {
                     mobileMenuOverlay.classList.remove('active');
@@ -223,13 +257,12 @@
             menuButtons.forEach(button => {
                 button.addEventListener('click', function () {
                     const dropdown = this.nextElementSibling;
-                    dropdown.classList.toggle('active');
                     dropdown.classList.toggle('hidden');
                 });
             });
         });
 
-        // Mobile submenu toggle function
+        // Gestion des sous-menus mobiles
         function toggleMobileSubmenu(id) {
             const submenu = document.getElementById(id);
             submenu.classList.toggle('hidden');
