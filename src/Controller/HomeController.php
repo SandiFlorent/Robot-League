@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Controller;
@@ -29,6 +28,9 @@ public function index(
     $fieldId = $request->query->get('field_id');
     $slotId = $request->query->get('slot_id');
     $statusFilter = $request->query->get('status', 'present'); // 'past', 'present', or 'future'
+    $page = max(1, (int) $request->query->get('page', 1));
+    $limit = 6; // Nombre de résultats par page
+
 
     // Filtrer les championship lists en fonction de leur statut
     switch ($statusFilter) {
@@ -65,11 +67,27 @@ public function index(
             $criteria['slot'] = $slotId;
         }
 
-        $championships = $championshipRepository->findBy($criteria);
+        $championships = $championshipRepository->findBy(
+            $criteria,
+            ['id' => 'ASC'],
+            $limit,
+            ($page - 1) * $limit
+        );
+        $totalItems = $championshipRepository->count($criteria);
+
     } else {
         // Si aucun championnat n'est sélectionné, récupérer tous les matchs
-        $championships = $championshipRepository->findAll();
+        $championships = $championshipRepository->findBy(
+            [],
+            ['id' => 'ASC'],
+            $limit,
+            ($page - 1) * $limit
+        );
+        $totalItems = $championshipRepository->count([]);
+
     }
+
+    $totalPages = (int) ceil($totalItems / $limit);
 
     return $this->render('home/index.html.twig', [
         'championships' => $championships,
@@ -80,6 +98,9 @@ public function index(
         'selected_field_id' => $fieldId,
         'selected_slot_id' => $slotId,
         'statusFilter' => $statusFilter,  // Passer le filtre pour la vue
+        'page' => $page,
+        'totalPages' => $totalPages
+
     ]);
 }
 
