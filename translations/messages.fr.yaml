@@ -1,4 +1,6 @@
 base: 
+  import: Importer
+  ical: Télécharger le calendriel iCal
   home: Accueil
   teams: Equipes
   create: Créer une équipe

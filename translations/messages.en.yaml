@@ -1,4 +1,6 @@
 base: 
+  import: Import
+  ical: Download the iCal calendar
   home: Home
   teams: Teams
   create: Create a team
