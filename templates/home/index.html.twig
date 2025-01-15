@@ -17,14 +17,6 @@
             <option value="future" {% if statusFilter == 'future' %}selected{% endif %}>{{ 'index.future'|trans }}</option>
         </select>
 
-        <label for="status" class="block text-lg font-semibold text-white mb-2">{{ 'base.chooseStatus'|trans }} :</label>
-        <select name="status" id="status" 
-                class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto"
-                onchange="this.form.submit()">
-            <option value="present" {% if statusFilter == 'present' %}selected{% endif %}>{{ 'index.present'|trans }}</option>
-            <option value="past" {% if statusFilter == 'past' %}selected{% endif %}>{{ 'index.past'|trans }}</option>
-            <option value="future" {% if statusFilter == 'future' %}selected{% endif %}>{{ 'index.future'|trans }}</option>
-        </select>
 
         <label for="championshiplist_id" class="block text-lg font-semibold text-white mb-2">{{ 'base.chooseChamp'|trans }} :</label>
         <select name="championshiplist_id" id="championshiplist_id" 
