@@ -63,8 +63,12 @@
                         <a href="{{ path('app_championship_elimination', {'id': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-yellow-500" role="menuitem">
                             {{ 'edit.eliminationMatches'|trans }}
                         </a>
+                        
                         <a href="{{ path('app_championship_export', {'championshiplist_id': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-blue-500" role="menuitem">
                             {{ 'edit.export_JSON'|trans }}
+                        </a>
+                        <a href="{{ path('app_championship_import', {'idChampionshipList': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-blue-500" role="menuitem">
+                            {{ 'edit.import_JSON'|trans }}
                         </a>
                     </div>
                 </div>
@@ -128,6 +132,13 @@
                                 </select>
                             </div>
 
+                            <!-- Case à cocher pour isLocked -->
+                            <div class="flex items-center space-x-2">
+                                <input type="checkbox" name="isLocked" value="1" id="isLocked" {% if championship.isLocked %}checked{% endif %}
+                                    class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-0">
+                                <label for="isLocked" class="text-sm text-gray-400">{{ 'index.isLocked'|trans }}</label>
+                            </div>
+
                             <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">
                                 {{ 'label.save'|trans }}
                             </button>
@@ -149,6 +160,7 @@
                             <th class="px-6 py-4 font-medium">{{ 'index.dateOfBeginning'|trans }}</th>
                             <th class="px-6 py-4 font-medium">{{ 'index.dateOfEnd'|trans }}</th>
                             <th class="px-6 py-4 font-medium">{{ 'index.state'|trans }}</th>
+                            <th class="px-6 py-4 font-medium">{{ 'index.isLocked'|trans }}</th>
                             <th class="px-6 py-4 font-medium">{{ 'index.actions'|trans }}</th>
                         </tr>
                     </thead>
@@ -177,6 +189,13 @@
                                             </option>
                                         {% endfor %}
                                     </select>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <input type="checkbox" name="isLocked" value="1" id="isLocked" {% if championship.isLocked %}checked{% endif %}
+                                            class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-0">
+                                        <label for="isLocked" class="text-sm text-gray-400">{{ 'index.isLocked'|trans }}</label>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">
