@@ -37,10 +37,18 @@ Pour les prochaines fois exécuter seulement les commandes :
 ### Interface Administrateur
 
 
+### Devenir Organisateur
+Afin de devenir organisateur, l'utilisateur doit demander à un autre organisateur de devenir organisateur en donnant sont e-mail.
+L'organisateur pourra alors changer le rôle de l'utilisateur dans l'interface de gestion d'utilisateur.
+
 
 ### Base de données
 Dans le projet, des scripts SQL nécessitent d'être importés dans PHPMyAdmin. 
 Il s'agit par exemple de triggers.
+
+Afin d'importer les entités dans sa base de données mySQL:
+Mettre le lien de sa base de donnée dans le fichier .env .
+Exécuter la commande `symfony console doctrine:schema:update --force`.
 
 
 #### Autres informations
