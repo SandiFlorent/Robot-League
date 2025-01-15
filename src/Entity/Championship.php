@@ -50,6 +50,9 @@ class Championship
     #[ORM\ManyToOne(inversedBy: 'championships')]
     private ?Field $field = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isLocked = null;
+
     public function __construct()
     {
         if ($this->state === null) {
@@ -240,6 +243,18 @@ class Championship
     public function setField(?Field $field): static
     {
         $this->field = $field;
+
+        return $this;
+    }
+
+    public function isLocked(): ?bool
+    {
+        return $this->isLocked;
+    }
+
+    public function setLocked(?bool $isLocked): static
+    {
+        $this->isLocked = $isLocked;
 
         return $this;
     }
