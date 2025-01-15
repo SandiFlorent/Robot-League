@@ -160,6 +160,15 @@ login:
 delete: 
   delete: Delete
 
+elimination:
+  eliminationPhase: Elimination phase
+  round: Round
+  state: State
+  winner: Winning team
+  won: won
+  matchNotFinished: The match is not finished yet
+  refresh: Refresh
+
 teammember: 
   addMembers: Add members
   addMember: Add a new member

@@ -93,6 +93,15 @@ new:
   championshipList: Liste des championnats
   championshipName: Nom du championnat
 
+elimination:
+  eliminationPhase: Phase d'élimination
+  round: Round
+  state: État
+  winner: La team gagnante
+  won: a gagné
+  matchNotFinished: Le match n'est pas encore terminé
+  refresh: Actualiser
+
 index: 
   actions: Actions
   noRecords: Pas d'informations trouvées
