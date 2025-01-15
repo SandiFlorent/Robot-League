@@ -292,32 +292,36 @@ final class ChampionshipController extends AbstractController
         }
 
         $threshold = $championshipList->getThreshold();
-        
+
         // Récupérer les équipes qualifiées (ajoutez un critère pour la qualification)
-        $qualifiedTeams = $championshipList->getTeams()->filter(function($team) {
+        $qualifiedTeams = $championshipList->getTeams()->filter(function ($team) {
             return $team->isAccepted() && $team->isQualifiedForElimination(); // Critère de qualification
         })->toArray();
-        
+
         // Limiter le nombre d'équipes qualifiées selon le seuil (threshold)
         if (count($qualifiedTeams) > $threshold) {
             $qualifiedTeams = array_slice($qualifiedTeams, 0, $threshold);
         }
 
         // Générer les matchs éliminatoires en fonction du nombre d'équipes
-        $this->generateEliminationMatches($qualifiedTeams, $championshipList);
-        
+        $matches = $this->generateEliminationMatches($qualifiedTeams, $championshipList);
+
+        // Regrouper les matchs par round
+        $matchesByRound = $this->groupMatchesByRound($matches);
+
         // Rendre la vue avec les équipes qualifiées et les matchs générés
         return $this->render('championship/elimination.html.twig', [
             'championship_list' => $championshipList,
-            'qualified_teams' => $qualifiedTeams,
+            'matches_by_round' => $matchesByRound,
         ]);
     }
 
-    private function generateEliminationMatches(array $teams, ChampionshipList $championshipList)
+    private function generateEliminationMatches(array $teams, ChampionshipList $championshipList): array
     {
         shuffle($teams);  // Mélange des équipes pour assurer un tirage au sort aléatoire
         $totalTeams = count($teams);
         $matches = [];
+        $round = 1;
 
         for ($i = 0; $i < $totalTeams; $i += 2) {
             if ($i + 1 < $totalTeams) {
@@ -327,69 +331,98 @@ final class ChampionshipController extends AbstractController
                 $match->setGreenTeam($teams[$i + 1]);
                 $match->setChampionshipList($championshipList);
                 $match->setState(State::NOT_STARTED);
-                $match->setElimination(true);  // Marquer comme match éliminatoire
-                // Sauvegarde du match
+                $match->setElimination(true);
+                $match->setRound($round);  // Set initial round
                 $this->entityManager->persist($match);
                 $matches[] = $match;
             }
         }
 
-        // Appliquer les changements en base
         $this->entityManager->flush();
-    }
 
-    private function createEliminationRound(array $teams, ChampionshipList $championshipList, string $roundType)
-    {
-        // Générer les matchs pour chaque tour (quart, demi-finale ou finale)
-        $roundMatches = [];
-
-        if ($roundType === 'Quart de Finale') {
-            $roundMatches = $this->generateMatchesForRound($teams, $championshipList);
-        } elseif ($roundType === 'Demi-Finale') {
-            // Demi-finale entre les gagnants des quarts de finale
-            $roundMatches = $this->generateMatchesForRound($teams, $championshipList);
-        }
-
-        // Finale
-        if ($roundType === 'Demi-Finale') {
-            $this->generateFinalMatch($teams, $championshipList);
-        }
-
-        // Persist all round matches
-        foreach ($roundMatches as $match) {
-            $this->entityManager->persist($match);
-        }
-
-        return $roundMatches;
-    }
-
-    private function generateMatchesForRound(array $teams, ChampionshipList $championshipList)
-    {
-        $matches = [];
-        $count = count($teams);
-        for ($i = 0; $i < $count; $i += 2) {
-            if ($i + 1 < $count) {
-                // Créer un match pour cette paire d'équipes
-                $match = new Championship();
-                $match->setBlueTeam($teams[$i]);
-                $match->setGreenTeam($teams[$i + 1]);
-                $match->setChampionshipList($championshipList);
-                $match->setState(State::NOT_STARTED);
-                $matches[] = $match;
-            }
-        }
         return $matches;
     }
 
-    private function generateFinalMatch(array $teams, ChampionshipList $championshipList)
+    private function groupMatchesByRound(array $matches): array
     {
-        // Final entre les gagnants des demi-finales
-        $match = new Championship();
-        $match->setBlueTeam($teams[0]);
-        $match->setGreenTeam($teams[1]);
-        $match->setChampionshipList($championshipList);
-        $match->setState(State::NOT_STARTED);
-        $this->entityManager->persist($match);
+        $matchesByRound = [];
+
+        foreach ($matches as $match) {
+            $round = $match->getRound();
+            if (!isset($matchesByRound[$round])) {
+                $matchesByRound[$round] = [];
+            }
+            $matchesByRound[$round][] = $match;
+        }
+
+        return $matchesByRound;
+    }
+
+    /**
+     * @Route("/championship/next-round/{id}", name="app_championship_next_round")
+     */
+    public function nextRound(int $id): Response
+    {
+        // Récupérer la championship list
+        $championshipList = $this->entityManager->getRepository(ChampionshipList::class)->find($id);
+        if (!$championshipList) {
+            throw $this->createNotFoundException('Championship list not found.');
+        }
+
+        $currentRound = $this->getCurrentRound($championshipList);
+
+        // Générer les matchs pour le round suivant
+        $matches = $this->generateNextRoundMatches($championshipList, $currentRound);
+
+        // Rendre la vue avec les matchs du round suivant
+        return $this->render('championship/elimination.html.twig', [
+            'championship_list' => $championshipList,
+            'matches_by_round' => $this->groupMatchesByRound($matches),
+        ]);
+    }
+
+    private function generateNextRoundMatches(ChampionshipList $championshipList, int $currentRound): array
+    {
+        $matches = [];
+        $round = $currentRound + 1;
+
+        // Récupérer les gagnants des matchs précédents
+        $winningTeams = $this->entityManager->getRepository(Championship::class)->findBy([
+            'championshipList' => $championshipList,
+            'round' => $currentRound,
+            'state' => [State::WIN_BLUE, State::WIN_GREEN]
+        ]);
+
+        // Générer les matchs pour le round suivant
+        shuffle($winningTeams); // Mélanger les gagnants pour la création des nouveaux matchs
+        for ($i = 0; $i < count($winningTeams); $i += 2) {
+            if ($i + 1 < count($winningTeams)) {
+                $match = new Championship();
+                $match->setBlueTeam($winningTeams[$i]->getWinner());
+                $match->setGreenTeam($winningTeams[$i + 1]->getWinner());
+                $match->setChampionshipList($championshipList);
+                $match->setState(State::NOT_STARTED);
+                $match->setElimination(true);
+                $match->setRound($round);
+                $this->entityManager->persist($match);
+                $matches[] = $match;
+            }
+        }
+
+        $this->entityManager->flush();
+
+        return $matches;
+    }
+
+    private function getCurrentRound(ChampionshipList $championshipList): int
+    {
+        // Récupérer le round le plus élevé parmi les matchs existants
+        $matches = $this->entityManager->getRepository(Championship::class)->findBy([
+            'championshipList' => $championshipList,
+            'isElimination' => true
+        ]);
+        $rounds = array_map(fn($match) => $match->getRound(), $matches);
+        return max($rounds);
     }
 
 
