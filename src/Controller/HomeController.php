@@ -98,7 +98,7 @@ public function index(
         'selected_championship_id' => $championshiplistId,
         'selected_field_id' => $fieldId,
         'selected_slot_id' => $slotId,
-        'statusFilter' => $statusFilter,  // Passer le filtre pour la vue
+        'statusFilter' => $statusFilter,
         'page' => $page,
         'totalPages' => $totalPages
 

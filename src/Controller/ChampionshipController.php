@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Enum\State;
 use App\Repository\EncounterRepository;
+use App\Form\ImportChampionshipType;
+use Doctrine\ORM\PersistentCollection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[Route('/{_locale}/championship')]
 final class ChampionshipController extends AbstractController
@@ -64,7 +67,7 @@ final class ChampionshipController extends AbstractController
                 $currentPage = min($currentPage, $totalPages);
 
                 // Calculer l'offset
-                $offset = ($currentPage - 1) * self::ITEMS_PER_PAGE;
+                $offset = max(0, ($currentPage - 1) * self::ITEMS_PER_PAGE);
 
                 // Récupérer les matchs paginés
                 $championships = $championshipRepository->createQueryBuilder('c')
@@ -207,11 +210,12 @@ final class ChampionshipController extends AbstractController
     
                     // Sauvegarde la rencontre
                     $this->entityManager->persist($championship);
+                    $this->entityManager->flush();
                 }
             }
         }
     
-        // Sauvegarde toutes les nouvelles rencontres
+        // Sauvegarde toutes les nouvelles rencontres (au cas où)
         $this->entityManager->flush();
     }
 
@@ -221,11 +225,13 @@ final class ChampionshipController extends AbstractController
         // Récupère les données du formulaire
         $blueScore = $request->request->get('blueScore');
         $greenScore = $request->request->get('greenScore');
-        $stateName = $request->request->get('state');  // Récupère le nom de la constante (par exemple, "Canceled")
+        $stateName = $request->request->get('state');
+        $isLocked = $request->request->get('isLocked');
 
         // Met à jour les scores
         $championship->setBlueGoal($blueScore);
         $championship->setGreenGoal($greenScore);
+        $championship->setLocked($isLocked);
 
         // Convertit la valeur de l'état en une instance de l'énumération State
         try {
@@ -390,10 +396,10 @@ final class ChampionshipController extends AbstractController
     #[Route('/championship/export', name: 'app_championship_export', methods: ['POST'])]
     public function export(Request $request, ChampionshipListRepository $championshipListRepository): Response
     {
-        $championshiplistId = $request->query->get('championshiplist_id');
+        $championshiplistId = $request->query->get('id');
 
         // Récupérer les championnats filtrés en fonction des paramètres
-        $championships = $championshipListRepository->findOne(["id" => $championshiplistId])->getMatches();
+        $championships = $championshipListRepository->findOneBy(["id" => $championshiplistId])->getMatches();
 
         // Convertir les championnats en un tableau de données à exporter
         $championshipData = [];
@@ -402,7 +408,7 @@ final class ChampionshipController extends AbstractController
                 'id' => $championship->getId(),
                 'blueGoal' => $championship->getBlueGoal(),
                 'greenGoal' => $championship->getGreenGoal(),
-                'state' => $championship->getState()->getValue(),
+                'state' => $championship->getState(),
             ];
         }
 
@@ -417,5 +423,60 @@ final class ChampionshipController extends AbstractController
         $response->headers->set('Content-Disposition', 'attachment; filename="championships.json"');
 
         return $response;
+    }
+
+    #[Route('/import/{idChampionshipList}', name: 'app_championship_import')]
+    public function import(Request $request, ChampionshipListRepository $championshipListRepository, int $idChampionshipList): Response
+    {
+        $form = $this->createForm(ImportChampionshipType::class);
+        $form->handleRequest($request);
+
+        $championships = $championshipListRepository->find($idChampionshipList)->getMatches();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $file */
+            $file = $form->get('file')->getData();
+            
+            // Traiter le fichier JSON
+            $this->importChampionshipsFromJson($file, $championships);
+
+            $this->addFlash('success', 'Les championnats ont été importés avec succès!');
+            
+            return $this->redirectToRoute('app_championship_index'); // rediriger vers une autre page après l'import
+        }
+
+        return $this->render('championship/import_championships.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    private function importChampionshipsFromJson(UploadedFile $file, PersistentCollection $championships): void
+    {
+        // Lire le contenu du fichier JSON
+        $jsonContent = file_get_contents($file->getPathname());
+        $championshipsData = json_decode($jsonContent, true);
+
+        if ($championshipsData === null) {
+            throw new \Exception("Le fichier JSON est mal formaté.");
+        }
+
+        // Parcourir les données et insérer chaque championnat dans la base de données
+        foreach ($championshipsData as $data) {
+            $championshipRes = null;
+            foreach($championships as $championship){
+                if ($data['id'] == $championship->getId()){
+                    $championshipRes = $championship;
+                }
+            }
+
+            if ($championshipRes == null or !$championshipRes->isLocked() or $championshipRes->isLocked() == false){
+                $championshipRes->SetBlueGoal($data['blueGoal']);
+                $championshipRes->SetGreenGoal($data['greenGoal']);
+                $championshipRes->SetState(State::from($data['state']));
+            }
+        }
+
+        // Sauvegarder les données dans la base de données
+        $this->entityManager->flush();
     }
 }
