@@ -168,8 +168,9 @@ label:
   update: Update
   update2: Update
   save: Save
-  championshipMatches: Championsship matches
+  championshipMatches: Championship matches
   scoreBoard: Score board
+  fullScreen: Full screen
 
 score: 
   selectChamp: Select a championship
