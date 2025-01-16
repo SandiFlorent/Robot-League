@@ -1,4 +1,6 @@
 base: 
+  import: Importer
+  ical: Télécharger le calendriel iCal
   home: Accueil
   teams: Equipes
   create: Créer une équipe
@@ -46,7 +48,9 @@ base:
   slotIndex: Index créneaux
   selectSlot: Sélectionner un créneau
   chooseSlot: Choisir un créneau
-
+  championnat: Championnat
+  arbre_de_tournoi: Arbre de tournoi
+  
 show:
   show: Aficher
   team: Equipe

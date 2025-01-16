@@ -14,7 +14,14 @@ use App\Repository\FieldRepository;
 use App\Repository\SlotRepository;
 
 class HomeController extends AbstractController
-{
+{   
+
+    #[Route('/', name: 'app_route')]
+    public function route(){
+        return $this->redirectToRoute('app_home');
+    }
+
+
     #[Route('/{_locale}/', name: 'app_home')]
 public function index(
     Request $request,

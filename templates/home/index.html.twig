@@ -22,8 +22,6 @@
         <select name="championshiplist_id" id="championshiplist_id" 
                 class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto"
                 onchange="this.form.submit()">
-                class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto"
-                onchange="this.form.submit()">
             <option value="">{{ 'base.selectChamp'|trans }}</option>
             {% for championshipList in championshipLists %}
                 <option value="{{ championshipList.id }}" {% if championshipList.id == selected_championship_id %}selected{% endif %}>
@@ -53,8 +51,6 @@
         <select name="slot_id" id="slot_id" 
                 class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto"
                 onchange="this.form.submit()">
-                class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto"
-                onchange="this.form.submit()">
             <option value="">{{ 'base.selectSlot'|trans }}</option>
             {% for slot in slots %}
                 <option value="{{ slot.id }}" {% if slot.id == selected_slot_id %}selected{% endif %}>
@@ -75,7 +71,7 @@
             'slot_id': selected_slot_id
         }) }}" 
         class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700">
-            Télécharger le calendrier iCal
+            {{'base.ical'|trans}}
         </a>
     </form>
 

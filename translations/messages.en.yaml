@@ -1,4 +1,6 @@
 base: 
+  import: Import
+  ical: Download the iCal calendar
   home: Home
   teams: Teams
   create: Create a team
@@ -46,7 +48,8 @@ base:
   slotIndex: Slot index
   selectSlot: Select a slot
   chooseSlot: Choose a slot
-
+  championnat: Championship
+  arbre_de_tournoi: Tournament tree
 show:
   show: Show
   team: Team
