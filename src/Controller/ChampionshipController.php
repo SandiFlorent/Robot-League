@@ -466,7 +466,13 @@ final class ChampionshipController extends AbstractController
         $championshiplistId = $request->query->get('id');
 
         // Récupérer les championnats filtrés en fonction des paramètres
-        $championships = $championshipListRepository->findOneBy(["id" => $championshiplistId])->getMatches();
+        $championshipList = $championshipListRepository->find($championshiplistId);
+
+        $championships = [];
+        
+        if ($championshipList){
+            $championship = $championshipList->getMatches();
+        }
 
         // Convertir les championnats en un tableau de données à exporter
         $championshipData = [];
