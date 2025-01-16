@@ -96,7 +96,7 @@ final class ChampionshipListController extends AbstractController
 
 
     #[Route('{id}/newSlot', name: 'app_championship_list_new_slot', methods: ['GET', 'POST'])]
-    public function newSlot(Request $request, EntityManagerInterface $entityManager , ChampionshipList $championshipList, FieldRepository $FieldRepository): Response
+    public function newSlot(Request $request, EntityManagerInterface $entityManager , ChampionshipList $championshipList, FieldRepository $FieldRepository, ChampionshipListRepository $championshipListRepository): Response
     {
         $slot = new Slot();
         $form = $this->createForm(SlotType::class, $slot);

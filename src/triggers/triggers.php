@@ -7,20 +7,20 @@ use App\Entity\Team;
 
 class triggers
 {
-    private State $oldState;
-    private State $newState;
+    private string $oldState;
+    private string $newState;
     private Team $blueTeam;
     private Team $greenTeam;
     private int $blueGoal = 0;
     private int $greenGoal = 0;
-    public function __construct($oldState, $newState, $blueTeam, $greenTeam, $blueGoal, $greenGoal)
+    public function __construct($championship, $oldState, $newState)
     {
         $this->oldState = $oldState;
         $this->newState = $newState;
-        $this->blueTeam = $blueTeam;
-        $this->greenTeam = $greenTeam;
-        $this->blueGoal = $blueGoal;
-        $this->greenGoal = $greenGoal;
+        $this->blueTeam = $championship->getBlueTeam();
+        $this->greenTeam = $championship->getGreenTeam();
+        $this->blueGoal = $championship->getBlueGoal();
+        $this->greenGoal = $championship->getGreenGoal();
     }
 
     public function discardGoals(): void
@@ -195,6 +195,7 @@ class triggers
                 break;
 
             case State::WIN_BLUE->value:
+                
                 switch ($oldState) {
                         // If the match was canceled before, we increase the number of encounters for both teams and add 3 points to the blue team and increase its number of wins
                     case State::CANCELED->value:

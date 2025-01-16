@@ -28,7 +28,7 @@ class ImpersonateController extends AbstractController
             $this->addFlash('error', 'userNotFound');
             return $this->redirectToRoute('app_home');
         }
-
+        
         return $this->redirectToRoute('app_home', ['_switch_user' => $user->getEmail()]);
     }
 
