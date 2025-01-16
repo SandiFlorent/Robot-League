@@ -4,15 +4,35 @@
 
 {% block body %}
 <div class="container mx-auto p-6 bg-gray-800 text-white rounded-lg shadow-lg mt-8">
-    <!-- Titre principal -->
-    <div class="text-center mb-8">
-        <h1 class="text-4xl font-extrabold text-white drop-shadow-lg">{{ 'elimination.eliminationPhase'|trans }}</h1>
+    <!-- Formulaire pour sélectionner un championnat -->
+    <div class="mb-6">
+        <label for="championshiplist_id" class="text-lg font-semibold text-gray-300">{{ 'base.chooseChamp'|trans }}</label>
+        <form method="get" action="{{ path('app_championship_elimination', {'id': selected_championship_list.id}) }}" class="space-y-4">
+            <select name="championshiplist_id" id="championshiplist_id" class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md">
+                <option value="">{{ 'base.selectChamp'|trans }}</option>
+                {% for championshipList in championship_lists %}
+                    <option value="{{ championshipList.id }}" {% if championshipList == selected_championship_list %}selected{% endif %}>
+                        {{ championshipList.ChampionshipName }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="w-auto px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
+                {{ 'index.displayMatch'|trans }}
+            </button>
+        </form>
     </div>
-
+{% if is_organisateur %}
+    <!-- Ajouter un bouton pour l'organisateur afin de créer les matchs -->
+    <a href="{{ path('app_championship_generate_elimination', {'id': selected_championship_list.id }) }}" 
+       class="w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
+        {{ 'elimination.createEliminationMatches'|trans }}
+    </a>
+{% endif %}
+    
     <!-- Affichage des matchs pour chaque round -->
     {% for round, matches in matches_by_round %}
         <div class="mb-6">
-            <h2 class="text-2xl font-semibold text-blue-400 mb-4">{{ 'elimination.round'|trans }} {{ round }}</h2>
+            <h2 class="text-2xl font-semibold text-blue-400 mt-6 mb-4">{{ 'elimination.round'|trans }} {{ round }}</h2>
             
             <ul class="space-y-4">
                 {% for match in matches %}
@@ -23,7 +43,7 @@
                             <span class="text-green-400 font-semibold">{{ match.greenTeam.name }}</span>
                         </div>
                         
-                        <!-- Section de l'état du match centrée et mise en avant -->
+                        <!-- Section de l'état du match -->
                         <div class="mt-4 text-center">
                             <span class="text-lg text-gray-400">{{ 'elimination.state'|trans }}: </span>
                             {% if match.state.value == 'winBlue' %}
@@ -45,43 +65,5 @@
             </ul>
         </div>
     {% endfor %}
-
-    <!-- Vérification si tous les matchs du tournoi sont terminés -->
-    {% set allMatchesFinished = true %}
-    {% for round, matches in matches_by_round %}
-        {% for match in matches %}
-            {% if match.state.value != 'winBlue' and match.state.value != 'winGreen' %}
-                {% set allMatchesFinished = false %}
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-
-    <!-- Vérification si nous sommes à la finale -->
-    {% set isFinale = matches_by_round|last|length == 1 %}
-
-    {% if isFinale %}
-        <div class="mt-8">
-            {% for match in matches_by_round|last %}
-                <div class="mt-4 text-center">
-                    {% if match.state.value == 'winBlue' %}
-                        <p class="text-2xl font-bold text-blue-400">{{ match.blueTeam.name }} {{ 'elimination.won'|trans }}!</p>
-                    {% elseif match.state.value == 'winGreen' %}
-                        <p class="text-2xl font-bold text-green-400">{{ match.greenTeam.name }} {{ 'elimination.won'|trans }}!</p>
-                    {% else %}
-                        <p class="text-gray-400">{{ 'elimination.matchNotFinished'|trans }}</p>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    <!-- Affichage du bouton "Actualiser" si tous les matchs sont terminés -->
-    {% if allMatchesFinished %}
-        <div class="mt-8 text-center">
-            <a href="{{ path('app_championship_next_round', {'id': championship_list.id}) }}" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
-                {{ 'elimination.refresh'|trans }}
-            </a>
-        </div>
-    {% endif %}
 </div>
 {% endblock %}

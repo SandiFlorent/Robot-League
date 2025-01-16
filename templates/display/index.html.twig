@@ -1,0 +1,140 @@
+{% block title %}   {% endblock %}
+
+<head>{% block stylesheets %}
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {% endblock %}</head>
+
+{% block body %}
+<body class="bg-gradient-to-br h-screen from-gray-900 to-gray-800 text-white">
+
+    {% set route = app.request.attributes.get('_route') %}
+    {% set route_params = app.request.attributes.get('_route_params') %}
+    {% set params = route_params|merge(app.request.query.all) %}
+
+    
+
+
+
+    {% if championships is not empty %}
+    <div class="text-center mb-6"></div>
+        <div class="flex flex-wrap items-center justify-center">
+            <div class="relative overflow-x-auto rounded-md">
+                <table class="w-full text-sm rounded-md text-left rtl:text-right text-white ">
+                    <thead class="rounded-b-3xl border-b border-black bg-gray-900 text-xs rounded-md uppercase bg-gray-50 text-white">
+                        <tr>
+                            <th scope="col" class="text-white px-6 py-3">
+                                {{ 'index.blueTeam'|trans }}
+                            </th>
+                            <th scope="col" class="text-white px-6 py-3">
+                                {{ 'index.beginDate'|trans }}
+                            </th>
+                            <th scope="col" class="text-white px-6 py-3">
+                                {{ 'index.field'|trans }}
+                            </th>
+                            <th scope="col" class="text-white px-6 py-3">
+                                {{ 'base.blueScore'|trans }}
+                            </th>
+                            <th scope="col" class="text-white px-6 py-3">
+                                {{ 'base.greenScore'|trans }}
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                {{ 'index.greenTeam'|trans }}
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                {{ 'index.state'|trans }}
+                            </th>
+                        </tr>
+                    </thead>
+                    
+                                <tr class="border-4 border-green-700 dark:bg-gray-700 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 ">
+                                       a
+                                    </th>
+                                    <td class="px-6 py-4">
+                                       a
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        a
+                                    </td>
+                                    <td class="px-6 py-4">
+                                       a
+                                    </td>
+                                    <td class="px-6 py-4">
+                                       a
+                                    </td>
+                                    <th scope="row" class="font-bold px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                                        a
+                                    </th>
+                                    <td class="px-6 py-4">
+                                       a
+                                    </td>
+                                </tr>
+                            </tbody>
+                    {% for championship in championships %}
+                        {% if championship.slot.dateDebut|date('Y-m-d H:i') <= "now"|date_modify("+1 hour")|date("Y-m-d H:i") and championship.slot.dateEnd|date('Y-m-d H:i') >= "now"|date_modify("+1 hour")|date("Y-m-d H:i") %}
+                            <tbody>
+                                <tr class="border-4 border-green-700 dark:bg-gray-700 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ championship.blueTeam.name }}
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{ championship.slot.dateDebut|date('H:i:s d-m-Y ') }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ championship.field.name }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ championship.blueGoal }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ championship.greenGoal }}
+                                    </td>
+                                    <th scope="row" class="font-bold px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                                        {{ championship.greenTeam.name }}
+                                    </th
+                                    <td class="px-6 py-4">
+                                        {{ championship.state.value }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        {% else %}
+                            {% if championship.slot.dateEnd|date('Y-m-d H:i:s') > "now"|date_modify("+1 hour")|date("Y-m-d H:i:s") %}
+                                <tbody>
+                                    <tr class="border-4 border-green-700 dark:bg-gray-700 dark:border-gray-700">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ championship.blueTeam.name }}
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            {{ championship.slot.dateDebut|date('H:i:s d-m-Y ') }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ championship.field.name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ championship.blueGoal }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ championship.greenGoal }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ championship.greenTeam.name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ championship.state.value }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            {% endif %}
+                            </table>
+                        </div>    
+                {% endif %}
+            {% endfor %}
+        </div>  
+    {% else %}
+        <p class="text-lg text-white text-center">{{ 'index.noChampionship'|trans }}</p>
+    {% endif %}
+</body>
+
+
+
+{% endblock %}
