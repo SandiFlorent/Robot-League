@@ -40,12 +40,7 @@ class SlotType extends AbstractType
                 ],
                 'label_attr' => ['class' => 'block mb-2 text-sm font-medium text-white']
             ])
-            ->add('submit', SubmitType::class, [
-                'attr' => [
-                    'class' => 'text-white bg-blue-600 hover:bg-blue-700 border border-blue-500 text-sm rounded-lg focus:ring-4 focus:ring-blue-400 focus:outline-none block w-full p-3 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg hover:shadow-2xl'
-                ],
-                'label' => 'Ajouter'
-            ]);
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

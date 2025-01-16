@@ -2,50 +2,192 @@
 
 {% block title %}{{ 'new.championshipListIndex'|trans }}{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .bg-blur {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.1); /* Fond semi-transparent pour le flou */
+    }
+
+    .arrow-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .button-container:hover .arrow-container {
+        transform: translateX(10px);
+    }
+
+    .arrow {
+        width: 0;
+        height: 0;
+        border-left: 5px solid white;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+    }
+
+    .common-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .common-button:hover {
+        transform: scale(1.05);
+    }
+
+    .common-button:active {
+        transform: scale(0.95);
+    }
+
+    .no-scale-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .no-scale-button:hover {
+        background-color: #1d4ed8; /* Couleur de fond pour le hover */
+    }
+
+    .no-scale-button:active {
+        background-color: #1e3a8a; /* Couleur de fond pour l'active */
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination a {
+        margin: 0 5px;
+        padding: 10px 15px;
+        background-color: #1d4ed8;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .pagination a:hover {
+        background-color: #1e3a8a;
+    }
+
+    .pagination .active {
+        background-color: #1e3a8a;
+    }
+
+    .card {
+        background-color: #1f2937;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        margin-bottom: 10px;
+    }
+
+    .card .actions {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .card .actions a {
+        margin-right: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .card .actions {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .card .actions a {
+            margin-bottom: 10px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="container mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
     <h1 class="text-4xl font-extrabold text-white drop-shadow-lg mb-6">{{ 'new.championshipListIndex'|trans }}</h1>
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-gray-800 rounded-lg shadow-lg">
-            <thead>
-                <tr class="bg-gray-700 text-white">
-                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'show.id'|trans }}</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'new.championshipName'|trans }}</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'base.description'|trans }}</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'base.addr'|trans }}</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'index.beginDate'|trans }}</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'index.endDate'|trans }}</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'base.threshold'|trans }}</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium uppercase tracking-wider">{{ 'index.actions'|trans }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for championship_list in championship_lists %}
-                    <tr class="bg-gray-800 hover:bg-gray-700 transition duration-300">
-                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.ChampionshipName }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.description }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.adress }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.dateStart ? championship_list.dateStart|date('Y-m-d H:i:s') : '' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.dateEnd ? championship_list.dateEnd|date('Y-m-d H:i:s') : '' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ championship_list.threshold }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <a href="{{ path('app_championship_list_show', {'id': championship_list.id}) }}" class="text-blue-500 hover:text-blue-700">{{ 'show.show'|trans }}</a>
-                            <a href="{{ path('app_championship_list_edit', {'id': championship_list.id}) }}" class="text-green-500 hover:text-green-700 ml-2">{{ 'show.edit'|trans }}</a>
-                        </td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="8" class="px-6 py-4 text-center text-gray-400">{{ 'index.noRecords'|trans }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for championship_list in championship_lists %}
+            <div class="card">
+                <h2>{{ championship_list.ChampionshipName }}</h2>
+                <p><strong>{{ 'base.description'|trans }}:</strong> {{ championship_list.description }}</p>
+                <p><strong>{{ 'base.addr'|trans }}:</strong> {{ championship_list.adress }}</p>
+                <p><strong>{{ 'index.beginDate'|trans }}:</strong> {{ championship_list.dateStart ? championship_list.dateStart|date('Y-m-d H:i:s') : '' }}</p>
+                <p><strong>{{ 'index.endDate'|trans }}:</strong> {{ championship_list.dateEnd ? championship_list.dateEnd|date('Y-m-d H:i:s') : '' }}</p>
+                <p><strong>{{ 'base.threshold'|trans }}:</strong> {{ championship_list.threshold }}</p>
+                <div class="actions">
+                    <a href="{{ path('app_championship_list_show', {'id': championship_list.id}) }}"
+                       class="common-button relative inline-flex items-center justify-center text-white bg-blue-700 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur button-container">
+                        <span class="mr-2">{{ 'show.show'|trans }}</span>
+                        <div class="arrow-container">
+                            <div class="arrow"></div>
+                        </div>
+                    </a>
+                    <a href="{{ path('app_championship_list_edit', {'id': championship_list.id}) }}"
+                       class="common-button relative inline-flex items-center justify-center text-white bg-green-700 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-green-500 bg-blur button-container">
+                        <span class="mr-2">{{ 'show.edit'|trans }}</span>
+                        <div class="arrow-container">
+                            <div class="arrow"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center text-gray-400">
+                {{ 'index.noRecords'|trans }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {% if pagination.hasPrevious %}
+            <a href="{{ path('app_championship_list_index', {page: pagination.currentPage - 1}) }}" class="pagination-link">{{ 'score.previous'|trans }}</a>
+        {% endif %}
+
+        {% for page in 1..pagination.totalPages %}
+            <a href="{{ path('app_championship_list_index', {page: page}) }}" class="pagination-link {% if page == pagination.currentPage %}active{% endif %}">{{ page }}</a>
+        {% endfor %}
+
+        {% if pagination.hasNext %}
+            <a href="{{ path('app_championship_list_index', {page: pagination.currentPage + 1}) }}" class="pagination-link">{{ 'score.next'|trans }}</a>
+        {% endif %}
     </div>
 
     <div class="mt-6 text-center">
-        <a href="{{ path('app_championship_list_new') }}" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">{{ 'new.add'|trans }}</a>
+        <a href="{{ path('app_championship_list_new') }}"
+           class="common-button relative inline-flex items-center justify-center text-white bg-blue-700 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur button-container">
+            <span class="mr-2">{{ 'new.add'|trans }}</span>
+            <div class="arrow-container">
+                <div class="arrow"></div>
+            </div>
+        </a>
     </div>
 </div>
 {% endblock %}

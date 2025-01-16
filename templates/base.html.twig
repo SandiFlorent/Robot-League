@@ -3,88 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        {% block title %}Score!{% endblock %}
-    </title>
+    <title>{% block title %}Score!{% endblock %}</title>
     <link rel="icon" href="{{ asset('Images/logo.png') }}">
     {% block stylesheets %}
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     {% endblock %}
 <style>
-    .dropdown-content {
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: opacity 0.4s ease, transform 0.4s ease;
-        pointer-events: none;
-        display: block;
-    }
-    .relative:hover .dropdown-content,
-    .relative:hover .dropdown-content:hover {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-    .relative button {
-        padding-bottom: 0px;
-    }
-    .relative .dropdown-content {
-        margin-top: -5px; 
-    }
-    .nav-link {
-        transition: all 0.3s ease-in-out;
-        border-bottom: 2px solid transparent;
-    }
-    .nav-link:hover {
-        border-bottom: 2px solid white;
-        transform: translateY(-2px);
-    }
-    .mobile-menu-overlay {
-        visibility: hidden;
-        opacity: 0;
+    /* Base navbar styles */
+    nav {
         transition: all 0.3s ease;
-        backdrop-filter: blur(8px);
-        background-color: rgba(0, 0, 0, 0.7);
     }
-    .mobile-menu-overlay.active {
-        visibility: visible;
-        opacity: 1;
+
+    /* Navigation link styles with animated underline */
+    .nav-link {
+        position: relative;
+        text-decoration: none;
+        padding-bottom: 4px;
     }
-    .mobile-menu {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #ffffff;
+        transition: width 0.3s ease;
+        transform-origin: left;
     }
-    .mobile-menu.active {
-        transform: translateX(0);
+
+    .nav-link:hover::after {
+        width: 100%;
     }
-    .mobile-nav-link {
-        @apply block w-full py-3 px-4 text-lg font-medium text-white hover:bg-gray-700 rounded-lg transition-colors duration-200;
-    }
-    /* Langue styles */
-    .lang-dropdown {
+
+    /* Unified dropdown styles for all dropdowns */
+    .dropdown {
         position: relative;
     }
-    .lang-content {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        background-color: #1F2937;
-        min-width: 160px;
-        border-radius: 0.5rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        opacity: 0;
-        transform: translateY(-10px);
-        visibility: hidden;
-        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+
+    /* Update dropdown button to match nav-link styling */
+    .dropdown button {
+        position: relative;
+        text-decoration: none;
+        padding-bottom: 4px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
     }
-    .lang-dropdown:hover .lang-content {
+
+    .dropdown button::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #ffffff;
+        transition: width 0.3s ease;
+        transform-origin: left;
+    }
+
+    .dropdown button:hover::after {
+        width: 100%;
+    }
+
+    .dropdown-content {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        background-color: rgba(17, 24, 39, 0.95);
+        backdrop-filter: blur(8px);
+        min-width: 200px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 50;
+    }
+
+    .dropdown:hover .dropdown-content {
         opacity: 1;
-        transform: translateY(0);
         visibility: visible;
+        transform: translateY(0);
+    }
+
+    .dropdown-content a {
+        padding: 12px 16px;
+        display: block;
+        color: white;
+        transition: all 0.2s ease;
+    }
+
+    .dropdown-content a:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Mobile menu styles */
+    .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(8px);
+        z-index: 40;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+    }
+
+    .mobile-menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(17, 24, 39, 0.98);
+        padding: 80px 24px 24px;
+        overflow-y: auto;
+    }
+
+    /* Mobile navigation link styles with animated underline */
+    .mobile-nav-link {
+        display: block;
+        padding: 16px;
+        color: white;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        position: relative;
+        text-decoration: none;
+    }
+
+    .mobile-nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #ffffff;
+        transition: width 0.3s ease;
+        transform-origin: left;
+    }
+
+    .mobile-nav-link:hover::after {
+        width: 100%;
+    }
+
+    .mobile-submenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .mobile-submenu.active {
+        max-height: 500px;
+    }
+
+    .mobile-submenu a {
+        padding: 12px 24px;
+        color: rgba(255, 255, 255, 0.8);
+        display: block;
+        font-size: 16px;
+    }
+
+    /* Burger button styles */
+    .burger-button {
+        width: 30px;
+        height: 24px;
+        position: relative;
+        cursor: pointer;
+        z-index: 50;
+    }
+
+    .burger-button span {
+        display: block;
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: white;
+        transition: all 0.3s ease;
+    }
+
+    .burger-button span:nth-child(1) { top: 0; }
+    .burger-button span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+    .burger-button span:nth-child(3) { bottom: 0; }
+
+    .burger-button.active span:nth-child(1) {
+        transform: translateY(11px) rotate(45deg);
+    }
+
+    .burger-button.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .burger-button.active span:nth-child(3) {
+        transform: translateY(-11px) rotate(-45deg);
     }
 </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-    {% set route = app.request.attributes.get('_route') %}
+<body class="bg-gray-900 text-white">
+ {% set route = app.request.attributes.get('_route') %}
     {% set route_params = app.request.attributes.get('_route_params') %}
     {% set params = route_params|merge(app.request.query.all) %}
 
@@ -93,195 +223,197 @@
             {{ message|trans }}
         </div>
     {% endfor %}
+    <!-- Your existing header content -->
+    <nav class="bg-gradient-to-br from-black to-gray-800 border-b border-blue-700 shadow-xl px-8 py-6 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <img class="w-14 h-14 rounded-full" src="{{ asset('Images/logo.png') }}" alt="Logo">
+            <p class="text-3xl font-extrabold">RobotLeague</p>
+        </div>
 
-    <div class="min-h-screen flex flex-col">
-        <!-- Navbar -->
-        <nav class="bg-gradient-to-r from-black to-gray-900 flex items-center justify-between px-8 py-6 shadow-xl rounded-b-3xl border-b border-gray-700">
-            <div class="flex items-center space-x-4">
-                <img class="w-14 h-14 rounded-full border-2 border-white" src="{{ asset('Images/logo.png') }}" alt="Logo">
-                <p class="text-3xl font-extrabold tracking-wide text-white">RobotLeague</p>
-            </div>
+        <!-- Burger Menu -->
+        <div class="burger-button md:hidden">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
 
-            <!-- Burger Menu Button -->
-            <button id="burger-button" class="md:hidden z-50 relative">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path class="line1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16"></path>
-                    <path class="line2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16"></path>
-                    <path class="line3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 18h16"></path>
-                </svg>
-            </button>
-
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex space-x-8 text-lg">
-                <a href="{{ path('app_home') }}" class="nav-link font-medium">{{ 'base.home'|trans }}</a>
-                <div class="relative">
-                    <button class="nav-link font-medium">{{ 'base.teams'|trans }}</button>
-                    <div class="dropdown-content absolute hidden bg-gray-800 text-white shadow-lg rounded-lg mt-2 p-4">
-                        {% if app.user %}
-                            {% if is_granted('ROLE_USER') %}
-                                <a href="{{ path('app_team_new') }}" class="block py-2 hover:text-gray-400">{{ 'base.create'|trans }}</a>
-                                <a href="{{ path('app_choose_championship_member') }}" class="block py-2 hover:text-gray-400">{{ 'show.member'|trans }}</a>
-                            {% endif %}
-                        {% endif %}
-                        <a href="{{ path('app_team_show') }}" class="block py-2 hover:text-gray-400">{{ 'base.seeTeams'|trans }}</a>
-                        <a href="{{ path('app_score_table') }}" class="block py-2 hover:text-gray-400">{{ 'base.seeScores'|trans }}</a>
-                    </div>
-                </div>
-
-                {% if is_granted('ROLE_ORGANISATEUR') %}
-                    <div class="relative">
-                        <button class="nav-link font-medium">{{ 'base.admin'|trans }}</button>
-                        <div class="dropdown-content absolute hidden bg-gray-800 text-white shadow-lg rounded-lg mt-2 p-4">
-                            <a href="{{ path('app_user_index') }}" class="block py-2 hover:text-gray-400">{{ 'base.users'|trans }}</a>
-                            <a href="{{ path('app_championship_index') }}" class="block py-2 hover:text-gray-400">{{ 'base.championship'|trans }}</a>
-                            <a href="{{ path('app_championship_list_new') }}" class="block py-2 hover:text-gray-400">{{ 'base.createAChampionship'|trans }}</a>
-                        </div>
-                    </div>
-                {% endif %}
-                 <div class="relative">
-                        <button class="nav-link font-medium">{{ 'base.championnat'|trans }}</button>
-                    <div class="dropdown-content absolute hidden bg-gray-800 text-white shadow-lg rounded-lg mt-2 p-4">
-                                <a href="{{ path('app_team_new') }}" class="block py-2 hover:text-gray-400">{{ 'base.score'|trans }}</a>
-                                <a href="{{ path('app_choose_championship_member') }}" class="block py-2 hover:text-gray-400">{{ 'base.arbre_de_tournoi'|trans }}</a>
-                        
-                    </div>
-                    </div>
-
-                {% if app.user %}
-                    <a href="{{ path('app_logout') }}" class="nav-link font-medium">{{ 'base.logout'|trans }}</a>
-                    
-                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                    <a href="{{ path('app_home', {'_switch_user': '_exit'}) }}" class="btn btn-warning">
-                            {{ 'base.stopImpersonate'|trans}}
-                        </a>
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8">
+            <a href="{{ path('app_home') }}" class="nav-link">{{ 'base.home'|trans }}</a>
+            
+            <!-- Teams Dropdown -->
+            <div class="dropdown">
+                <button class="nav-link">{{ 'base.teams'|trans }}</button>
+                <div class="dropdown-content">
+                    {% if app.user and is_granted('ROLE_USER') %}
+                        <a href="{{ path('app_team_new') }}">{{ 'base.create'|trans }}</a>
+                        <a href="{{ path('app_choose_championship_member') }}">{{ 'show.member'|trans }}</a>
                     {% endif %}
-                    
-                {% else %}
-                    <a href="{{ path('app_login') }}" class="nav-link font-medium">{{ 'base.login'|trans }}</a>
-                    <a href="{{ path('app_register') }}" class="nav-link font-medium">{{ 'base.register'|trans }}</a>
-                {% endif %}
-
-                <!-- Langue Dropdown -->
-                <div class="lang-dropdown">
-                    <button class="nav-link font-medium flex items-center">
-                        {{ app.request.locale|upper }}
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div class="lang-content">
-                        <a href="{{ path(route, params|merge({ _locale: 'fr' })) }}" 
-                           class="block px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200">
-                            Français
-                        </a>
-                        <a href="{{ path(route, params|merge({ _locale: 'en' })) }}"
-                           class="block px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200">
-                            English
-                        </a>
-                    </div>
+                    <a href="{{ path('app_team_show') }}">{{ 'base.seeTeams'|trans }}</a>
+                    <a href="{{ path('app_score_table') }}">{{ 'base.seeScores'|trans }}</a>
                 </div>
             </div>
-        </nav>
 
-        <!-- Mobile Menu Overlay -->
-        <div class="mobile-menu-overlay fixed inset-0 z-40 md:hidden">
-            <div class="mobile-menu min-h-screen w-64 bg-gray-900 p-4 fixed left-0 top-0 z-50">
-                <div class="flex flex-col space-y-4">
-                    <a href="{{ path('app_home') }}" class="mobile-nav-link">{{ 'base.home'|trans }}</a>
-                    
-                    <div class="space-y-2">
-                        <button class="mobile-nav-link w-full text-left" onclick="toggleMobileSubmenu('teams-submenu')">
-                            {{ 'base.teams'|trans }}
-                        </button>
-                        <div id="teams-submenu" class="hidden pl-4 space-y-2">
-                            {% if app.user %}
-                                {% if is_granted('ROLE_USER') %}
-                                    <a href="{{ path('app_team_new') }}" class="mobile-nav-link">{{ 'new.createTeam'|trans }}</a>
-                                    <a href="{{ path('app_choose_championship_member') }}" class="mobile-nav-link">{{ 'show.members'|trans }}</a>
-                                {% endif %}
-                            {% endif %}
-                            <a href="{{ path('app_team_show') }}" class="mobile-nav-link">{{ 'base.seeTeams'|trans }}</a>
-                            <a href="{{ path('app_score_table') }}" class="mobile-nav-link">{{ 'base.seeScores'|trans }}</a>
-                        </div>
-                    </div> 
+            <!-- Admin Dropdown -->
+            {% if is_granted('ROLE_ORGANISATEUR') %}
+            <div class="dropdown">
+                <button class="nav-link">{{ 'base.admin'|trans }}</button>
+                <div class="dropdown-content">
+                    <a href="{{ path('app_user_index') }}">{{ 'base.users'|trans }}</a>
+                    <a href="{{ path('app_championship_index') }}">{{ 'base.championship'|trans }}</a>
+                    <a href="{{ path('app_championship_list_new') }}">{{ 'base.createAChampionship'|trans }}</a>
+                </div>
+            </div>
+            {% endif %}
 
-                    {% if is_granted('ROLE_ORGANISATEUR') %}
-                        <div class="space-y-2">
-                            <button class="mobile-nav-link w-full text-left" onclick="toggleMobileSubmenu('admin-submenu')">
-                                {{ 'base.admin'|trans }}
-                            </button>
-                            <div id="admin-submenu" class="hidden pl-4 space-y-2">
-                                <a href="{{ path('app_user_index') }}" class="mobile-nav-link">{{ 'base.users'|trans }}</a>
-                                <a href="{{ path('app_championship_index') }}" class="mobile-nav-link">{{ 'base.championship'|trans }}</a>
-                                <a href="{{ path('app_championship_list_new') }}" class="mobile-nav-link">{{ 'base.createAChampionship'|trans }}</a>
-                            </div>
-                        </div>
-                    {% endif %}
+            <!-- Championship Dropdown -->
+            <div class="dropdown">
+                <button class="nav-link">{{ 'base.championnat'|trans }}</button>
+                <div class="dropdown-content">
+                    <a href="{{ path('app_score_table') }}">{{ 'base.score'|trans }}</a>
+                    <a href="{{ path('app_championship_elimination', {'championshiplist_id': 1}) }}">{{ 'base.arbre_de_tournoi'|trans }}</a>
+                </div>
+            </div>
 
-                    {% if app.user %}
-                        <a href="{{ path('app_logout') }}" class="mobile-nav-link">{{ 'base.logout'|trans }}</a>
-                    {% else %}
-                        <a href="{{ path('app_login') }}" class="mobile-nav-link">{{ 'base.login'|trans }}</a>
-                        <a href="{{ path('app_register') }}" class="mobile-nav-link">{{ 'base.register'|trans }}</a>
-                    {% endif %}
+            <!-- Auth Links -->
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}" class="nav-link">{{ 'base.logout'|trans }}</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="nav-link">{{ 'base.login'|trans }}</a>
+                <a href="{{ path('app_register') }}" class="nav-link">{{ 'base.register'|trans }}</a>
+            {% endif %}
 
-                    <!-- Langue Mobile -->
-                    <div class="space-y-2">
-                        <button class="mobile-nav-link w-full text-left" onclick="toggleMobileSubmenu('lang-submenu')">
-                            {{ 'Langue'|trans }}
-                        </button>
-                        <div id="lang-submenu" class="hidden pl-4 space-y-2">
-                            <a href="{{ path(route, params|merge({ _locale: 'fr' })) }}" class="mobile-nav-link">
-                                Français
-                            </a>
-                            <a href="{{ path(route, params|merge({ _locale: 'en' })) }}" class="mobile-nav-link">
-                                English
-                            </a>
-                        </div>
-                    </div>
+            <!-- Language Dropdown -->
+            <div class="dropdown">
+                <button class="nav-link">{{ app.request.locale|upper }}</button>
+                <div class="dropdown-content">
+                    <a href="{{ path(route, params|merge({ _locale: 'fr' })) }}">Français</a>
+                    <a href="{{ path(route, params|merge({ _locale: 'en' })) }}">English</a>
                 </div>
             </div>
         </div>
 
-        {% block body %}{% endblock %}
-    </div>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu-overlay">
+            <div class="mobile-menu">
+                <a href="{{ path('app_home') }}" class="mobile-nav-link">{{ 'base.home'|trans }}</a>
+                
+                <!-- Mobile Teams -->
+                <div class="mobile-dropdown">
+                    <button class="mobile-nav-link w-full text-left" data-submenu="teams">
+                        {{ 'base.teams'|trans }}
+                    </button>
+                    <div class="mobile-submenu" id="teams-submenu">
+                        {% if app.user and is_granted('ROLE_USER') %}
+                            <a href="{{ path('app_team_new') }}">{{ 'base.create'|trans }}</a>
+                            <a href="{{ path('app_choose_championship_member') }}">{{ 'show.member'|trans }}</a>
+                        {% endif %}
+                        <a href="{{ path('app_team_show') }}">{{ 'base.seeTeams'|trans }}</a>
+                        <a href="{{ path('app_score_table') }}">{{ 'base.seeScores'|trans }}</a>
+                    </div>
+                </div>
+
+                <!-- Mobile Admin -->
+                {% if is_granted('ROLE_ORGANISATEUR') %}
+                <div class="mobile-dropdown">
+                    <button class="mobile-nav-link w-full text-left" data-submenu="admin">
+                        {{ 'base.admin'|trans }}
+                    </button>
+                    <div class="mobile-submenu" id="admin-submenu">
+                        <a href="{{ path('app_user_index') }}">{{ 'base.users'|trans }}</a>
+                        <a href="{{ path('app_championship_index') }}">{{ 'base.championship'|trans }}</a>
+                        <a href="{{ path('app_championship_list_new') }}">{{ 'base.createAChampionship'|trans }}</a>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Mobile Championship -->
+                <div class="mobile-dropdown">
+                    <button class="mobile-nav-link w-full text-left" data-submenu="championship">
+                        {{ 'base.championnat'|trans }}
+                    </button>
+                    <div class="mobile-submenu" id="championship-submenu">
+                        <a href="{{ path('app_team_new') }}">{{ 'base.score'|trans }}</a>
+                        <a href="{{ path('app_choose_championship_member') }}">{{ 'base.arbre_de_tournoi'|trans }}</a>
+                    </div>
+                </div>
+
+                <!-- Mobile Auth Links -->
+                {% if app.user %}
+                    <a href="{{ path('app_logout') }}" class="mobile-nav-link">{{ 'base.logout'|trans }}</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="mobile-nav-link">{{ 'base.login'|trans }}</a>
+                    <a href="{{ path('app_register') }}" class="mobile-nav-link">{{ 'base.register'|trans }}</a>
+                {% endif %}
+
+                <!-- Mobile Language -->
+                <div class="mobile-dropdown">
+                    <button class="mobile-nav-link w-full text-left" data-submenu="language">
+                        {{ app.request.locale|upper }}
+                    </button>
+                    <div class="mobile-submenu" id="language-submenu">
+                        <a href="{{ path(route, params|merge({ _locale: 'fr' })) }}">Français</a>
+                        <a href="{{ path(route, params|merge({ _locale: 'en' })) }}">English</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% block body %}{% endblock %}
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const burgerButton = document.getElementById('burger-button');
-            const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
-            const mobileMenu = document.querySelector('.mobile-menu');
-            
-            burgerButton.addEventListener('click', function() {
-                mobileMenuOverlay.classList.toggle('active');
-                mobileMenu.classList.toggle('active');
-                document.body.classList.toggle('overflow-hidden');
-            });
+    document.addEventListener('DOMContentLoaded', function() {
+        const burgerButton = document.querySelector('.burger-button');
+        const mobileOverlay = document.querySelector('.mobile-menu-overlay');
+        const mobileDropdowns = document.querySelectorAll('.mobile-dropdown button');
 
-            // Fermer le menu en cliquant à l'extérieur
-            mobileMenuOverlay.addEventListener('click', function(e) {
-                if (e.target === mobileMenuOverlay) {
-                    mobileMenuOverlay.classList.remove('active');
-                    mobileMenu.classList.remove('active');
-                    document.body.classList.remove('overflow-hidden');
-                }
-            });
+        // Toggle mobile menu
+        burgerButton.addEventListener('click', function() {
+            this.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            document.body.classList.toggle('overflow-hidden');
+        });
 
-            // Desktop dropdown functionality
-            const menuButtons = document.querySelectorAll('.relative button');
-            menuButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const dropdown = this.nextElementSibling;
-                    dropdown.classList.toggle('hidden');
+        // Handle mobile dropdowns
+        mobileDropdowns.forEach(button => {
+            button.addEventListener('click', function() {
+                const submenuId = this.dataset.submenu + '-submenu';
+                const submenu = document.getElementById(submenuId);
+                const isActive = submenu.classList.contains('active');
+
+                // Close all submenus first
+                document.querySelectorAll('.mobile-submenu').forEach(menu => {
+                    menu.classList.remove('active');
                 });
+
+                // Toggle clicked submenu
+                if (!isActive) {
+                    submenu.classList.add('active');
+                }
             });
         });
 
-        // Gestion des sous-menus mobiles
-        function toggleMobileSubmenu(id) {
-            const submenu = document.getElementById(id);
-            submenu.classList.toggle('hidden');
-        }
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (mobileOverlay.classList.contains('active') && 
+                !e.target.closest('.mobile-menu') && 
+                !e.target.closest('.burger-button')) {
+                burgerButton.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && mobileOverlay.classList.contains('active')) {
+                burgerButton.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                document.body.classList.remove('overflow-hidden');
+            }
+        });
+    });
     </script>
 </body>
 </html>

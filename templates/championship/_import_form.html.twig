@@ -1,10 +1,23 @@
 {# templates/form/import_championship.html.twig #}
 
-{{ form_start(form) }}
-    <div class="form-group">
-        {{ form_label(form.file) }}
-        {{ form_widget(form.file, {'attr': {'class': 'form-control'}}) }}
-        {{ form_errors(form.file) }}
+{{ form_start(form, { 'attr': { 'class': 'space-y-6' } }) }}
+    <!-- Champ d'importation de fichier -->
+    <div>
+        {{ form_label(form.file, 'import.file'|trans, { 'label_attr': { 'class': 'block mb-2 text-sm font-medium text-blue-400' } }) }}
+        {{ form_widget(form.file, { 'attr': {
+            'class': 'bg-gray-800 border border-blue-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-pointer' } }) }}
+
+        {% for error in form_errors(form.file) %}
+            <div class="text-red-400">{{ error.message }}</div>
+        {% endfor %}
     </div>
-    <button type="submit" class="btn btn-primary">{{'base.import'|trans}}</button>
+
+    <!-- Bouton de soumission -->
+    <button type="submit"
+        class="relative inline-flex items-center justify-center w-full p-3 text-white bg-blue-700 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur">
+        <span class="mr-2">{{ 'base.import'|trans }}</span>
+        <div class="arrow-container">
+            <div class="arrow"></div>
+        </div>
+    </button>
 {{ form_end(form) }}

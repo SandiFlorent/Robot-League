@@ -167,4 +167,29 @@ public function index(
         );
     }
 
+   
+    #[Route('{_locale}/display/', name: 'app_display')]
+    public function display(
+        Request $request,
+        ChampionshipRepository $championshipRepository,
+        ChampionshipListRepository $championshipListRepository,
+    ): Response {
+    
+        // Récupérer les paramètres de la requête
+        $championshiplistId = $request->query->get('championshiplist_id');
+        $championshiplist = $championshipListRepository->find($championshiplistId);
+    
+        $championships = $championshipRepository->findBy([
+            'championshipList' => $championshiplist
+        ]);
+    
+    
+        return $this->render('display/index.html.twig', [
+     
+            'championships' => $championships,
+        ]);
+    }
+
+
+
 }

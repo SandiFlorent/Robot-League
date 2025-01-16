@@ -3,53 +3,84 @@
 {% block title %}{{ 'label.championshipMatches'|trans }}{% endblock %}
 
 {% block body %}
+
 <div class="flex flex-col items-center justify-center min-h-screen">
     <div class="flex-grow p-6 w-full max-w-7xl mx-auto mt-12">
 
 
-    <form method="get" action="{{ path('app_home') }}" class="mb-8 bg-gray-800 p-6 rounded-lg shadow-lg">
-        <label for="status" class="block text-lg font-semibold text-white mb-2">{{ 'base.chooseStatus'|trans }} :</label>
-        <select name="status" id="status" 
-                class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto"
+<form method="get" action="{{ path('app_home') }}" class="mb-8 bg-gradient-to-br from-gray-800 to-gray-900 p-8 rounded-xl shadow-2xl border border-gray-700 space-y-6 md:space-y-8">
+    <!-- Container pour les sélections -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Status Selection -->
+        <div class="space-y-2">
+            <label for="status" class="block text-lg font-semibold text-white mb-3 uppercase tracking-wide">
+                {{ 'base.chooseStatus'|trans }} :
+            </label>
+            <select name="status" id="status"
+                class="w-full px-4 py-3 border-2 border-blue-500 bg-gray-700 text-white rounded-xl
+                    shadow-lg transition-all duration-300
+                    focus:ring-4 focus:ring-blue-400/50 focus:border-blue-400
+                    hover:border-blue-400 hover:bg-gray-600"
                 onchange="this.form.submit()">
-            <option value="present" {% if statusFilter == 'present' %}selected{% endif %}>{{ 'index.present'|trans }}</option>
-            <option value="past" {% if statusFilter == 'past' %}selected{% endif %}>{{ 'index.past'|trans }}</option>
-            <option value="future" {% if statusFilter == 'future' %}selected{% endif %}>{{ 'index.future'|trans }}</option>
-        </select>
+                <option value="present" {% if statusFilter == 'present' %}selected{% endif %}>{{ 'index.present'|trans }}</option>
+                <option value="past" {% if statusFilter == 'past' %}selected{% endif %}>{{ 'index.past'|trans }}</option>
+                <option value="future" {% if statusFilter == 'future' %}selected{% endif %}>{{ 'index.future'|trans }}</option>
+            </select>
+        </div>
 
-
-        <label for="championshiplist_id" class="block text-lg font-semibold text-white mb-2">{{ 'base.chooseChamp'|trans }} :</label>
-        <select name="championshiplist_id" id="championshiplist_id" 
-                class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto"
+        <!-- Championship Selection -->
+        <div class="space-y-2">
+            <label for="championshiplist_id" class="block text-lg font-semibold text-white mb-3 uppercase tracking-wide">
+                {{ 'base.chooseChamp'|trans }} :
+            </label>
+            <select name="championshiplist_id" id="championshiplist_id"
+                class="w-full px-4 py-3 border-2 border-blue-500 bg-gray-700 text-white rounded-xl
+                    shadow-lg transition-all duration-300
+                    focus:ring-4 focus:ring-blue-400/50 focus:border-blue-400
+                    hover:border-blue-400 hover:bg-gray-600"
                 onchange="this.form.submit()">
-            <option value="">{{ 'base.selectChamp'|trans }}</option>
-            {% for championshipList in championshipLists %}
-                <option value="{{ championshipList.id }}" {% if championshipList.id == selected_championship_id %}selected{% endif %}>
-                    {{ championshipList.championshipName }}
-                </option>
-            {% endfor %}
-        </select>
+                <option value="">{{ 'base.selectChamp'|trans }}</option>
+                {% for championshipList in championshipLists %}
+                    <option value="{{ championshipList.id }}" {% if championshipList.id == selected_championship_id %}selected{% endif %}>
+                        {{ championshipList.championshipName }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <!-- Sélection du terrain -->
+        <!-- Field Selection - Only shown if championship is selected -->
         {% if selected_championship_id %}
-        <label for="field_id" class="block text-lg font-semibold text-white mb-2 mt-4">{{ 'base.chooseField'|trans }} :</label>
-        <select name="field_id" id="field_id" 
-                class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto"
+        <div class="space-y-2">
+            <label for="field_id" class="block text-lg font-semibold text-white mb-3 uppercase tracking-wide">
+                {{ 'base.chooseField'|trans }} :
+            </label>
+            <select name="field_id" id="field_id"
+                class="w-full px-4 py-3 border-2 border-blue-500 bg-gray-700 text-white rounded-xl
+                    shadow-lg transition-all duration-300
+                    focus:ring-4 focus:ring-blue-400/50 focus:border-blue-400
+                    hover:border-blue-400 hover:bg-gray-600"
                 onchange="this.form.submit()">
-            <option value="">{{ 'index.selectField'|trans }}</option>
-            {% for field in fields %}
-                <option value="{{ field.id }}" {% if field.id == selected_field_id %}selected{% endif %}>
-                    {{ field.name }}
-                </option>
-            {% endfor %}
-        </select>
+                <option value="">{{ 'index.selectField'|trans }}</option>
+                {% for field in fields %}
+                    <option value="{{ field.id }}" {% if field.id == selected_field_id %}selected{% endif %}>
+                        {{ field.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
         {% endif %}
 
-        <!-- Sélection du créneau -->
+        <!-- Slot Selection - Only shown if championship is selected -->
         {% if selected_championship_id %}
-        <label for="slot_id" class="block text-lg font-semibold text-white mb-2 mt-4">{{ 'base.chooseSlot'|trans }} :</label>
-        <select name="slot_id" id="slot_id" 
-                class="px-4 py-2 border border-blue-500 bg-gray-700 text-white rounded-lg focus:ring-blue-400 focus:border-blue-400 block w-full sm:w-auto"
+        <div class="space-y-2">
+            <label for="slot_id" class="block text-lg font-semibold text-white mb-3 uppercase tracking-wide">
+                {{ 'base.chooseSlot'|trans }} :
+            </label>
+            <select name="slot_id" id="slot_id"
+                class="w-full px-4 py-3 border-2 border-blue-500 bg-gray-700 text-white rounded-xl
+                    shadow-lg transition-all duration-300
+                    focus:ring-4 focus:ring-blue-400/50 focus:border-blue-400
+                    hover:border-blue-400 hover:bg-gray-600"
                 onchange="this.form.submit()">
             <option value="">{{ 'base.selectSlot'|trans }}</option>
             {% for slot in slots %}
@@ -58,22 +89,52 @@
                 </option>
             {% endfor %}
         </select>
-        {% endif %}
 
+
+
+        <a href="{{ path('app_display', {'championshiplist_id': selected_championship_id }) }}" class="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">{{'label.fullScreen'|trans}}</a>
+                <option value="">{{ 'base.selectSlot'|trans }}</option>
+                {% for slot in slots %}
+                    <option value="{{ slot.id }}" {% if slot.id == selected_slot_id %}selected{% endif %}>
+                        {{ slot.dateDebut|date('Y-m-d H:i:s') }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Buttons Container -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
         <button type="submit" 
-                class="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">
+            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl
+                shadow-lg hover:shadow-blue-500/50 transition-all duration-300
+                transform hover:scale-105 hover:from-blue-500 hover:to-blue-600
+                focus:ring-4 focus:ring-blue-500/50 focus:outline-none
+                w-full sm:w-auto">
             {{ 'index.displayMatch'|trans }}
+
+
         </button>
 
         <a href="{{ path('export_ical', {
             'championshiplist_id': selected_championship_id,
             'field_id': selected_field_id,
             'slot_id': selected_slot_id
-        }) }}" 
-        class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700">
-            {{'base.ical'|trans}}
+            }) }}"
+            class="px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white font-bold rounded-xl
+                shadow-lg hover:shadow-green-500/50 transition-all duration-300
+                transform hover:scale-105 hover:from-green-500 hover:to-green-600
+                focus:ring-4 focus:ring-green-500/50 focus:outline-none text-center
+                w-full sm:w-auto">
+            {{ 'base.ical'|trans }}
         </a>
+    </div>
+
+        
+        <a href="{{ path('app_display') }}" class="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">{{'label.fullScreen'|trans}}</a>
     </form>
+    
 
         {% if championships is not empty %}
         <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -145,7 +206,7 @@
             <p class="text-lg text-white text-center">{{ 'index.noChampionship'|trans }}</p>
         {% endif %}
     </div>
-    <footer class="bg-gray-900 text-white py-12 w-full mt-12">
+    <footer class="bg-black text-white py-12 w-full mt-12">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
                 <h3 class="text-xl font-semibold mb-4">{{ 'base.info'|trans }}</h3>
@@ -166,4 +227,7 @@
         </div>
     </footer>
 </div>
+
+
+
 {% endblock %}

@@ -1,5 +1,73 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ 'base.manageChamp'|trans }}{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .bg-blur {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.1); /* Fond semi-transparent pour le flou */
+    }
+
+    .arrow-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .button-container:hover .arrow-container {
+        transform: translateX(10px);
+    }
+
+    .arrow {
+        width: 0;
+        height: 0;
+        border-left: 5px solid white;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+    }
+
+    .common-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .common-button:hover {
+        transform: scale(1.05);
+    }
+
+    .common-button:active {
+        transform: scale(0.95);
+    }
+
+    .no-scale-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .no-scale-button:hover {
+        background-color: #1d4ed8; /* Couleur de fond pour le hover */
+    }
+
+    .no-scale-button:active {
+        background-color: #1e3a8a; /* Couleur de fond pour l'active */
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="container mx-auto p-6 bg-gray-800 text-white rounded-lg shadow-lg mt-8">
     <!-- Titre principal -->
@@ -13,7 +81,8 @@
         <div class="mb-6">
             <label for="championshiplist_id" class="text-lg font-semibold text-gray-300">{{ 'base.chooseChamp'|trans }}</label>
             <form method="get" action="{{ path('app_championship_index') }}" class="space-y-4">
-                <select name="championshiplist_id" id="championshiplist_id" class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md">
+                <select name="championshiplist_id" id="championshiplist_id" class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md"
+                onchange="this.form.submit()">
                     <option value="">{{ 'base.selectChamp'|trans }}</option>
                     {% for championshipList in championship_lists %}
                         <option value="{{ championshipList.id }}" {% if championshipList == selected_championship_list %}selected{% endif %}>
@@ -21,9 +90,6 @@
                         </option>
                     {% endfor %}
                 </select>
-                <button type="submit" class="w-auto px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
-                    {{ 'index.displayMatch'|trans }}
-                </button>
             </form>
         </div>
 
@@ -31,11 +97,12 @@
             <!-- Menu déroulant pour les boutons d'action -->
             <div class="relative inline-block text-left">
                 <div>
-                    <button id="options-menu" type="button" class="inline-flex justify-center w-auto px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300" aria-haspopup="true" aria-expanded="false">
-                        Actions
-                        <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
+                    <button id="options-menu" type="button"
+                        class="common-button relative inline-flex items-center justify-center text-white bg-blue-500 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur button-container">
+                        <span class="mr-2">Actions</span>
+                        <div class="arrow-container">
+                            <div class="arrow"></div>
+                        </div>
                     </button>
                 </div>
 
@@ -60,11 +127,11 @@
                             </button>
                         </form>
                           <!-- Lien pour les affrontements éliminatoires -->
-                        <a href="{{ path('app_championship_elimination', {'id': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-yellow-500" role="menuitem">
+                        <a href="{{ path('app_championship_elimination', {'championshiplist_id': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-yellow-500" role="menuitem">
                             {{ 'edit.eliminationMatches'|trans }}
                         </a>
                         
-                        <a href="{{ path('app_championship_export', {'championshiplist_id': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-blue-500" role="menuitem">
+                        <a href="{{ path('app_championship_export', {'id': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-blue-500" role="menuitem">
                             {{ 'edit.export_JSON'|trans }}
                         </a>
                         <a href="{{ path('app_championship_import', {'idChampionshipList': selected_championship_list.id }) }}" class="block px-4 py-2 text-sm text-white hover:bg-blue-500" role="menuitem">
@@ -139,8 +206,11 @@
                                 <label for="isLocked" class="text-sm text-gray-400">{{ 'index.isLocked'|trans }}</label>
                             </div>
 
-                            <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300">
-                                {{ 'label.save'|trans }}
+                            <button type="submit" class="common-button relative inline-flex items-center justify-center text-white bg-blue-500 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur button-container">
+                                <span class="mr-2">{{ 'label.save'|trans }}</span>
+                                <div class="arrow-container">
+                                    <div class="arrow"></div>
+                                </div>
                             </button>
                         </form>
                     </div>
@@ -261,4 +331,3 @@
 </script>
 
 {% endblock %}
-
