@@ -109,7 +109,7 @@ final class ChampionshipListController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_championship_list_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_championship_list_edit', ['id' => $championshipList->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('championship_list/edit.html.twig', [
