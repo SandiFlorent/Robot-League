@@ -46,6 +46,7 @@ class ChampionshipStatesTriggers
                 State::DRAW->value => fn() => $this->onCancelFromDraw(),
                 State::FORFAIT_BLUE->value => fn() => $this->onCancelForfaitBlue(),
                 State::FORFAIT_GREEN->value => fn() => $this->onCancelForfaitGreen(),
+                State::FORFAIT->value => fn() => $this-> onForfaitCancel(),
             ],
             State::NOT_STARTED->value => [
                 State::WIN_BLUE->value => fn() => $this->onCancelFromWinBlue(),
@@ -53,6 +54,7 @@ class ChampionshipStatesTriggers
                 State::DRAW->value => fn() => $this->onCancelFromDraw(),
                 State::FORFAIT_BLUE->value => fn() => $this->onCancelForfaitBlue(),
                 State::FORFAIT_GREEN->value => fn() => $this->onCancelForfaitGreen(),
+                State::FORFAIT->value => fn() => $this -> onForfaitCancel(),
             ],
             State::IN_PROGRESS->value => [
                 State::CANCELED->value => fn() => $this->onProgressFromCanceled(),
@@ -61,6 +63,7 @@ class ChampionshipStatesTriggers
                 State::DRAW->value => fn() => $this->onProgressFromDraw(),
                 State::FORFAIT_BLUE->value => fn() => $this->onCancelForfaitBlue(),
                 State::FORFAIT_GREEN->value => fn() => $this->onCancelForfaitGreen(),
+                State::FORFAIT->value => fn() => $this -> onForfaitCancel(),
             ],
             State::WIN_BLUE->value => [
                 State::WIN_GREEN->value => fn() => $this->onCancelFromWinGreen(),
@@ -69,6 +72,7 @@ class ChampionshipStatesTriggers
                 State::DRAW->value => fn() => $this->onProgressFromDraw(),
                 State::FORFAIT_BLUE->value => fn() => $this->onCancelForfaitBlue(),
                 State::FORFAIT_GREEN->value => fn() => $this->onCancelForfaitGreen(),
+                State::FORFAIT->value => fn() => $this -> onForfaitCancel(),
             ],
             // The same as WIN_BLUE but with the teams reversed
             State::WIN_GREEN->value => [
@@ -78,6 +82,7 @@ class ChampionshipStatesTriggers
                 State::FORFAIT_BLUE->value => fn() => $this->onCancelForfaitBlue(),
                 State::FORFAIT_GREEN->value => fn() => $this->onCancelForfaitGreen(),
                 State::WIN_BLUE->value => fn() => $this->onCancelFromWinBlue(),
+                State::FORFAIT->value => fn() => $this -> onForfaitCancel(),
             ],
             State::DRAW->value => [
                 State::CANCELED->value => fn() => $this->onProgressFromCanceled(),
@@ -86,6 +91,7 @@ class ChampionshipStatesTriggers
                 State::WIN_GREEN->value => fn() => $this->onCancelFromWinGreen(),
                 State::FORFAIT_BLUE->value => fn() => $this->onCancelForfaitBlue(),
                 State::FORFAIT_GREEN->value => fn() => $this->onCancelForfaitGreen(),
+                State::FORFAIT->value => fn() => $this -> onForfaitCancel(),
             ],
             State::FORFAIT_BLUE->value => [
                 //No need for canceled or not started states here (their points is gonna be updated in the global)
@@ -94,6 +100,7 @@ class ChampionshipStatesTriggers
                 State::WIN_GREEN->value => fn() => $this->onCancelFromWinGreen(),
                 State::DRAW->value => fn() => $this->onCancelFromDraw(),
                 State::FORFAIT_GREEN->value => fn() => $this->onCancelForfaitGreen(),
+                State::FORFAIT->value => fn() => $this -> onForfaitCancel(),
 
             ],
             State::FORFAIT_GREEN->value => [
@@ -102,7 +109,17 @@ class ChampionshipStatesTriggers
                 State::WIN_GREEN->value => fn() => $this->onCancelFromWinGreen(),
                 State::DRAW->value => fn() => $this->onCancelFromDraw(),
                 State::FORFAIT_BLUE->value => fn() => $this->onCancelForfaitBlue(),
+                State::FORFAIT->value => fn() => $this -> onForfaitCancel(),
             ],
+
+            State::FORFAIT->value => [
+                State::IN_PROGRESS->value => fn() => $this->onForfaitGreenFromInProgress(),
+                State::WIN_BLUE->value => fn() => $this->onCancelFromWinBlue(),
+                State::WIN_GREEN->value => fn() => $this->onCancelFromWinGreen(),
+                State::FORFAIT_BLUE->value => fn() => $this->onCancelForfaitBlue(),
+                State::FORFAIT_GREEN->value => fn() => $this->onCancelForfaitGreen(),
+                State::DRAW->value => fn() => $this->onCancelFromDraw(),
+            ]
         ];
         $oldState = $this->oldState;
         $newState = $this->newState;
@@ -146,6 +163,11 @@ class ChampionshipStatesTriggers
 
         if ($newState === State::IN_PROGRESS->value){
             $this->updateNbEnCounterByOne(1);
+        }
+
+        if ($newState === State::FORFAIT){
+            $this->blueTeam->updateTotalPoints(-1);
+            $this->greenTeam->updateTotalPoints(-1);
         }
     }
 
@@ -242,5 +264,10 @@ class ChampionshipStatesTriggers
         $this->blueTeam->updateTotalPoints(-3);
         $this->blueTeam->updateNbWins(-1);
         $this->updateNbEnCounterByOne(-1);
+    }
+
+    private function onForfaitCancel()
+    {
+        $this->blueTeam->updateTotalPoints(1);
     }
 }
