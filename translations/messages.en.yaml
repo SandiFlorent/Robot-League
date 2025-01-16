@@ -180,7 +180,8 @@ elimination:
   won: won
   matchNotFinished: The match is not finished yet
   refresh: Refresh
-
+  createEliminationMatches: Create matches
+  
 teammember: 
   addMembers: Add members
   addMember: Add a new member
