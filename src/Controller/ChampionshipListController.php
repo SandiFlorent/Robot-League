@@ -119,14 +119,56 @@ final class ChampionshipListController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_championship_list_delete', methods: ['POST'])]
-    public function delete(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager,
+    ChampionshipRepository $championshipRepository,
+    SlotRepository $slotRepository,
+    FieldRepository $fieldRepository,
+    EncounterRepository $encounterRepository,
+    TeamRepository $teamRepository): Response
     {
+
+        $encounters = $encounterRepository->findBy(['myChampionshipList' => $championshipList]);
+        $championships = $championshipRepository->findBy(['championshipList' => $championshipList]);
+        $fields = $fieldRepository->findBy(['championshipList' => $championshipList]);
+        $slots = $slotRepository->findBy(['championshipList' => $championshipList]);
+        $teams = $teamRepository->findBy(['championshipList' => $championshipList]);
+
+        foreach($encounters as $encounter)
+        {
+            $entityManager->remove($encounter);
+            $entityManager->flush();
+        }
+
+        foreach($championships as $championship)
+        {
+            $entityManager->remove($championship);
+            $entityManager->flush();
+        }
+
+        foreach($fields as $field)
+        {
+            $entityManager->remove($field);
+            $entityManager->flush();
+        }
+
+        foreach($slots as $slot)
+        {
+            $entityManager->remove($slot);
+            $entityManager->flush();
+        }
+
+        foreach($teams as $team)
+        {
+            $entityManager->remove($team);
+            $entityManager->flush();
+        }
+
         if ($this->isCsrfTokenValid('delete'.$championshipList->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($championshipList);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_championship_list_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_championship_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('{id}/newSlot', name: 'app_championship_list_new_slot', methods: ['GET', 'POST'])]
