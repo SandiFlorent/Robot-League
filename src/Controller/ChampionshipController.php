@@ -281,64 +281,71 @@ final class ChampionshipController extends AbstractController
         return $this->redirectToRoute('app_championship_index');
     }
 
-    #[Route('/championship/elimination/{id}', name: 'app_championship_elimination')]
-    public function eliminationPhase(int $id, Request $request): Response
-    {
-        // Trouver le championnat par ID
-        $championshipList = $this->entityManager->getRepository(ChampionshipList::class)->find($id);
-        if (!$championshipList) {
-            throw $this->createNotFoundException('Championship list not found.');
-        }
+    #[Route('/championship/elimination', name: 'app_championship_elimination')]
+public function eliminationPhase(Request $request): Response
+{
+    // Récupérer le champ de la query string
+    $championshiplistId = $request->query->get('championshiplist_id');
     
-        // Récupérer tous les matchs d'élimination existants
+    if (!$championshiplistId) {
+        throw $this->createNotFoundException('Championship list ID not provided.');
+    }
+
+    // Trouver le championnat par ID
+    $championshipList = $this->entityManager->getRepository(ChampionshipList::class)->find($championshiplistId);
+    if (!$championshipList) {
+        throw $this->createNotFoundException('Championship list not found.');
+    }
+    
+    // Récupérer tous les matchs d'élimination existants
+    $existingMatches = $this->entityManager->getRepository(Championship::class)->findBy([
+        'championshipList' => $championshipList,
+        'IsElimination' => true
+    ]);
+
+    // Regrouper les matchs par round
+    $matchesByRound = $this->groupMatchesByRound($existingMatches);
+
+    // Vérifier si l'utilisateur est un organisateur
+    $isOrganisateur = $this->isGranted('ROLE_ORGANISATEUR');
+
+    // Vérifier si tous les matchs du round actuel sont terminés
+    $currentRound = $this->getCurrentRound($championshipList);
+    $matches = $this->entityManager->getRepository(Championship::class)->findBy([
+        'championshipList' => $championshipList,
+        'round' => $currentRound,
+        'IsElimination' => true
+    ]);
+
+    $allMatchesFinished = true;
+    foreach ($matches as $match) {
+        if (!in_array($match->getState(), [State::WIN_BLUE, State::WIN_GREEN])) {
+            $allMatchesFinished = false;
+            break;
+        }
+    }
+
+    // Si tous les matchs sont terminés, générer les matchs pour le round suivant
+    if ($allMatchesFinished) {
+        // Générer les matchs du round suivant
+        $this->generateNextRoundMatches($championshipList, $currentRound);
+        // Regrouper les matchs après génération du round suivant
         $existingMatches = $this->entityManager->getRepository(Championship::class)->findBy([
             'championshipList' => $championshipList,
             'IsElimination' => true
         ]);
-    
-        // Regrouper les matchs par round
         $matchesByRound = $this->groupMatchesByRound($existingMatches);
-    
-        // Vérifier si l'utilisateur est un organisateur
-        $isOrganisateur = $this->isGranted('ROLE_ORGANISATEUR');
-    
-        // Vérifier si tous les matchs du round actuel sont terminés
-        $currentRound = $this->getCurrentRound($championshipList);
-        $matches = $this->entityManager->getRepository(Championship::class)->findBy([
-            'championshipList' => $championshipList,
-            'round' => $currentRound,
-            'IsElimination' => true
-        ]);
-    
-        $allMatchesFinished = true;
-        foreach ($matches as $match) {
-            if (!in_array($match->getState(), [State::WIN_BLUE, State::WIN_GREEN])) {
-                $allMatchesFinished = false;
-                break;
-            }
-        }
-    
-        // Si tous les matchs sont terminés, générer les matchs pour le round suivant
-        if ($allMatchesFinished) {
-            // Générer les matchs du round suivant
-            $this->generateNextRoundMatches($championshipList, $currentRound);
-            // Regrouper les matchs après génération du round suivant
-            $existingMatches = $this->entityManager->getRepository(Championship::class)->findBy([
-                'championshipList' => $championshipList,
-                'IsElimination' => true
-            ]);
-            $matchesByRound = $this->groupMatchesByRound($existingMatches);
-        }
-    
-        // Rendre la vue avec les matchs d'élimination
-        return $this->render('championship/elimination.html.twig', [
-            'championship_list' => $championshipList,
-            'matches_by_round' => $matchesByRound,
-            'is_organisateur' => $isOrganisateur, // Passer l'info sur si c'est un organisateur
-            'championship_lists' => $this->entityManager->getRepository(ChampionshipList::class)->findAll(),
-            'selected_championship_list' => $championshipList,
-        ]);
     }
+
+    // Rendre la vue avec les matchs d'élimination
+    return $this->render('championship/elimination.html.twig', [
+        'championship_list' => $championshipList,
+        'matches_by_round' => $matchesByRound,
+        'is_organisateur' => $isOrganisateur, // Passer l'info sur si c'est un organisateur
+        'championship_lists' => $this->entityManager->getRepository(ChampionshipList::class)->findAll(),
+        'selected_championship_list' => $championshipList,
+    ]);
+}
     
     #[Route('/championship/generate-elimination/{id}', name: 'app_championship_generate_elimination')]
     public function generateEliminationMatchesForChampionship(int $id): Response
