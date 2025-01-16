@@ -21,17 +21,18 @@
             </button>
         </form>
     </div>
-
-    {% if is_organisateur %}
-        <!-- Ajouter un bouton pour l'organisateur afin de créer les matchs -->
-        <a href="{{ path('app_championship_generate_elimination', {'id': selected_championship_list.id }) }}" 
-           class="btn btn-primary">Créer les Matchs d'Élimination</a>
-    {% endif %}
+{% if is_organisateur %}
+    <!-- Ajouter un bouton pour l'organisateur afin de créer les matchs -->
+    <a href="{{ path('app_championship_generate_elimination', {'id': selected_championship_list.id }) }}" 
+       class="w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
+        {{ 'elimination.createEliminationMatches'|trans }}
+    </a>
+{% endif %}
     
     <!-- Affichage des matchs pour chaque round -->
     {% for round, matches in matches_by_round %}
         <div class="mb-6">
-            <h2 class="text-2xl font-semibold text-blue-400 mb-4">{{ 'elimination.round'|trans }} {{ round }}</h2>
+            <h2 class="text-2xl font-semibold text-blue-400 mt-6 mb-4">{{ 'elimination.round'|trans }} {{ round }}</h2>
             
             <ul class="space-y-4">
                 {% for match in matches %}
