@@ -60,6 +60,10 @@
                 </option>
             {% endfor %}
         </select>
+
+
+
+        <a href="{{ path('app_display', {'championshiplist_id': selected_championship_id }) }}" class="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">{{'label.fullScreen'|trans}}</a>
         {% endif %}
 
         <button type="submit" 
@@ -78,8 +82,6 @@
             {{'base.ical'|trans}}
         </a>
 
-        
-        <a href="{{ path('app_display') }}" class="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">{{'label.fullScreen'|trans}}</a>
     </form>
     
 
