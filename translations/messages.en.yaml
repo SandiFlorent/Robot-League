@@ -52,6 +52,7 @@ base:
   arbre_de_tournoi: Tournament tree
   stopImpersonate: Stop impersonate
   chooseStatus: Championship status
+  submit: Submit
 
 show:
   show: Show
@@ -156,14 +157,14 @@ edit:
   generateChampionship: Generate championships
   deleteChampionship: Delete championship
   actAs: Act as
-  eliminationMatches: "playoff clashes" 
-  export_JSON: "Export in .json"
-  import_JSON: "Import a .json"
+  eliminationMatches: playoff clashes"
+  export_JSON: Export in .json
+  import_JSON: Import a .json
   
 login: 
   loginPage: Log in
   log: Log
-  placeholderMail: exemple@mail.uk
+  placeholderMail: example@mail.uk
   placeholderPasswd: p@sswd#
   submit: Submit
   sixCharsAtLeast: At least 6 characters

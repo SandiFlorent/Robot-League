@@ -52,6 +52,7 @@ base:
   arbre_de_tournoi: Arbre de tournoi
   stopImpersonate: Arrêt incarnation
   chooseStatus: Statut du championnat
+  submit: Soumettre
 
 show:
   show: Aficher
@@ -101,7 +102,7 @@ new:
 
 elimination:
   eliminationPhase: Phase d'élimination
-  round: Round
+  round: Tour
   state: État
   winner: La team gagnante
   won: a gagné
@@ -122,7 +123,7 @@ index:
   goalBlueTeam: But équipe bleue
   goalGreenTeam: But équipe verte 
   state: État
-  noChampionship: Pas de championnat en cours.
+  noChampionship: Pas de championnat en cours
   legalNotices: Mentions légales
   generateChampionshhip: Générer un championnat
   deleteChampionship: Supprimer le championnat
@@ -137,8 +138,8 @@ index:
   dateOfEnd: Fin du match
   beginDate: Date de début
   endDate: Date de fin
-  createNewField: Create a new field
-  newField: New field
+  createNewField: Créer un nouveau terrain
+  newField: Nouveau terrain
   noFields: Pas de terrains
   noField: Pas de terrain enregistré pour le moment
   editField: Editer le terrain
@@ -146,9 +147,9 @@ index:
   addField: Ajouter un terrain
   addFields: Ajouter des terrains
   backToChamp: Retour aux championnats
-  selectChampionship: Select a championship
+  selectChampionship: Sélectionner un championnat
   selectField: Choisir un terrain
-  filterChamp: Filter championships
+  filterChamp: Filtrer les championnats
   filter: Filtrer
   fieldIndex: Index terrain
   present: En cours
@@ -165,9 +166,9 @@ edit:
   generateChampionship: Générer le championnat
   deleteChampionship: Supprimer le championnat
   actAs: Se faire passer pour
-  eliminationMatches: "Affrontements éliminatoires"
-  export_JSON: "Exporter en .json"
-  import_JSON: "Importer un .json"
+  eliminationMatches: Affrontements éliminatoires
+  export_JSON: Exporter en .json
+  import_JSON: Importer un .json
 
 login: 
   loginPage: Se connecter
