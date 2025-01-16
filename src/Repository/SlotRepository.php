@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Slot;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\ChampionshipList;
 
 /**
  * @extends ServiceEntityRepository<Slot>
@@ -40,16 +41,18 @@ class SlotRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-    public function findOverlappingSlots($startDate, $endDate, $championshipList): array
-{
-    return $this->createQueryBuilder('s')
-        ->where('s.championshipList = :championshipList')
-        ->andWhere('s.dateDebut < :endDate')
-        ->andWhere('s.dateEnd > :startDate')
-        ->setParameter('championshipList', $championshipList)
-        ->setParameter('startDate', $startDate)
-        ->setParameter('endDate', $endDate)
-        ->getQuery()
-        ->getResult();
-}
+    // SlotRepository.php
+    public function findOverlappingSlots(\DateTimeInterface $dateDebut, \DateTimeInterface $dateEnd, ?ChampionshipList $championshipList): array
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        return $qb->where('s.championshipList = :championshipList')
+            ->andWhere('(:dateDebut BETWEEN s.dateDebut AND s.dateEnd OR :dateEnd BETWEEN s.dateDebut AND s.dateEnd)')
+            ->orWhere('s.dateDebut BETWEEN :dateDebut AND :dateEnd')
+            ->setParameter('championshipList', $championshipList)
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateEnd', $dateEnd)
+            ->getQuery()
+            ->getResult();
+    }
 }

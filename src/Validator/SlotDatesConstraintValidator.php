@@ -21,6 +21,7 @@ final class SlotDatesConstraintValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint): void
     {
+        
         if (!$value instanceof Slot) {
             return;
         }
@@ -53,18 +54,18 @@ final class SlotDatesConstraintValidator extends ConstraintValidator
             $value->getDateEnd(),
             $value->getChampionshipList()
         );
-
+        
         foreach ($existingSlots as $existingSlot) {
-            // Skip the current slot if updating an existing one
+            // Skip the current slot if it exists and matches the ID
             if ($value->getId() && $value->getId() === $existingSlot->getId()) {
                 continue;
             }
-
+        
             // Add violation if overlap is found
             $this->context->buildViolation($constraint->messageOverlap)
                 ->atPath('dateDebut')
                 ->addViolation();
-            break;
+            break; // Stop after the first violation
         }
     }
 }
