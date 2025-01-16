@@ -108,7 +108,8 @@ elimination:
   won: a gagné
   matchNotFinished: Le match n'est pas encore terminé
   refresh: Actualiser
-
+  createEliminationMatches: Créer matchs
+  
 index: 
   actions: Actions
   noRecords: Pas d'informations trouvées
@@ -230,3 +231,4 @@ winGreen: Victoire Verte
 draw: Egalité
 forfaitBlue: Forfait Bleue
 forfaitGreen: Forfait Verte
+forfait: Forfait

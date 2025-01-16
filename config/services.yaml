@@ -14,6 +14,8 @@ services:
         arguments:
             $slotRepository: '@App\Repository\SlotRepository'
             $championshipListRepository: '@App\Repository\ChampionshipListRepository'
+    App\Validator\UniqueTeamMemberEmailValidator:
+        tags: [ 'validator.constraint_validator' ]
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

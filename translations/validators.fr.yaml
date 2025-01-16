@@ -5,3 +5,4 @@ alerts:
   emailExists: Il y a déjà un compte avec cet email.
   teamExists: Un équipe porte déjà ce nom.
   fieldName: Ce nom de terrain est déjà pris.
+  alerts.duplicateMemberEmail: "Une équipe ne peut pas avoir plusieurs membres avec le même Email."

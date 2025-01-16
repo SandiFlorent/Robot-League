@@ -90,6 +90,7 @@
                 {% endfor %}
             </select>
         </div>
+
         {% endif %}
     </div>
 
@@ -118,8 +119,23 @@
                 w-full sm:w-auto">
             {{ 'base.ical'|trans }}
         </a>
+
+        {% if selected_championship_id %}
+            <a href="{{ path('app_display', {'championshiplist_id': selected_championship_id }) }}" 
+            class="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl
+                shadow-lg hover:shadow-blue-500/50 transition-all duration-300
+                transform hover:scale-105 hover:from-blue-500 hover:to-blue-600
+                focus:ring-4 focus:ring-blue-500/50 focus:outline-none
+                w-full sm:w-auto">
+            {{'label.fullScreen'|trans}}
+            </a>
+        {% endif %}
+
     </div>
-</form>
+
+        
+    </form>
+    
 
         {% if championships is not empty %}
         <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
