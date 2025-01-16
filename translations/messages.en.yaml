@@ -50,7 +50,6 @@ base:
   chooseSlot: Choose a slot
   championnat: Championship
   arbre_de_tournoi: Tournament tree
-  score: Score
 show:
   show: Show
   team: Team

@@ -50,7 +50,6 @@ base:
   chooseSlot: Choisir un créneau
   championnat: Championnat
   arbre_de_tournoi: Arbre de tournoi
-  score : Score
   
 show:
   show: Aficher
