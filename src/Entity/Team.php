@@ -48,8 +48,7 @@ class Team
     private Collection $championships;
 
 
-    #[Assert\PositiveOrZero(message: 'alerts.equalToZeroGoals')]
-    #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $totalPoints = 0;
 
     #[ORM\Column(type: 'float', nullable: true)]
