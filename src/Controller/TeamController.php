@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Team;
 use App\Entity\Member;
+use App\Entity\ChampionshipList;
 use App\Entity\User;
 use App\Form\TeamType;
 use App\Form\MemberType;
@@ -33,6 +34,16 @@ final class TeamController extends AbstractController
     #[Route('/new', name: 'app_team_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
+        // Vérifier s'il existe des championnats
+        $championshipListRepository = $entityManager->getRepository(ChampionshipList::class);
+        $championships = $championshipListRepository->findAll();
+
+        // Si aucun championnat n'existe, rediriger vers la page d'accueil avec un message d'erreur
+        if (empty($championships)) {
+            // Message de succès après la création de l'équipe
+            $this->addFlash('notice', 'index.noChampionship');
+            return $this->redirectToRoute('app_home');  // Redirige vers la page d'accueil (modifiez le nom de la route si nécessaire)
+        }       
         $team = new Team();
         $form = $this->createForm(TeamType::class, $team);
         $form->handleRequest($request);
