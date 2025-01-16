@@ -51,6 +51,7 @@ base:
   championnat: Championship
   arbre_de_tournoi: Tournament tree
   stopImpersonate: Stop impersonate
+  chooseStatus: Championship status
 
 show:
   show: Show
@@ -141,6 +142,9 @@ index:
   filterChamp: Filter championships
   filter: Filter
   fieldIndex: Field index
+  present: In progress
+  past: Finished
+  future: Upcoming
 
 edit: 
   edit: Edit
@@ -152,7 +156,9 @@ edit:
   generateChampionship: Generate championships
   deleteChampionship: Delete championship
   actAs: Act as
-  eliminationMatches: "Affrontements éliminatoires" 
+  eliminationMatches: "playoff clashes" 
+  export_JSON: "Export in .json"
+  import_JSON: "Import a .json"
   
 login: 
   loginPage: Log in
