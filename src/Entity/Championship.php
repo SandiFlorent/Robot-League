@@ -255,7 +255,8 @@ class Championship
 
             if ($this->blueTeam) {
                 $this->blueTeam->setNbGoals($newGoal);
-                $this->blueGoal = $newGoal;
+                $this->greenTeam->updateGoalsTaken($newValue - $oldValue);
+                $this->greenTeam->beforeUpdateGoalAverage();
             }
         }
 
@@ -267,7 +268,8 @@ class Championship
 
             if ($this->greenTeam) {
                 $this->greenTeam->setNbGoals($newGoal);
-                $this->greenGoal = $newGoal;
+                $this->blueTeam->updateGoalsTaken($newValue - $oldValue);
+                $this->blueTeam->beforeUpdateGoalAverage();
             }
         }
     }
