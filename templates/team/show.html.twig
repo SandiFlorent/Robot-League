@@ -7,7 +7,7 @@
 <style>
     .bg-blur {
         backdrop-filter: blur(10px);
-        background-color: rgba(255, 255, 255, 0.1); /* Fond semi-transparent pour le flou */
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
     .arrow-container {
@@ -35,13 +35,13 @@
 {% endblock %}
 
 {% block body %}
-<div class="container mx-auto my-8">
-    <h1 class="text-4xl font-bold text-white mb-6">{{ 'show.teams'|trans }}</h1>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 my-8">
+    <h1 class="text-3xl sm:text-4xl font-bold text-white mb-6 text-center">{{ 'show.teams'|trans }}</h1>
 
     <!-- Formulaire de filtre pour sélectionner un championnat -->
-    <form method="get" class="mb-6">
-        <label for="championship" class="block mb-2 text-lg text-white">{{ 'index.filterChamp'|trans }} :</label>
-        <select name="championship" id="championship" class="border border-blue-500 rounded-lg p-2 w-full bg-gray-800 text-white focus:ring-2 focus:ring-blue-400 focus:outline-none">
+    <form method="get" class="mb-6 flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+        <label for="championship" class="block text-lg text-white mb-2 sm:mb-0">{{ 'index.filterChamp'|trans }} :</label>
+        <select name="championship" id="championship" class="border border-blue-500 rounded-lg p-2 w-full sm:w-auto bg-gray-800 text-white focus:ring-2 focus:ring-blue-400 focus:outline-none">
             <option value="">-- {{ 'index.selectChampionship'|trans }} --</option>
             {% for championship in championshipList %}
                 <option value="{{ championship.id }}" {% if selectedChampionship and championship.id == selectedChampionship.id %}selected{% endif %}>
@@ -50,7 +50,7 @@
             {% endfor %}
         </select>
         <button type="submit"
-            class="relative inline-flex items-center justify-center mt-4 px-6 py-3 text-white bg-blue-700 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur">
+            class="w-full sm:w-auto mt-4 sm:mt-0 px-6 py-3 text-white bg-blue-700 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur flex items-center justify-center">
             <span class="mr-2">{{ 'index.filter'|trans }}</span>
             <div class="arrow-container">
                 <div class="arrow"></div>
@@ -59,16 +59,16 @@
     </form>
 
     {% if teams is not empty %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
             {% for team in teams %}
                 <div class="bg-gray-800 shadow-lg rounded-xl overflow-hidden p-6 space-y-4 cursor-pointer transform hover:scale-105 transition-all duration-300" onclick="toggleTeamMembers('team-{{ team.id }}')">
-                    <h2 class="text-2xl font-semibold text-white">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-white">
                         {{ 'show.team'|trans }}: {{ team.Name }}
                     </h2>
                     <div id="team-{{ team.id }}" class="hidden space-y-4 mt-4 transition-all duration-700 ease-in-out">
                         {% for member in team.TeamMembers %}
-                            <div class="p-4 border border-gray-600 rounded-lg bg-gray-700 flex justify-between items-center">
-                                <div>
+                            <div class="p-4 border border-gray-600 rounded-lg bg-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                                <div class="text-center sm:text-left">
                                     <p class="text-white font-medium">{{ member.Name }}</p>
                                     <p class="text-gray-400 text-sm">{{ member.Email }}</p>
                                 </div>
@@ -82,9 +82,9 @@
             {% endfor %}
         </div>
     {% else %}
-        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
-            <p class="font-bold"> {{ 'show.noTeams'|trans }}</p>
-            <p> {{ 'show.noTeamJoined'|trans }}</p>
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 text-center" role="alert">
+            <p class="font-bold">{{ 'show.noTeams'|trans }}</p>
+            <p>{{ 'show.noTeamJoined'|trans }}</p>
         </div>
     {% endif %}
 </div>

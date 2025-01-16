@@ -363,4 +363,5 @@ final class ChampionshipListController extends AbstractController
             'teamsnotvalidated' => $teamsnotvalidated,
         ]);
     }
+    
 }

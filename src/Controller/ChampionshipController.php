@@ -282,8 +282,19 @@ final class ChampionshipController extends AbstractController
     }
 
     #[Route('/championship/elimination', name: 'app_championship_elimination')]
-    public function eliminationPhase(Request $request): Response
+    public function eliminationPhase(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Vérifier s'il existe des championnats
+        $championshipListRepository = $entityManager->getRepository(ChampionshipList::class);
+        $championships = $championshipListRepository->findAll();
+
+        // Si aucun championnat n'existe, rediriger vers la page d'accueil avec un message d'erreur
+        if (empty($championships)) {
+            // Message de succès après la création de l'équipe
+            $this->addFlash('notice', 'index.noChampionship');
+            return $this->redirectToRoute('app_home');  // Redirige vers la page d'accueil (modifiez le nom de la route si nécessaire)
+        }       
+
         // Récupérer le champ de la query string
         $championshiplistId = $request->query->get('championshiplist_id');
         
