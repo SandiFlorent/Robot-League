@@ -143,7 +143,7 @@
                     <a href="{{ path('app_logout') }}" class="nav-link font-medium">{{ 'base.logout'|trans }}</a>
                     
                     {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                        <a href="{{ path('app_stop_impersonation') }}" class="btn btn-warning">
+                    <a href="{{ path('app_home', {'_switch_user': '_exit'}) }}" class="btn btn-warning">
                             {{ 'base.stopImpersonate'|trans}}
                         </a>
                     {% endif %}
@@ -195,7 +195,7 @@
                             <a href="{{ path('app_team_show') }}" class="mobile-nav-link">{{ 'base.seeTeams'|trans }}</a>
                             <a href="{{ path('app_score_table') }}" class="mobile-nav-link">{{ 'base.seeScores'|trans }}</a>
                         </div>
-                    </div>
+                    </div> 
 
                     {% if is_granted('ROLE_ORGANISATEUR') %}
                         <div class="space-y-2">
