@@ -191,16 +191,14 @@ public function display(
     ]);
 }
 
-#[Route('{_locale}/display/{id}', name: 'app_display')]
+#[Route('{_locale}/display/', name: 'app_display')]
 public function display(
     Request $request,
     ChampionshipRepository $championshipRepository,
     ChampionshipListRepository $championshipListRepository,
     FieldRepository $fieldRepository, 
-    SlotRepository $slotRepository, 
-    int $id
+    SlotRepository $slotRepository
 ): Response {
-    $mychampionship = $championshipListRepository->find($id);
 
     // Récupérer les paramètres de la requête
     $championshiplistId = $request->query->get('championshiplist_id');
@@ -233,7 +231,7 @@ public function display(
 
     if ($championshiplistId) {
         // Récupérer les terrains et créneaux associés au championnat sélectionné
-        $championshipList = $championshipListRepository->find($championshiplistId);
+        $championshipList = $championshipListRepository->find(2);
         $fields = $fieldRepository->findBy(['championshipList' => $championshipList]);
         $slots = $slotRepository->findBy(['championshipList' => $championshipList]);
         
@@ -269,7 +267,6 @@ public function display(
     }
 
     $totalPages = (int) ceil($totalItems / $limit);
-
     return $this->render('display/index.html.twig', [
  
         'championships' => $championships,
