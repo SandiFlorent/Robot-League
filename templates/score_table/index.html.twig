@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}Tableau des scores{% endblock %}
+{% block title %}{{'label.scoreBoard'|trans}}{% endblock %}
 {% block body %}
 <div class="max-w-7xl mx-auto px-4 py-8">
     <!-- Sélecteur de championnat -->
@@ -75,15 +75,15 @@
                 </div>
                 <div class="flex items-center space-x-8">
                     <div class="text-center">
-                        <div class="text-sm text-gray-400">Points</div>
+                        <div class="text-sm text-gray-400">{{'score.points'|trans}}</div>
                         <div class="font-semibold">{{ team.score }}</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-sm text-gray-400">Moyenne</div>
+                        <div class="text-sm text-gray-400">{{'score.average'|trans}}</div>
                         <div class="font-semibold">{{ team.goalAverage }}</div>
                     </div>
                     <div class="hidden sm:block text-center">
-                        <div class="text-sm text-gray-400">Date</div>
+                        <div class="text-sm text-gray-400">{{'date.average'|trans}}</div>
                         <div class="text-sm">{{ team.inscriptionDate|date('Y-m-d') }}</div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
     {% endif %}
     {% else %}
     <div class="text-center text-gray-400 py-8">
-        Aucune équipe n'est inscrite dans ce championnat.
+        {{'noTeam'|trans}}
     </div>
     {% endif %}
 </div>

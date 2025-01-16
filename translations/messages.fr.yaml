@@ -108,8 +108,7 @@ elimination:
   won: a gagné
   matchNotFinished: Le match n'est pas encore terminé
   refresh: Actualiser
-  createEliminationMatches: Créer matchs
-  
+
 index: 
   actions: Actions
   noRecords: Pas d'informations trouvées
@@ -156,6 +155,7 @@ index:
   present: En cours
   past: Fini
   future: A venir
+  isLocked: Est vérouillé
 
 edit: 
   edit: Modifier
@@ -206,6 +206,9 @@ score:
   end: Fin
   previous: Précédent
   next: Suivant
+  points: Points
+  average: Moyenne
+  date: Date
 
 userNotFound: Utilisateur non trouvé
 userSuccessfullyCreated: Utilisateur créé
@@ -221,6 +224,7 @@ teamSuccessfullyAttributed: Equipe attribuée
 teamSuccessfullyRemoved: Equipe retirée
 successfullyLoggedOut: Votre compte a été déconnecté
 noTeamInChampionship: Vous n'avez pas d'équipe dans ce championnat
+noTeam: Aucune équipe dans ce championnat
 creatorSuccessfullyDeleted: Créateur supprimé
 
 canceled: Annulé

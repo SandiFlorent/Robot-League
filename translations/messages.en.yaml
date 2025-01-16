@@ -146,6 +146,7 @@ index:
   present: In progress
   past: Finished
   future: Upcoming
+  isLocked: Is locked
 
 edit: 
   edit: Edit
@@ -206,6 +207,9 @@ score:
   end: End
   previous: Previous
   next: Next
+  points: Points
+  average: Average
+  date: Date
 
 userNotFound: User not found
 userSuccessfullyCreated: User created
@@ -221,6 +225,7 @@ teamSuccessfullyAttributed: Team attributed
 teamSuccessfullyRemoved: Team removed
 successfullyLoggedOut: Your account has been disconnected
 noTeamInChampionship: You do not have a team in this championship
+noTeam: No team is in this championship
 creatorSuccessfullyDeleted: Creator deleted
 
 canceled: Canceled
