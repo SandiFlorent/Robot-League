@@ -1,10 +1,70 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}{{ 'new.newChampionship'|trans }}{% endblock %}
 
-
 {% block body %}
+<style>
+    .bg-blur {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.1); /* Fond semi-transparent pour le flou */
+    }
+
+    .arrow-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .button-container:hover .arrow-container {
+        transform: translateX(10px);
+    }
+
+    .arrow {
+        width: 0;
+        height: 0;
+        border-left: 5px solid white;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+    }
+
+    .common-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .common-button:hover {
+        transform: scale(1.05);
+    }
+
+    .common-button:active {
+        transform: scale(0.95);
+    }
+
+    .no-scale-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .no-scale-button:hover {
+        background-color: #1d4ed8; /* Couleur de fond pour le hover */
+    }
+
+    .no-scale-button:active {
+        background-color: #1e3a8a; /* Couleur de fond pour l'active */
+    }
+</style>
 <div class="min-h-screen flex items-center justify-center p-6 bg-gray-900 text-white">
     <div class="p-8 bg-gray-800 border border-blue-500 rounded-lg shadow-lg w-full max-w-lg">
         <h1 class="text-4xl font-extrabold text-white drop-shadow-lg mb-6 text-center">{{ 'base.createNewChamp'|trans }}</h1>

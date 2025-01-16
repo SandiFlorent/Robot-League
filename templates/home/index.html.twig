@@ -69,6 +69,15 @@
 
         </button>
 
+        <a href="{{ path('export_ical', {
+            'championshiplist_id': selected_championship_id,
+            'field_id': selected_field_id,
+            'slot_id': selected_slot_id
+        }) }}" 
+        class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700">
+            {{'base.ical'|trans}}
+        </a>
+
         
         <a href="{{ path('app_display') }}" class="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">{{'label.fullScreen'|trans}}</a>
     </form>

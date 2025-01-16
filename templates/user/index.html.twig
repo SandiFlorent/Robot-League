@@ -1,5 +1,37 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .bg-blur {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.1); /* Fond semi-transparent pour le flou */
+    }
+
+    .arrow-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .button-container:hover .arrow-container {
+        transform: translateX(10px);
+    }
+
+    .arrow {
+        width: 0;
+        height: 0;
+        border-left: 5px solid white;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="container mx-auto p-6">
     <!-- Titre de la page -->
@@ -62,8 +94,11 @@
     <!-- Lien de création d'utilisateur -->
     <div class="mt-8 text-center">
         <a href="{{ path('app_user_new') }}"
-           class="px-6 py-3 bg-blue-700 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 transform hover:scale-105 transition duration-300">
-            {{ 'new.createNewUser'|trans }}
+           class="relative inline-flex items-center justify-center px-6 py-3 text-white bg-blue-700 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur button-container">
+            <span class="mr-2">{{ 'new.createNewUser'|trans }}</span>
+            <div class="arrow-container">
+                <div class="arrow"></div>
+            </div>
         </a>
     </div>
 </div>

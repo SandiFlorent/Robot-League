@@ -13,7 +13,13 @@ use DateTimeInterface;
 use DateTime;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\PreUpdate;
 
+// I want to precise that in a team, the email is unique
+// So I use the UniqueEntity annotation to specify that
+
+#[HasLifecycleCallbacks]
 #[UniqueEntity(fields: ['Name'], message: "alerts.teamExists")]
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
 class Team
@@ -22,7 +28,7 @@ class Team
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-    
+
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank()]
     private ?string $Name = null;
@@ -44,16 +50,15 @@ class Team
     #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $totalPoints = 0;
 
-    #[Assert\PositiveOrZero()]
-    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $score = 0;
 
     #[Assert\PositiveOrZero()]
-    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $nbEncounter = 0;
 
     #[Assert\PositiveOrZero()]
-    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $nbGoals = 0;
 
     #[ORM\Column(type: "datetime")]
@@ -61,7 +66,7 @@ class Team
 
 
     #[Assert\PositiveOrZero()]
-    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $nbWin = 0;
 
     #[ORM\Column]
@@ -87,8 +92,9 @@ class Team
         $this->TeamMembers = new ArrayCollection();
         $this->championships = new ArrayCollection();
         $this->inscriptionDate = new DateTime();
-        $this->isAccepted=false;
+        $this->isAccepted = false;
         $this->slots = new ArrayCollection();
+        $this->reinitialize();
     }
 
     public function getId(): ?int
@@ -297,6 +303,16 @@ class Team
         return $this;
     }
 
+    // A function that reinitialize the team's attribute to default values
+    public function reinitialize(): void
+    {
+        $this->nbEncounter = 0;
+        $this->nbGoals = 0;
+        $this->nbWin = 0;
+        $this->score = 0;
+        $this->totalPoints = 0;
+    }
+
     // Equivalent to SQL triggers 
     public function updateTotalGoals(int $difference): void
     {
@@ -307,44 +323,27 @@ class Team
      * Update the team's nb of encounter by the specified value. 
      * A negative value for soustraction and positive for addition
      */
-    public function updateNbEncounter(int $difference):void
+    public function updateNbEncounter(int $difference): void
     {
-        $this->nbEncounter +=$difference;
+        $this->nbEncounter += $difference;
     }
 
-    public function updateTotalPoints(int $difference):void
+    public function updateTotalPoints(int $difference): void
     {
-        $this->totalPoints +=$difference;
+        $this->totalPoints += $difference;
     }
 
-    public function updateNbWins(int $difference):void
+    public function updateNbWins(int $difference): void
     {
-        $this->nbWin +=$difference;
+        $this->nbWin += $difference;
     }
 
-    #[ORM\PreUpdate]
-    public function beforeUpdateTeamTotalPoints(PreUpdateEventArgs $event)    
+    public function beforeUpdateTeamScore(): void
     {
-        // If total points has changed, then we update the score
-        if ($event->hasChangedField('totalPoints')) {
-            $newTotalPoints = $event->getNewValue('totalPoints');
-            if ($this->nbEncounter > 0)
-            {
-                $this->score = $newTotalPoints/$this->nbEncounter;
-            }
-        }
-    }
-
-    #[ORM\PreUpdate]
-    public function beforeUpdateTeamNbEncounter(PreUpdateEventArgs $event)    
-    {
-        // If nbEncounter has changed, then we update the score
-        if ($event->hasChangedField('nbEncounter')) {
-            $newNbEncounter = $event->getNewValue('nbEncounter');
-            if ($newNbEncounter > 0)
-            {
-                $this->score = $this->totalPoints/$newNbEncounter;
-            }
+        if ($this->nbEncounter <= 0) {
+            $this->score = 0;
+        } else {
+            $this->score = ($this->totalPoints * 1.0) / $this->nbEncounter * 1.0;
         }
     }
 
@@ -359,4 +358,12 @@ class Team
 
         return $this;
     }
+
+    public function isQualifiedForElimination(): bool
+    {
+        // Exemple simple : l'équipe est qualifiée si elle a plus de 10 points
+        // Adaptez la logique en fonction de vos besoins.
+        return $this->getGoalAverage() > 10;  // Remplacez `getPoints()` par la méthode qui récupère les points de l'équipe.
+    }
+
 }

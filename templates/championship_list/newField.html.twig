@@ -2,6 +2,72 @@
 
 {% block title %}{{ 'index.newChampionshipList'|trans }}{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .bg-blur {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.1); /* Fond semi-transparent pour le flou */
+    }
+
+    .arrow-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .button-container:hover .arrow-container {
+        transform: translateX(10px);
+    }
+
+    .arrow {
+        width: 0;
+        height: 0;
+        border-left: 5px solid white;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+    }
+
+    .common-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .common-button:hover {
+        transform: scale(1.05);
+    }
+
+    .common-button:active {
+        transform: scale(0.95);
+    }
+
+    .no-scale-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .no-scale-button:hover {
+        background-color: #1d4ed8; /* Couleur de fond pour le hover */
+    }
+
+    .no-scale-button:active {
+        background-color: #1e3a8a; /* Couleur de fond pour l'active */
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="container mx-auto p-8 bg-gray-900 text-white rounded-lg shadow-lg">
     <h1 class="text-4xl font-bold text-center text-white mb-8">{{ 'index.addFields'|trans }}</h1>
@@ -9,14 +75,19 @@
     <hr class="border-gray-700 my-6"/>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for fiel in championship_list.field %}
+        {% for field in championship_list.field %}
             <div class="bg-gray-800 rounded-lg p-4 shadow-lg">
                 <div class="flex justify-between items-center mb-4">
-                    <div class="text-blue-400 font-semibold">{{ fiel.Name }}</div>
-                    <a href="{{ path('app_championship_list_delete_field', {'id': championship_list.id, 'idField': fiel.id }) }}"
-                       class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300">
-                        {{ 'delete.delete'|trans }}
-                    </a>
+                    <div class="text-blue-400 font-semibold">{{ field.Name }}</div>
+                    <div class="text-center">
+                        <a href="{{ path('app_championship_list_delete_field', {'id': championship_list.id, 'idField': field.id }) }}"
+                           class="common-button relative inline-flex items-center justify-center text-white bg-red-700 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-red-500 bg-blur button-container">
+                            <span class="mr-2">{{ 'delete.delete'|trans }}</span>
+                            <div class="arrow-container">
+                                <div class="arrow"></div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         {% else %}
@@ -36,8 +107,11 @@
 
     <div class="text-center">
         <a href="{{ path('app_championship_list_new_slot', {'id': championship_list.id }) }}"
-           class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
-            {{ 'base.addSlots'|trans }}
+           class="common-button relative inline-flex items-center justify-center text-white bg-blue-700 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur button-container">
+            <span class="mr-2">{{ 'base.addSlots'|trans }}</span>
+            <div class="arrow-container">
+                <div class="arrow"></div>
+            </div>
         </a>
     </div>
 </div>

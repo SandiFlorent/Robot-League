@@ -466,7 +466,13 @@ final class ChampionshipController extends AbstractController
         $championshiplistId = $request->query->get('id');
 
         // Récupérer les championnats filtrés en fonction des paramètres
-        $championships = $championshipListRepository->findOneBy(["id" => $championshiplistId])->getMatches();
+        $championshipList = $championshipListRepository->find($championshiplistId);
+
+        $championships = [];
+        
+        if ($championshipList){
+            $championship = $championshipList->getMatches();
+        }
 
         // Convertir les championnats en un tableau de données à exporter
         $championshipData = [];
@@ -507,7 +513,7 @@ final class ChampionshipController extends AbstractController
             // Traiter le fichier JSON
             $this->importChampionshipsFromJson($file, $championships);
 
-            $this->addFlash('successFimportchampionnats ont été importés avec succès!');
+            $this->addFlash('success', 'Les championnats ont été importés avec succès!');
             
             return $this->redirectToRoute('app_championship_index'); // rediriger vers une autre page après l'import
         }

@@ -4,4 +4,4 @@ alerts:
   niceMail: Veuillez entrer une adresse email valide.
   emailExists: Il y a déjà un compte avec cet email.
   teamExists: Un équipe porte déjà ce nom.
-
+  fieldName: Ce nom de terrain est déjà pris.

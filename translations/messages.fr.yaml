@@ -1,4 +1,6 @@
 base: 
+  import: Importer
+  ical: Télécharger le calendriel iCal
   home: Accueil
   teams: Equipes
   create: Créer une équipe
@@ -46,6 +48,10 @@ base:
   slotIndex: Index créneaux
   selectSlot: Sélectionner un créneau
   chooseSlot: Choisir un créneau
+  championnat: Championnat
+  arbre_de_tournoi: Arbre de tournoi
+  stopImpersonate: Arrêt incarnation
+  chooseStatus: Statut du championnat
 
 show:
   show: Aficher
@@ -93,6 +99,15 @@ new:
   championshipList: Liste des championnats
   championshipName: Nom du championnat
 
+elimination:
+  eliminationPhase: Phase d'élimination
+  round: Round
+  state: État
+  winner: La team gagnante
+  won: a gagné
+  matchNotFinished: Le match n'est pas encore terminé
+  refresh: Actualiser
+
 index: 
   actions: Actions
   noRecords: Pas d'informations trouvées
@@ -136,6 +151,9 @@ index:
   filterChamp: Filter championships
   filter: Filtrer
   fieldIndex: Index terrain
+  present: En cours
+  past: Fini
+  future: A venir
 
 edit: 
   edit: Modifier
@@ -147,6 +165,9 @@ edit:
   generateChampionship: Générer le championnat
   deleteChampionship: Supprimer le championnat
   actAs: Se faire passer pour
+  eliminationMatches: "Affrontements éliminatoires"
+  export_JSON: "Exporter en .json"
+  import_JSON: "Importer un .json"
 
 login: 
   loginPage: Se connecter
