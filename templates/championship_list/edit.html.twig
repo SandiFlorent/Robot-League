@@ -2,26 +2,97 @@
 
 {% block title %}{{ 'index.editChampionship'|trans }}{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .bg-blur {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.1); /* Fond semi-transparent pour le flou */
+    }
+
+    .arrow-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .button-container:hover .arrow-container {
+        transform: translateX(10px);
+    }
+
+    .arrow {
+        width: 0;
+        height: 0;
+        border-left: 5px solid white;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+    }
+
+    .common-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .common-button:hover {
+        transform: scale(1.05);
+    }
+
+    .common-button:active {
+        transform: scale(0.95);
+    }
+
+    .no-scale-button {
+        width: auto;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .no-scale-button:hover {
+        background-color: #1d4ed8; /* Couleur de fond pour le hover */
+    }
+
+    .no-scale-button:active {
+        background-color: #1e3a8a; /* Couleur de fond pour l'active */
+    }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="container mx-auto p-8 bg-gray-900 text-white rounded-lg shadow-lg">
     <h1 class="text-4xl font-bold text-center text-white mb-8">{{ 'edit.editChamp'|trans }}</h1>
 
     <div class="p-6 bg-gray-800 rounded-lg mb-6">
         {{ include('championship_list/_form.html.twig', {'button_label':  'label.update'|trans}) }}
-        
     </div>
 
     <hr class="border-gray-700 my-6"/>
 
     <div class="text-center space-y-4">
-        <a href="{{ path('app_championship_list_new_slot', {'id': championship_list.id }) }}" 
-           class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
-            {{ 'base.addSlots'|trans }}
+        <a href="{{ path('app_championship_list_new_slot', {'id': championship_list.id }) }}"
+           class="common-button relative inline-flex items-center justify-center text-white bg-blue-700 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur button-container">
+            <span class="mr-2">{{ 'base.addSlots'|trans }}</span>
+            <div class="arrow-container">
+                <div class="arrow"></div>
+            </div>
         </a>
 
-        <a href="{{ path('app_championship_list_new_field', {'id': championship_list.id }) }}" 
-           class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
-            {{ 'index.addFields'|trans }}
+        <a href="{{ path('app_championship_list_new_field', {'id': championship_list.id }) }}"
+           class="common-button relative inline-flex items-center justify-center text-white bg-blue-700 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-500 bg-blur button-container">
+            <span class="mr-2">{{ 'index.addFields'|trans }}</span>
+            <div class="arrow-container">
+                <div class="arrow"></div>
+            </div>
         </a>
     </div>
 
