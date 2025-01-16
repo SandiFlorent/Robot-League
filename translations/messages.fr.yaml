@@ -192,6 +192,7 @@ label:
   save: Sauvegarder
   championshipMatches: Matchs du championnat
   scoreBoard: Tableau des scores
+  fullScreen: Plein écran
 
 score: 
   selectChamp: Sélectionner un championnat

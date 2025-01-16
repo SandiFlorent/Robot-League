@@ -192,6 +192,7 @@ label:
   save: Save
   championshipMatches: Championship matches
   scoreBoard: Score board
+  fullScreen: Full screen
 
 score: 
   selectChamp: Select a championship
