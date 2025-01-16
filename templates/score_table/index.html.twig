@@ -5,7 +5,7 @@
     <!-- Sélecteur de championnat -->
     <div class="mb-8">
         <label for="championshiplist_id" class="text-lg font-semibold text-gray-300 block mb-2">Choisir un championnat</label>
-        <form method="get" action="{{ path('app_score_table_id', {'idlist': selected_championship_list.id ?? 0}) }}" class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-4">
+        <form method="get" action="{{ path('app_score_table', {'idlist': selected_championship_list.id ?? 0}) }}" class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-4">
             <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md w-full sm:w-auto">
                 <option value="">{{ 'base.selectChamp'|trans }}</option>
                 {% for championshipList in championshiplists %}
