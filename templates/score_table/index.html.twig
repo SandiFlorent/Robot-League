@@ -7,7 +7,7 @@
     <label for="championshiplist_id" class="text-lg font-semibold text-gray-300">Choisir un championnat</label>
     <form method="get" action="{{ path('app_score_table_id', {'idlist': selected_championship_list.id ?? 0}) }}" class="space-y-4">
         <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md w-full sm:w-auto">
-            <option value="">Sélectionner un championnat</option> <!-- Option vide par défaut -->
+            <option value="">{{'base.selectChamp'|trans}}</option> <!-- Option vide par défaut -->
             {% for championshipList in championshiplists %}
                 <option value="{{ championshipList.id }}" 
                         {% if championshipList.id == selected_championship_list.id %}selected{% endif %}>
@@ -16,7 +16,7 @@
             {% endfor %}
         </select>
         <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300 mt-4">
-            Voir les Matchs
+            {{'score.seeMatches'|trans}}
         </button>
     </form>
 </div>

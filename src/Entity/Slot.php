@@ -7,6 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use App\Repository\ChampionshipListRepository;
+use App\Validator\SlotDatesConstraint;
 
 #[ORM\Entity(repositoryClass: SlotRepository::class)]
 class Slot
@@ -16,9 +20,13 @@ class Slot
     #[ORM\Column]
     private ?int $id = null;
 
+    #[SlotDatesConstraint]
+    #[Assert\LessThan(propertyPath: 'dateEnd', message: 'The beginning date must be before the ending date.')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateDebut = null;
 
+    #[SlotDatesConstraint]
+    #[Assert\GreaterThan(propertyPath: 'dateDebut', message: 'The ending date must be after the beginning date.')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateEnd = null;
 
@@ -31,6 +39,7 @@ class Slot
     #[ORM\ManyToOne(inversedBy: 'slot')]
     private ?ChampionshipList $championshipList = null;
 
+    private ChampionshipListRepository $championshipListRepository;
 
     #[ORM\Column]
     private ?int $length = null;

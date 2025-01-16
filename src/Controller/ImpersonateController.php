@@ -28,7 +28,15 @@ class ImpersonateController extends AbstractController
             $this->addFlash('error', 'userNotFound');
             return $this->redirectToRoute('app_home');
         }
-
+        
         return $this->redirectToRoute('app_home', ['_switch_user' => $user->getEmail()]);
+    }
+
+    #[Route('/{_locale}/stop-impersonation', name: 'app_stop_impersonation', methods: ['GET'])]
+    public function stopImpersonation(): RedirectResponse
+    {
+        $this->denyAccessUnlessGranted('ROLE_ORGANISATEUR'); // Ensure only organizers can stop impersonation
+
+        return $this->redirectToRoute('app_home', ['_switch_user' => '_exit']);
     }
 }

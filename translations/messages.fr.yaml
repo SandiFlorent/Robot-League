@@ -1,4 +1,6 @@
 base: 
+  import: Importer
+  ical: Télécharger le calendriel iCal
   home: Accueil
   teams: Equipes
   create: Créer une équipe
@@ -46,6 +48,9 @@ base:
   slotIndex: Index créneaux
   selectSlot: Sélectionner un créneau
   chooseSlot: Choisir un créneau
+  championnat: Championnat
+  arbre_de_tournoi: Arbre de tournoi
+  stopImpersonate: Arrêt incarnation
 
 show:
   show: Aficher
@@ -92,6 +97,15 @@ new:
   newSlot: Nouveau créneau
   championshipList: Liste des championnats
   championshipName: Nom du championnat
+
+elimination:
+  eliminationPhase: Phase d'élimination
+  round: Round
+  state: État
+  winner: La team gagnante
+  won: a gagné
+  matchNotFinished: Le match n'est pas encore terminé
+  refresh: Actualiser
 
 index: 
   actions: Actions
@@ -147,6 +161,7 @@ edit:
   generateChampionship: Générer le championnat
   deleteChampionship: Supprimer le championnat
   actAs: Se faire passer pour
+  eliminationMatches: "Affrontements éliminatoires"
 
 login: 
   loginPage: Se connecter
