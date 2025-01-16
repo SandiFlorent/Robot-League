@@ -3,31 +3,45 @@
 {% block title %}{{ 'base.manageTeams'|trans }}{% endblock %}
 
 {% block body %}
-<div class="flex flex-col items-center justify-center min-h-screen">
-    <p class="text-5xl font-bold text-white mt-12 mb-8">{{ 'base.manageTeams'|trans }}</p>
+<div class="flex flex-col items-center justify-center min-h-screen px-4">
+    <p class="text-3xl sm:text-5xl font-bold text-white mt-12 mb-8 text-center">{{ 'base.manageTeams'|trans }}</p>
 
-    <div class="flex-grow p-6 w-full max-w-7xl mx-auto mt-12 bg-gray-800 rounded-lg shadow-lg">
-        <h2 class="text-3xl font-semibold text-white-400 mb-4">{{ 'base.validatedTeams'|trans }}</h2>
+    <div class="flex-grow p-6 w-full max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg">
+        <h2 class="text-2xl sm:text-3xl font-semibold text-white mb-4">{{ 'base.validatedTeams'|trans }}</h2>
         <ul class="space-y-4">
             {% for team in teamsvalidated %}
-                <li class="text-lg font-medium text-blue-300">{{ team.Name }}</li>
-                <a href={{ path('app_championship_list_unvalidate_team', {'id': championship_list.id, 'idTeam': team.id }) }} class="text-red-500 hover:underline">{{ 'base.removeTeam'|trans }}</a>
+                <li class="text-lg font-medium text-blue-300 flex justify-between items-center">
+                    <span>{{ team.Name }}</span>
+                    <a href="{{ path('app_championship_list_unvalidate_team', {'id': championship_list.id, 'idTeam': team.id }) }}" class="text-red-500 hover:underline text-sm sm:text-base">
+                        {{ 'base.removeTeam'|trans }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
 
-        <h2 class="text-3xl font-semibold text-white-400 mt-12 mb-4">{{ 'base.valRequests'|trans }}</h2>
+        <h2 class="text-2xl sm:text-3xl font-semibold text-white mt-8 mb-4">{{ 'base.valRequests'|trans }}</h2>
         <ul class="space-y-4">
             {% for team in teamsnotvalidated %}
-                <li class="text-lg font-medium text-white-300">{{ team.Name }}</li>
-                <a href={{ path('app_championship_list_validate_team', {'id': championship_list.id, 'idTeam':team.id }) }} class="text-white-500 hover:underline">{{ 'login.submit'|trans }}</a>
+                <li class="text-lg font-medium text-white flex justify-between items-center">
+                    <span>{{ team.Name }}</span>
+                    <a href="{{ path('app_championship_list_validate_team', {'id': championship_list.id, 'idTeam': team.id }) }}" class="text-green-500 hover:underline text-sm sm:text-base">
+                        {{ 'login.submit'|trans }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
 
-        <a href={{ path('app_championship_index') }} class="block text-center text-lg font-semibold text-white mt-12 underline">{{ 'index.backToChamp'|trans }}</a>
+        <a href="{{ path('app_championship_index') }}" class="block text-center text-lg font-semibold text-white mt-8 underline">
+            {{ 'index.backToChamp'|trans }}
+        </a>
     </div>
 
-    <footer class="bg-gray-900 text-white py-12 w-full mt-12 rounded-t-lg">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+    
+
+
+    <!-- Footer responsive -->
+    <footer class="bg-black text-white py-8 w-full mt-12 rounded-t-lg">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center px-4">
             <div>
                 <h3 class="text-xl font-semibold mb-4">{{ 'base.info'|trans }}</h3>
                 <a href="{{ path('app_home') }}" class="block hover:underline">{{ 'index.legalNotices'|trans }}</a>

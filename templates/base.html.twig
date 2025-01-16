@@ -250,7 +250,6 @@
                         <a href="{{ path('app_choose_championship_member') }}">{{ 'show.member'|trans }}</a>
                     {% endif %}
                     <a href="{{ path('app_team_show') }}">{{ 'base.seeTeams'|trans }}</a>
-                    <a href="{{ path('app_score_table') }}">{{ 'base.seeScores'|trans }}</a>
                 </div>
             </div>
 
@@ -278,6 +277,13 @@
             <!-- Auth Links -->
             {% if app.user %}
                 <a href="{{ path('app_logout') }}" class="nav-link">{{ 'base.logout'|trans }}</a>
+
+                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                <a href="{{ path('app_home', {'_switch_user': '_exit'}) }}" class="nav-link">
+                        {{ 'base.stopImpersonate'|trans}}
+                    </a>
+                {% endif %}
+
             {% else %}
                 <a href="{{ path('app_login') }}" class="nav-link">{{ 'base.login'|trans }}</a>
                 <a href="{{ path('app_register') }}" class="nav-link">{{ 'base.register'|trans }}</a>
@@ -309,7 +315,6 @@
                             <a href="{{ path('app_choose_championship_member') }}">{{ 'show.member'|trans }}</a>
                         {% endif %}
                         <a href="{{ path('app_team_show') }}">{{ 'base.seeTeams'|trans }}</a>
-                        <a href="{{ path('app_score_table') }}">{{ 'base.seeScores'|trans }}</a>
                     </div>
                 </div>
 
@@ -341,6 +346,11 @@
                 <!-- Mobile Auth Links -->
                 {% if app.user %}
                     <a href="{{ path('app_logout') }}" class="mobile-nav-link">{{ 'base.logout'|trans }}</a>
+                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                        <a href="{{ path('app_home', {'_switch_user': '_exit'}) }}" class="mobile-nav-link">
+                            {{ 'base.stopImpersonate'|trans}}
+                        </a>
+                    {% endif %}
                 {% else %}
                     <a href="{{ path('app_login') }}" class="mobile-nav-link">{{ 'base.login'|trans }}</a>
                     <a href="{{ path('app_register') }}" class="mobile-nav-link">{{ 'base.register'|trans }}</a>
