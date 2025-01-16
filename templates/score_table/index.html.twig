@@ -5,7 +5,7 @@
     <!-- Sélecteur de championnat -->
     <div class="mb-8">
         <label for="championshiplist_id" class="text-lg font-semibold text-gray-300 block mb-2">Choisir un championnat</label>
-        <form method="get" action="{{ path('app_score_table_id', {'idlist': selected_championship_list.id ?? 0}) }}" class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-4">
+        <form method="get" action="{{ path('app_score_table', {'idlist': selected_championship_list.id ?? 0}) }}" class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-4">
             <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md w-full sm:w-auto">
                 <option value="">{{ 'base.selectChamp'|trans }}</option>
                 {% for championshipList in championshiplists %}
@@ -52,7 +52,7 @@
         <!-- Troisième place -->
         <div class="order-3">
             {% if teams|length >= 3 %}
-            <div class="bg-gradient-to-b from-orange-300 to-orange-400 rounded-lg p-4 h-full flex flex-col items-center justify-center text-center">
+            <div class="bg-gradient-to-b from-yellow-500 to-yellow-600 rounded-lg p-4 h-full flex flex-col items-center justify-center text-center">
                 <div class="text-3xl font-bold mb-2">🥉</div>
                 <div class="text-2xl font-bold">3</div>
                 <div class="font-semibold mt-2">{{ teams[2].Name }}</div>
@@ -67,7 +67,7 @@
     {% if teams|length > 3 %}
     <div class="grid gap-4 grid-cols-1 lg:grid-cols-2">
         {% for team in teams|slice(3) %}
-        <div class="bg-gray-800 rounded-lg p-4 {% if app.user and team.creator == app.user %}ring-2 ring-blue-500{% endif %}">
+        <div class="bg-gray-800 rounded-lg p-4 {% if app.user and team.creator == app.user %}{% endif %}">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div class="flex items-center space-x-4">
                     <span class="text-xl font-bold w-8">{{ loop.index + 3 }}</span>
