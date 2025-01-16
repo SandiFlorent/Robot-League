@@ -282,7 +282,7 @@ final class ChampionshipController extends AbstractController
     }
 
     #[Route('/championship/elimination', name: 'app_championship_elimination')]
-    public function eliminationPhase(Request $request, EntityManagerInterface $entityManager): Response
+    public function eliminationPhase(Request $request, EntityManagerInterface $entityManager, ChampionshipListRepository $championshipListRepository): Response
     {
         // Vérifier s'il existe des championnats
         $championshipListRepository = $entityManager->getRepository(ChampionshipList::class);
@@ -299,7 +299,7 @@ final class ChampionshipController extends AbstractController
         $championshiplistId = $request->query->get('championshiplist_id');
         
         if (!$championshiplistId) {
-            throw $this->createNotFoundException('Championship list ID not provided.');
+            $championshiplistId = $championshipListRepository->findOneBy([])->getId();
         }
     
         // Trouver le championnat par ID
