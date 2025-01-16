@@ -270,8 +270,8 @@
             <div class="dropdown">
                 <button class="nav-link">{{ 'base.championnat'|trans }}</button>
                 <div class="dropdown-content">
-                    <a href="{{ path('app_team_new') }}">{{ 'base.score'|trans }}</a>
-                    <a href="{{ path('app_choose_championship_member') }}">{{ 'base.arbre_de_tournoi'|trans }}</a>
+                    <a href="{{ path('app_score_table') }}">{{ 'base.score'|trans }}</a>
+                    <a href="{{ path('app_championship_elimination', {'championshiplist_id': 1}) }}">{{ 'base.arbre_de_tournoi'|trans }}</a>
                 </div>
             </div>
 
