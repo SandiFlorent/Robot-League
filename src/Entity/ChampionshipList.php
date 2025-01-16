@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueEntity(fields: ['ChampionshipName'], message: "Un tournois porte déjà ce nom")]
 #[ORM\Entity(repositoryClass: ChampionshipListRepository::class)]
@@ -27,9 +28,11 @@ class ChampionshipList
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;
 
+    #[Assert\LessThan(propertyPath: 'dateEnd', message: 'The beginning date must be before the ending date.')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateStart = null;
 
+    #[Assert\GreaterThan(propertyPath: 'dateStart', message: 'The ending date must be after the beginning date.')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateEnd = null;
 

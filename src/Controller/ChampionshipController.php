@@ -383,11 +383,14 @@ public function eliminationPhase(Request $request): Response
         // Créer les matchs par paires
         for ($i = 0; $i < $totalTeams; $i += 2) {
             if ($i + 1 < $totalTeams) {
-                // Créer un match entre deux équipes
+                // Créer un match entre deux équipes qualifiées
                 $match = new Championship();
-                $match->setBlueTeam($teams[$i]);
-                $match->setGreenTeam($teams[$i + 1]);
+                $match->setBlueTeam($qualifiedTeams[$i]);
+                $match->setGreenTeam($qualifiedTeams[$i + 1]);
                 $match->setChampionshipList($championshipList);
+                $match->setState(State::NOT_STARTED);  // État initial du match
+                $match->setElimination(true);  // Indiquer que c'est un match d'élimination
+                $match->setRound($round);  // Le round actuel
                 $match->setState(State::NOT_STARTED);  // État initial du match
                 $match->setElimination(true);  // Indiquer que c'est un match d'élimination
                 $match->setRound($round);  // Le round actuel
@@ -407,6 +410,8 @@ public function eliminationPhase(Request $request): Response
         $matchesByRound = [];
         
         // Organiser les matchs par round
+        
+        // Organiser les matchs par round
         foreach ($matches as $match) {
             $round = $match->getRound();
             if (!isset($matchesByRound[$round])) {
@@ -414,6 +419,10 @@ public function eliminationPhase(Request $request): Response
             }
             $matchesByRound[$round][] = $match;
         }
+        
+        // Trier les rounds par ordre croissant
+        ksort($matchesByRound);
+        
         
         // Trier les rounds par ordre croissant
         ksort($matchesByRound);
@@ -461,9 +470,10 @@ public function eliminationPhase(Request $request): Response
         // Si tous les matchs ne sont pas terminés, rediriger
         $this->addFlash('info', 'Tous les matchs du round actuel ne sont pas encore terminés.');
         return $this->redirectToRoute('app_championship_elimination', [
-            'id' => $championshipList->getId()
+            'championshiplist_id' => $championshipList->getId()
         ]);
     }
+    
     
     private function generateNextRoundMatches(ChampionshipList $championshipList, int $currentRound): array
     {
@@ -506,6 +516,14 @@ public function eliminationPhase(Request $request): Response
             'championshipList' => $championshipList,
             'IsElimination' => true
         ]);
+        
+        // Vérifier si des matchs existent
+        if (empty($matches)) {
+            // Aucun match n'a été créé, donc le round actuel est 1
+            return 1;
+        }
+        
+        // Extraire les rounds et retourner le round maximum
         $rounds = array_map(fn($match) => $match->getRound(), $matches);
         return max($rounds);
     }

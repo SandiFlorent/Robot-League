@@ -29,7 +29,7 @@ class ChampionshipType extends AbstractType
             ])
             ->add('state', ChoiceType::class, [
                 'choices' => [
-                    'Annulé' => State::CANCELED->value,
+                    'Annulé' => State::CANCELED->value ,
                     'En cours' => State::IN_PROGRESS->value,
                     'Non commencé' => State::NOT_STARTED->value,
                     'Victoire Blue' => State::WIN_BLUE->value,

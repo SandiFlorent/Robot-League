@@ -15,6 +15,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\PreUpdate;
+use App\Validator as CustomAssert;
+use App\Validator\UniqueTeamMemberEmail;
 
 // I want to precise that in a team, the email is unique
 // So I use the UniqueEntity annotation to specify that
@@ -36,6 +38,7 @@ class Team
     /**
      * @var Collection<int, Member>
      */
+    #[UniqueTeamMemberEmail]
     #[ORM\ManyToMany(targetEntity: Member::class, inversedBy: 'teams')]
     private Collection $TeamMembers;
 
@@ -86,6 +89,10 @@ class Team
 
     #[ORM\Column]
     private ?float $goalAverage = 0.0;
+
+    #[Assert\PositiveOrZero()]
+    #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
+    private ?int $nbGoalsTaken = 0;
 
     public function __construct()
     {
@@ -347,6 +354,16 @@ class Team
         }
     }
 
+    public function updateGoalsTaken($difference): void
+    {
+        $this->nbGoalsTaken += $difference;
+    }
+
+    public function beforeUpdateGoalAverage():void
+    {
+        $this->goalAverage = $this->nbGoals / $this->nbEncounter;
+    }
+
     public function getGoalAverage(): ?float
     {
         return $this->goalAverage;
@@ -359,11 +376,41 @@ class Team
         return $this;
     }
 
-    public function isQualifiedForElimination(): bool
+    public function isQualifiedForElimination(ChampionshipList $championshipList): bool
     {
-        // Exemple simple : l'équipe est qualifiée si elle a plus de 10 points
-        // Adaptez la logique en fonction de vos besoins.
-        return $this->getGoalAverage() > 10;  // Remplacez `getPoints()` par la méthode qui récupère les points de l'équipe.
+        // Accédez au seuil du championnat, qui est le nombre d'équipes qualifiées
+        $threshold = $championshipList->getThreshold();
+        
+        // Récupérer la liste des équipes participantes au championnat
+        $teams = $championshipList->getTeams()->toArray(); // Assurez-vous que getTeams() vous donne les équipes du championnat
+        
+        // Trier les équipes par leur score 
+        usort($teams, function($teamA, $teamB) {
+            return $teamB->getScore() - $teamA->getScore();  // Trie en ordre décroissant selon le score
+        });
+        
+        // Vérifier si l'équipe actuelle fait partie des 'threshold' meilleures équipes
+        $rank = 0;
+        foreach ($teams as $index => $team) {
+            if ($team->getId() === $this->getId()) {
+                $rank = $index + 1; // Le rang de l'équipe dans le classement
+                break;
+            }
+        }
+    
+        // L'équipe est qualifiée si son rang est inférieur ou égal au seuil
+        return $rank <= $threshold;
+    }
+    public function getNbGoalsTaken(): ?int
+    {
+        return $this->nbGoalsTaken;
+    }
+
+    public function setNbGoalsTaken(int $nbGoalsTaken): static
+    {
+        $this->nbGoalsTaken = $nbGoalsTaken;
+
+        return $this;
     }
 
 }

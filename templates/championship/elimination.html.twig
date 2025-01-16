@@ -8,7 +8,7 @@
     <div class="mb-6">
         <label for="championshiplist_id" class="text-lg font-semibold text-gray-300">{{ 'base.chooseChamp'|trans }}</label>
 <form method="get" action="{{ path('app_championship_elimination', {'id': selected_championship_list.id}) }}" class="space-y-4">
-    <select name="championshiplist_id" id="championshiplist_id" class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md " onchange="this.form.submit()">>
+    <select name="championshiplist_id" id="championshiplist_id" class="w-full px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md" onchange="this.form.submit()">
         <option value="">{{ 'base.selectChamp'|trans }}</option>
         {% for championshipList in championship_lists %}
             <option value="{{ championshipList.id }}" {% if championshipList == selected_championship_list %}selected{% endif %}>
@@ -21,7 +21,7 @@
     </div>
 {% if is_organisateur %}
     <!-- Ajouter un bouton pour l'organisateur afin de créer les matchs -->
-    <a href="{{ path('app_championship_generate_elimination', {'id': selected_championship_list.id }) }}" 
+<a href="{{ path('app_championship_generate_elimination', {'championshiplist_id': selected_championship_list.id }) }}"
        class="w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
         {{ 'elimination.createEliminationMatches'|trans }}
     </a>
