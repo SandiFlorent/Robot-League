@@ -1,54 +1,101 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}tableau des scores{% endblock %}
-
+{% block title %}Tableau des scores{% endblock %}
 {% block body %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Sélecteur de championnat -->
+    <div class="mb-8">
+        <label for="championshiplist_id" class="text-lg font-semibold text-gray-300 block mb-2">Choisir un championnat</label>
+        <form method="get" action="{{ path('app_score_table_id', {'idlist': selected_championship_list.id ?? 0}) }}" class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-4">
+            <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md w-full sm:w-auto">
+                <option value="">{{ 'base.selectChamp'|trans }}</option>
+                {% for championshipList in championshiplists %}
+                <option value="{{ championshipList.id }}" {% if championshipList.id == selected_championship_list.id %}selected{% endif %}>
+                    {{ championshipList.ChampionshipName }}
+                </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
+                {{ 'score.seeMatches'|trans }}
+            </button>
+        </form>
+    </div>
 
-
-<form method="get" action="{{ path('app_score_table', {'idlist': selected_championship_list.id ?? 0}) }}" class="space-y-4">
-    <select name="championshiplist_id" id="championshiplist_id" class="px-4 py-2 border border-gray-600 bg-gray-800 text-white rounded-md w-full sm:w-auto"
-    onchange="this.form.submit()">
-        <option value="">{{ 'base.selectChamp'|trans }}</option>
-        {% for championshipList in championshiplists %}
-            <option value="{{ championshipList.id }}" 
-                    {% if championshipList.id == selected_championship_list.id %}selected{% endif %}>
-                {{ championshipList.ChampionshipName }}
-            </option>
-        {% endfor %}
-    </select>
-</form>
-
-
-    <table class="min-w-full table-auto border-collapse">
-    <thead>
-        <tr class="bg-gray-500 text-left">
-            <th class="px-4 py-2 border-b">{{ 'show.ranking'|trans }}</th>
-            <th class="px-4 py-2 border-b">{{ 'new.teamName'|trans }}</th>
-            <th class="px-4 py-2 border-b">{{ 'base.score'|trans }}</th>
-            <th class="px-4 py-2 border-b">{{ 'score.goalAverage'|trans }}</th>
-            <th class="px-4 py-2 border-b">{{ 'show.registerDate'|trans }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for team in teams %}
-            {% if app.user and team.creator == app.user %}
-                <tr class="bg-gray-700 hover:bg-gray-500">
-                    <td class="px-4 py-2 border-b">{{ loop.index }}</td>
-                    <td class="px-4 py-2 border-b">{{ team.Name }}</td>
-                    <td class="px-4 py-2 border-b">{{ team.score }}</td>
-                    <td class="px-4 py-2 border-b">{{ team.goalAverage }}</td>
-                    <td class="px-4 py-2 border-b">{{ team.inscriptionDate|date('Y-m-d H:i:s') }}</td>
-                </tr>
-            {% else %}
-                <tr class="hover:bg-gray-500">
-                    <td class="px-4 py-2 border-b">{{ loop.index }}</td>
-                    <td class="px-4 py-2 border-b">{{ team.Name }}</td>
-                    <td class="px-4 py-2 border-b">{{ team.score }}</td>
-                    <td class="px-4 py-2 border-b">{{ team.goalAverage }}</td>
-                    <td class="px-4 py-2 border-b">{{ team.inscriptionDate|date('Y-m-d H:i:s') }}</td>
-                </tr>
+    <!-- Nouveau podium responsive -->
+    {% if teams|length > 0 %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+        <!-- Deuxième place -->
+        <div class="order-2 md:order-1">
+            {% if teams|length >= 2 %}
+            <div class="bg-gradient-to-b from-gray-300 to-gray-400 rounded-lg p-4 h-full flex flex-col items-center justify-center text-center">
+                <div class="text-3xl font-bold mb-2">🥈</div>
+                <div class="text-2xl font-bold">2</div>
+                <div class="font-semibold mt-2">{{ teams[1].Name }}</div>
+                <div class="text-lg">{{ teams[1].score }} pts</div>
+                <div class="text-sm">{{ teams[1].goalAverage }} avg</div>
+            </div>
             {% endif %}
+        </div>
+
+        <!-- Première place -->
+        <div class="order-1 md:order-2">
+            {% if teams|length >= 1 %}
+            <div class="bg-gradient-to-b from-yellow-300 to-yellow-400 rounded-lg p-4 h-full flex flex-col items-center justify-center text-center transform scale-105">
+                <div class="text-4xl font-bold mb-2">👑</div>
+                <div class="text-3xl font-bold">1</div>
+                <div class="font-semibold mt-2">{{ teams[0].Name }}</div>
+                <div class="text-xl">{{ teams[0].score }} pts</div>
+                <div class="text-sm">{{ teams[0].goalAverage }} avg</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Troisième place -->
+        <div class="order-3">
+            {% if teams|length >= 3 %}
+            <div class="bg-gradient-to-b from-orange-300 to-orange-400 rounded-lg p-4 h-full flex flex-col items-center justify-center text-center">
+                <div class="text-3xl font-bold mb-2">🥉</div>
+                <div class="text-2xl font-bold">3</div>
+                <div class="font-semibold mt-2">{{ teams[2].Name }}</div>
+                <div class="text-lg">{{ teams[2].score }} pts</div>
+                <div class="text-sm">{{ teams[2].goalAverage }} avg</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Liste des autres équipes -->
+    {% if teams|length > 3 %}
+    <div class="grid gap-4 grid-cols-1 lg:grid-cols-2">
+        {% for team in teams|slice(3) %}
+        <div class="bg-gray-800 rounded-lg p-4 {% if app.user and team.creator == app.user %}ring-2 ring-blue-500{% endif %}">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-4">
+                    <span class="text-xl font-bold w-8">{{ loop.index + 3 }}</span>
+                    <span class="font-semibold">{{ team.Name }}</span>
+                </div>
+                <div class="flex items-center space-x-8">
+                    <div class="text-center">
+                        <div class="text-sm text-gray-400">Points</div>
+                        <div class="font-semibold">{{ team.score }}</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm text-gray-400">Moyenne</div>
+                        <div class="font-semibold">{{ team.goalAverage }}</div>
+                    </div>
+                    <div class="hidden sm:block text-center">
+                        <div class="text-sm text-gray-400">Date</div>
+                        <div class="text-sm">{{ team.inscriptionDate|date('Y-m-d') }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </tbody>
-</table>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="text-center text-gray-400 py-8">
+        Aucune équipe n'est inscrite dans ce championnat.
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
