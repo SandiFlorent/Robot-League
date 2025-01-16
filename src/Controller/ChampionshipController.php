@@ -140,19 +140,6 @@ final class ChampionshipController extends AbstractController
     private function generateChampionships(array $teams, ChampionshipList $championshipList, EncounterRepository $encounterRepository)
     {
 
-        // $seenArray = [];
-        // $nbmatchArray = [];
-        // foreach ($teams as $team){
-        //     $seenArray[$team->getId()] = [];
-        //     $nbmatchArray[$team->getId()] = 0; 
-        // }
-
-        // // Récupérer la valeur minimale
-        // $minValue = min($nbmatchArray);
-
-        // // Récupérer la clé associée à la valeur minimale
-        // $minKey = array_search($minValue, $array);
-
         // Génère les matchs sans matchs retour (évite les doublons)
         foreach ($teams as $index1 => $team1) {
             for ($index2 = $index1 + 1; $index2 < count($teams); $index2++) {
