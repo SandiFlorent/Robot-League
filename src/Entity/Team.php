@@ -38,7 +38,6 @@ class Team
     /**
      * @var Collection<int, Member>
      */
-    #[UniqueTeamMemberEmail]
     #[ORM\ManyToMany(targetEntity: Member::class, inversedBy: 'teams')]
     private Collection $TeamMembers;
 
@@ -50,7 +49,7 @@ class Team
 
 
     #[Assert\PositiveOrZero(message: 'alerts.equalToZeroGoals')]
-    #[ORM\Column( type: 'integer', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'integer', nullable: true, options: ['unsigned' => true])]
     private ?int $totalPoints = 0;
 
     #[ORM\Column(type: 'float', nullable: true)]
@@ -359,9 +358,12 @@ class Team
         $this->nbGoalsTaken += $difference;
     }
 
-    public function beforeUpdateGoalAverage():void
+    public function beforeUpdateGoalAverage(): void
     {
-        $this->goalAverage = $this->nbGoals / $this->nbEncounter;
+        $this->goalAverage = $this->nbGoals;
+        if ($this->nbEncounter != 0) {
+            $this->goalAverage = $this->goalAverage / $this->nbEncounter;
+        }
     }
 
     public function getGoalAverage(): ?float
@@ -380,15 +382,15 @@ class Team
     {
         // Accédez au seuil du championnat, qui est le nombre d'équipes qualifiées
         $threshold = $championshipList->getThreshold();
-        
+
         // Récupérer la liste des équipes participantes au championnat
         $teams = $championshipList->getTeams()->toArray(); // Assurez-vous que getTeams() vous donne les équipes du championnat
-        
+
         // Trier les équipes par leur score 
-        usort($teams, function($teamA, $teamB) {
+        usort($teams, function ($teamA, $teamB) {
             return $teamB->getScore() - $teamA->getScore();  // Trie en ordre décroissant selon le score
         });
-        
+
         // Vérifier si l'équipe actuelle fait partie des 'threshold' meilleures équipes
         $rank = 0;
         foreach ($teams as $index => $team) {
@@ -397,7 +399,7 @@ class Team
                 break;
             }
         }
-    
+
         // L'équipe est qualifiée si son rang est inférieur ou égal au seuil
         return $rank <= $threshold;
     }
@@ -412,5 +414,4 @@ class Team
 
         return $this;
     }
-
 }
