@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 #[Route('/{_locale}/championship/list')]
 final class ChampionshipListController extends AbstractController
@@ -119,13 +120,16 @@ final class ChampionshipListController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_championship_list_delete', methods: ['POST'])]
-    public function delete(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager,
-    ChampionshipRepository $championshipRepository,
-    SlotRepository $slotRepository,
-    FieldRepository $fieldRepository,
-    EncounterRepository $encounterRepository,
-    TeamRepository $teamRepository): Response
-    {
+    public function delete(
+        Request $request,
+        ChampionshipList $championshipList,
+        EntityManagerInterface $entityManager,
+        ChampionshipRepository $championshipRepository,
+        SlotRepository $slotRepository,
+        FieldRepository $fieldRepository,
+        EncounterRepository $encounterRepository,
+        TeamRepository $teamRepository
+    ): Response {
 
         $encounters = $encounterRepository->findBy(['myChampionshipList' => $championshipList]);
         $championships = $championshipRepository->findBy(['championshipList' => $championshipList]);
@@ -133,37 +137,32 @@ final class ChampionshipListController extends AbstractController
         $slots = $slotRepository->findBy(['championshipList' => $championshipList]);
         $teams = $teamRepository->findBy(['championshipList' => $championshipList]);
 
-        foreach($encounters as $encounter)
-        {
+        foreach ($encounters as $encounter) {
             $entityManager->remove($encounter);
             $entityManager->flush();
         }
 
-        foreach($championships as $championship)
-        {
+        foreach ($championships as $championship) {
             $entityManager->remove($championship);
             $entityManager->flush();
         }
 
-        foreach($fields as $field)
-        {
+        foreach ($fields as $field) {
             $entityManager->remove($field);
             $entityManager->flush();
         }
 
-        foreach($slots as $slot)
-        {
+        foreach ($slots as $slot) {
             $entityManager->remove($slot);
             $entityManager->flush();
         }
 
-        foreach($teams as $team)
-        {
+        foreach ($teams as $team) {
             $entityManager->remove($team);
             $entityManager->flush();
         }
 
-        if ($this->isCsrfTokenValid('delete'.$championshipList->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $championshipList->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($championshipList);
             $entityManager->flush();
         }
@@ -172,7 +171,7 @@ final class ChampionshipListController extends AbstractController
     }
 
     #[Route('{id}/newSlot', name: 'app_championship_list_new_slot', methods: ['GET', 'POST'])]
-    public function newSlot(Request $request, EntityManagerInterface $entityManager , ChampionshipList $championshipList, FieldRepository $FieldRepository, ChampionshipListRepository $championshipListRepository): Response
+    public function newSlot(Request $request, EntityManagerInterface $entityManager, ChampionshipList $championshipList, FieldRepository $FieldRepository, ChampionshipListRepository $championshipListRepository): Response
     {
         $slot = new Slot();
         $form = $this->createForm(SlotType::class, $slot);
@@ -180,6 +179,12 @@ final class ChampionshipListController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData(); // Récupère l'objet Slot avec les données du formulaire
+
+            if (!$this->isSlotValid($championshipList, $data)) {
+                return $this->redirectToRoute('app_championship_list_new_slot', [
+                    'id' => $championshipList->getId(),
+                ]);
+            }
 
             // Les données du formulaire
             $dateDebut = $data->getDateDebut();  // Date de début
@@ -213,7 +218,7 @@ final class ChampionshipListController extends AbstractController
                 $fields = $FieldRepository->findBy(['championshipList' => $championshipList]);
 
                 foreach ($slots as $slo) {
-                    foreach($fields as $field){
+                    foreach ($fields as $field) {
                         $encounter = new Encounter();
                         $encounter->setField($field);
                         $encounter->setSlot($slo);
@@ -294,13 +299,13 @@ final class ChampionshipListController extends AbstractController
     }
 
     #[Route('{idField}/{id}/deleteField', name: 'app_championship_list_delete_field', methods: ['GET', 'POST'])]
-    public function deleteField(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager , int $idField, FieldRepository $fieldRepository, EncounterRepository $encounterRepository): Response
+    public function deleteField(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager, int $idField, FieldRepository $fieldRepository, EncounterRepository $encounterRepository): Response
     {
         $field = $fieldRepository->findOneBy(['id' => $idField]);
 
         $encounters = $encounterRepository->findBy(['field' => $idField]);
 
-        foreach ($encounters as $encounter){
+        foreach ($encounters as $encounter) {
             $entityManager->remove($encounter);
         }
 
@@ -313,7 +318,7 @@ final class ChampionshipListController extends AbstractController
     }
 
     #[Route('{id}/teams', name: 'app_championship_list_teams', methods: ['GET', 'POST'])]
-    public function teamsChange(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager , TeamRepository $teamRepository): Response
+    public function teamsChange(Request $request, ChampionshipList $championshipList, EntityManagerInterface $entityManager, TeamRepository $teamRepository): Response
     {
         $teams = $championshipList->getTeams();
 
@@ -329,7 +334,7 @@ final class ChampionshipListController extends AbstractController
     }
 
     #[Route('{id}-{idTeam}/teamValidate', name: 'app_championship_list_validate_team', methods: ['GET', 'POST'])]
-    public function teamValidate(Request $request,  EntityManagerInterface $entityManager , TeamRepository $teamRepository, int $idTeam, ChampionshipList $championshipList): Response
+    public function teamValidate(Request $request,  EntityManagerInterface $entityManager, TeamRepository $teamRepository, int $idTeam, ChampionshipList $championshipList): Response
     {
         $team = $teamRepository->findOneBy(['id' => $idTeam]);
         $team->setAccepted(true);
@@ -347,7 +352,7 @@ final class ChampionshipListController extends AbstractController
     }
 
     #[Route('{id}-{idTeam}/teamUnvalidate', name: 'app_championship_list_unvalidate_team', methods: ['GET', 'POST'])]
-    public function teamUnvalidate(Request $request,  EntityManagerInterface $entityManager , TeamRepository $teamRepository, int $idTeam, ChampionshipList $championshipList): Response
+    public function teamUnvalidate(Request $request,  EntityManagerInterface $entityManager, TeamRepository $teamRepository, int $idTeam, ChampionshipList $championshipList): Response
     {
         $team = $teamRepository->findOneBy(['id' => $idTeam]);
         $team->setAccepted(false);
@@ -363,5 +368,27 @@ final class ChampionshipListController extends AbstractController
             'teamsnotvalidated' => $teamsnotvalidated,
         ]);
     }
-    
+
+    //Function check if the slot doesn't overlap with another slot of the same field in the same championship
+    private function isSlotValid(ChampionshipList $championshipList, Slot $slot): bool
+    {
+        // Check if the slot is not before or after the championship
+        $slots = $championshipList->getSlot();
+        if ($slot->getDateDebut() < $championshipList->getDateStart() || $slot->getDateEnd() > $championshipList->getDateEnd()) {
+            // Build error flash message
+            $this->addFlash('error', 'Le créneau horaire ne peut pas être en dehors de la durée du championnat');
+            return false;
+        }
+
+        $slots = $championshipList->getSlot();
+        foreach ($slots as $slot) {
+            if (($slot->getDateDebut() >= $slot->getDateDebut() && $slot->getDateDebut() <= $slot->getDateEnd()) ||
+                ($slot->getDateEnd() >= $slot->getDateDebut() && $slot->getDateEnd() <= $slot->getDateEnd())
+            ) {
+                $this->addFlash('error', 'Le créneau horaire ne peut pas se chevaucher avec un autre créneau horaire');
+                return false;
+            }
+        }
+        return true;
+    }
 }

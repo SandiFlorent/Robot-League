@@ -29,7 +29,7 @@ final class TeamController extends AbstractController
         ]);
     }
 
-    
+
 
     #[Route('/new', name: 'app_team_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
@@ -43,7 +43,7 @@ final class TeamController extends AbstractController
             // Message de succès après la création de l'équipe
             $this->addFlash('notice', 'index.noChampionship');
             return $this->redirectToRoute('app_home');  // Redirige vers la page d'accueil (modifiez le nom de la route si nécessaire)
-        }       
+        }
         $team = new Team();
         $form = $this->createForm(TeamType::class, $team);
         $form->handleRequest($request);
@@ -89,7 +89,7 @@ final class TeamController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
- 
+
     #[Route('/choose-championship-member', name: 'app_choose_championship_member', methods: ['GET', 'POST'])]
     public function chooseChampionshipForMember(Request $request, TeamRepository $teamRepository): Response
     {
@@ -169,7 +169,7 @@ final class TeamController extends AbstractController
     #[Route('/{id}', name: 'app_team_delete', methods: ['POST'])]
     public function delete(Request $request, Team $team, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$team->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $team->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($team);
             $entityManager->flush();
 
@@ -178,14 +178,13 @@ final class TeamController extends AbstractController
                 'notice',
                 'teamSuccessfullyDeleted'
             );
-
         }
 
         return $this->redirectToRoute('app_team_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/teammember', name: 'app_team_member', methods: ['GET', 'POST'])]
-    public function member(Request $request, Team $team ,EntityManagerInterface $entityManager): Response
+    public function member(Request $request, Team $team, EntityManagerInterface $entityManager): Response
     {
         // Vérifier si l'utilisateur connecté est le créateur de l'équipe
         $user = $this->getUser();
@@ -198,6 +197,18 @@ final class TeamController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Check if the email is already used by another member of the team
+            $teamMembers = $team->getTeamMembers();
+
+            foreach ($teamMembers as $teamMember) {
+                if ($teamMember->getEmail() === $member->getEmail()) {
+                    $this->addFlash('error', 'The member already exists');
+                    return $this->redirectToRoute('app_team_member', [
+                        'id' => $team->getId()
+                    ]);
+                }
+            }
+
             $team->addTeamMember($member);
 
             $entityManager->persist($member);
@@ -220,12 +231,10 @@ final class TeamController extends AbstractController
             'member' => $member,
             'form' => $form,
         ]);
-
-        
     }
 
     #[Route('/show', name: 'app_team_show', methods: ['GET'])]
-        public function show(Request $request, TeamRepository $teamRepository, ChampionshipListRepository $championshipListRepository): Response
+    public function show(Request $request, TeamRepository $teamRepository, ChampionshipListRepository $championshipListRepository): Response
     {
         // Récupérer tous les championnats pour le formulaire de filtre
         $championshipList = $championshipListRepository->findAll();
@@ -236,7 +245,7 @@ final class TeamController extends AbstractController
 
         if ($request->query->get('championship')) {
             $selectedChampionship = $championshipListRepository->find($request->query->get('championship'));
-            
+
             if ($selectedChampionship) {
                 // Filtrer les équipes qui appartiennent au championnat sélectionné
                 $teams = $teamRepository->findBy(['championshipList' => $selectedChampionship]);

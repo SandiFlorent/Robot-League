@@ -104,6 +104,10 @@
             </tbody>
         </table>
 
+        {% for flashError in app.flashes('error') %}
+            <div class="bg-red-500 text-white text-sm font-semibold p-2.5 rounded-lg">{{ flashError }}</div>
+        {% endfor %}
+        
         <div class="mt-12">
             {{ include('slot/_form.html.twig') }}
         </div>
